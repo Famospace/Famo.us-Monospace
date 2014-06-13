@@ -31,12 +31,12 @@ define(function(require, exports, module){
     ];
 
     posTranslate = [
-      [0, 0, -this.options.size/2],
+      [0, 0, this.options.size/2],
       [-this.options.size/2, 0, 0],
       [this.options.size/2, 0, 0],
       [0, 0, -this.options.size/2],
       [0, this.options.size/2, 0],
-      [0, this.options.size/2, 0]
+      [0, -this.options.size/2, 0]
     ];
 
     for (var i =0; i <6; i++) {

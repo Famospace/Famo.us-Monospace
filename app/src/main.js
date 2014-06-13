@@ -26,7 +26,7 @@ define(function(require, exports, module) {
     origin: [0.5, 0.5],
     align: [0.5, 0.5]
   });
-  cubeSmallModifier1.setTransform(Transform.translate(75,0,75))
+  cubeSmallModifier1.setTransform(Transform.translate(75,0,75));
 
   cubeSmall1 = new CubeView({
     size: 50

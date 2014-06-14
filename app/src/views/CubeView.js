@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var StateModifier = require('famous/modifiers/StateModifier');
     var Modifier = require('famous/core/Modifier');
     var Timer = require('famous/utilities/Timer');
-    var Transitionable = require('famous/transitions/Transitionable')
+    var Transitionable = require('famous/transitions/Transitionable');
 
 
     function CubeView() {
@@ -26,7 +26,7 @@ define(function(require, exports, module) {
     CubeView.prototype.constructor = CubeView;
 
     CubeView.DEFAULT_OPTIONS = {
-      size: 100,
+      size: 200,
       convert: Math.PI/180
     };
 
@@ -74,8 +74,9 @@ define(function(require, exports, module) {
     // create initial cube surfaces
         var surface = new Surface({
           size: [this.options.size*2, this.options.size*2],
-          content: '<h1>FRONT</h1>',
+          content: '<p>F</p>',
           properties: {
+            textAlign: 'center',
             webkitBackfaceVisibility: 'visible',
             backfaceVisibility: 'visible',
             border: '1px solid black',
@@ -128,10 +129,5 @@ define(function(require, exports, module) {
         );
       }
     }
-
-
-
-    // create rotational cube modifiers
-
 
 });

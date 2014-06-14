@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   var rotatingCube = new RotatingCube();
 
   var mainContext = Engine.createContext();
-  mainContext.setPerspective(1000);
+  mainContext.setPerspective(400);
   mainContext.add(rotatingCube);
   
 

@@ -8,46 +8,88 @@ define(function(require, exports, module) {
   var Easing = require('famous/transitions/Easing');
   var Timer = require('famous/utilities/Timer');
   var CubeView = require('views/CubeView');
+  var MouseSync  = require("famous/inputs/MouseSync");
 
   var mainContext = Engine.createContext();
-  mainContext.setPerspective(400);
+  mainContext.setPerspective(500);
 
+  var surface = new Surface({
+      size : [undefined, undefined]
+  });
+
+  var surfaceModifier = new Modifier({
+    origin: [0,0],
+    align: [0,0]
+  });
 
   cubeModifier = new Modifier({
     origin: [0.5, 0.5],
-    align: [0.5, 0.5]
+    align: [0.5, 0.5],
+    // transform : function(){
+    //   return Transform.translate(0, 400, 0);
+    // }
+  });
+
+  cubeRotateModifier = new Modifier({
+    transform: function(){
+      rotX = rotateDelta[1]/100;
+      rotY =-rotateDelta[0]/100;
+      // console.log('rotation angle', rotX, rotY);
+      var trans = Transform.rotate(rotX,rotY, 0);
+      return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2,0], trans);
+    }
   });
 
   cube = new CubeView({
     size: 200
   });
 
-  cubeSmallModifier1 = new Modifier({
-    origin: [0.5, 0.5],
-    align: [0.5, 0.5]
-  });
-  cubeSmallModifier1.setTransform(Transform.translate(75,0,75));
+  var sync = new MouseSync();
 
-  cubeSmall1 = new CubeView({
-    size: 50
+  var rotateDelta = [0,0];
+  
+  surface.pipe(sync);
+  console.log('here');
+
+  sync.on('update', function(data){
+    rotateDelta[0] -= data.delta[0];
+    rotateDelta[1] -= data.delta[1];
+    // console.log('rotate data', rotateDelta);
   });
 
-  mainContext.add(cubeModifier).add(cube);
-  mainContext.add(cubeSmallModifier1).add(cubeSmall1);
+  // cubeSmallModifier1 = new Modifier({
+  //   origin: [0.5, 0.5],
+  //   align: [0.5, 0.5]
+  // });
+  // cubeSmallModifier1.setTransform(Transform.translate(75,25,75));
+
+  // cubeSmall1 = new CubeView({
+  //   size: 50
+  // });
+
+  mainContext.add(surfaceModifier).add(surface);
+
+  var rotate = mainContext.add(cubeRotateModifier);
+  rotate.add(cubeModifier).add(cube);
+  // rotate.add(cubeSmallModifier1).add(cubeSmall1);
 
   for (var i=0; i<4; i++){
-    var modifier = new Modifier({
-      origin: [0.5, 0.5],
-      align: [0.5, 0.5]
-    });
-    modifier.setTransform(Transform.translate(-75+i*50,75,-75));
+    for (var j=0; j<4; j++){
+      for(var k=0; k<1; k++){
+        var modifier = new Modifier({
+          origin: [0.5, 0.5],
+          align: [0.5, 0.5]
+        });
+        modifier.setTransform(Transform.translate(-75+i*50,-75+j*50,-75+k*50));
 
-    var cubeSmall = new CubeView({
-      size: 50,
-      backgroundColor: 'blue'
-    });
+        var cubeSmall = new CubeView({
+          size: 50
+          // backgroundColor: 'blue'
+        });
 
-    mainContext.add(modifier).add(cubeSmall);
+        rotate.add(modifier).add(cubeSmall);
+      }
+    }
   }
   
 

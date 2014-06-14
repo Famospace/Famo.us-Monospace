@@ -26,7 +26,7 @@ define(function(require, exports, module) {
 
     CubeView.DEFAULT_OPTIONS = {
       size: 200,
-      convert: Math.PI/180      
+      convert: Math.PI/180
     };
 
     module.exports = CubeView;

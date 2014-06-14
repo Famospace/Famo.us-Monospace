@@ -5,8 +5,8 @@ define(function(require, exports, module) {
     var Modifier       = require('famous/core/Modifier');
     var StateModifier  = require('famous/modifiers/StateModifier');
     var MouseSync      = require('famous/inputs/MouseSync');
+
     var Transitionable = require('famous/transitions/Transitionable');
-    var Draggable      = require('famous/modifiers/Draggable');
 
     var CubeView = require('views/CubeView');
 
@@ -29,8 +29,6 @@ define(function(require, exports, module) {
         var smallPosition = [150, 150, 150];
         var smallPositionXY = [3, 3];
 
-
-
         var rotateModifier = new Modifier({
             transform: function () {
                 var trans = Transform.rotate(position[1]/100, position[0]/100, 0);
@@ -49,6 +47,8 @@ define(function(require, exports, module) {
         });
 
         for (var i=0;i<smallCube.surfaces.length;i++) {
+            smallCube.surfaces[i].setProperties({ backgroundColor: 'blue', opacity: 0.25 });
+            smallCube.surfaces[i].setContent('');
             _setMovementListeners(smallCube.surfaces[i]);
         }
 
@@ -120,4 +120,6 @@ define(function(require, exports, module) {
     RotatingCube.DEFAULT_OPTIONS = {};
 
     module.exports = RotatingCube;
+
+
 });

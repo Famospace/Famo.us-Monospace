@@ -27,6 +27,7 @@ define(function(require, exports, module) {
 
         var position = [0, 0];
         var smallPosition = [150, 150, 150];
+        var smallPositionXY = [3, 3];
 
 
 
@@ -48,7 +49,6 @@ define(function(require, exports, module) {
         });
 
         for (var i=0;i<smallCube.surfaces.length;i++) {
-            // smallCube.surfaces[i].pipe(smallCubeSync);
             _setMovementListeners(smallCube.surfaces[i]);
         }
 
@@ -66,71 +66,34 @@ define(function(require, exports, module) {
         function _moveSmallCube (downData, upData) {
             var xDelta = Math.abs(downData.x - upData.x);
             var yDelta = Math.abs(downData.y - upData.y);
-            if (xDelta > 10 || yDelta > 10) {
+            if (xDelta > 1 || yDelta > 1) {
                 // vertical
                 if (yDelta > xDelta) {
-                    // delta is positive
-                    if (downData.y - upData.y > 0) {
-                        smallPosition[1] -= 100;                           
-                    } else {
-                    // delta is negative
+                    // move up
+                    if (downData.y - upData.y > 0 && smallPositionXY[1] > 0) {
+                        smallPositionXY[1]--;
+                        smallPosition[1] -= 100;                     
+                    } 
+                    // move down
+                    if (downData.y - upData.y < 0 && smallPositionXY[1] < 3) {
+                        smallPositionXY[1]++;
                         smallPosition[1] += 100;                           
                     }
                 // horizontal
                 } else {
-                    // delta is positive
-                    if (downData.x - upData.x > 0) {
+                    // move left
+                    if (downData.x - upData.x > 0 && smallPositionXY[0] > 0) {
+                        smallPositionXY[0]--;
                         smallPosition[0] -= 100;                           
-                    } else {
-                    // delta is negative
-                        smallPosition[0] += 100;                           
+                    }
+                    // move right
+                    if (downData.x - upData.x < 0 && smallPositionXY[0] < 3) {
+                        smallPositionXY[0]++;
+                        smallPosition[0] += 100;
                     }
                 }
             }
         }
-
-        /*
-        Objective:
-            assess trend of mouse-movement
-                if (xDelta > yDelta)
-                    isolate x-axis (aka prohibit y-axis translations)
-                else
-                    isolate y-axis (aka prohibit x-axis translations)
-
-            What if:
-                _____________
-                |///////////|
-                |//         |
-                |//         |
-                |//         |
-                |//_________|
-
-                when '/' area is reached (assuming start pointer coords are 
-                    in center of cube), the cube starts *only* moving in that
-                    direction
-                  process
-                    mousedown coords inside surface
-                    move pointer to 'edge' of surface
-                        direction is locked
-                            mouse must still be down
-                                maybe calculate slope to determine x/y axis
-
-            if mouse approaches surface edge area:
-                based on edge, cube moves in that direction by 1
-        */
-
-
-        // smallCubeSync.on('update', function (data) {
-        //     var x = Math.abs(data.delta[0]);
-        //     var y = Math.abs(data.delta[1]);
-        //     console.log(data);
-        //     if (x > y) {
-        //         smallPosition[0] += data.delta[0];
-        //     } else {
-        //         smallPosition[1] += data.delta[1];
-        //     }
-        // }.bind(this));
-
         
         node.add(smallCubeModifier).add(smallCube);
 

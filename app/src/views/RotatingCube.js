@@ -27,15 +27,16 @@ define(function(require, exports, module) {
     var delta = [0, 0];
     var position = [0,0,0];
     var state = [0,0,1];
+    var nVec = [0,1,0];
     var index = [0,0,0];
     var right = 0;
-    var up = 0;
+    var down = 0;
 
     var transitionable = new Transitionable(0);
 
     sync.on('update', function (data) {
       delta[0] += data.delta[0];
-      delta[1] -= data.delta[1];
+      delta[1] += data.delta[1];
     });
 
     sync.on('end', function () {
@@ -44,13 +45,128 @@ define(function(require, exports, module) {
         right = delta[0] > 0 ? 1 : -1;
         // index[0] = delta[0] > 0 ? 1 : -1; 
       } else{
-        up = delta[0] > 0 ? 1 : -1;
+        down = delta[1] > 0 ? 1 : -1;
         // index[1] = delta[0] > 0 ? 1 : -1; 
       }
+
+      if(state[2] === 1){ //[0,0,1]
+        var tempState = state;
+        index = [right, -down, 0];
+        if (nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
+          if (down !== 0){
+            state = [0,down*nVec[1],0];
+            nVec = [0,0,-down*tempState[2]];
+          }else{
+            state = [-right*nVec[1],0,0];
+          }
+        }else{
+          if (down !== 0){ //[1,0,0] or [-1,0,0]
+            state = [down*nVec[0],0,0];
+            nVec = [0,0,-down*tempState[2]];
+          }else{
+            state = [0,right*nVec[0],0];
+          }
+        }
+      }else if(state[2] === -1){ //[0,0,-1]
+        var tempState = state;
+        index = [right, -down, 0];
+        if (nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
+          if (down !== 0){
+            state = [0,down*nVec[1],0];
+            nVec = [0,0,-down*tempState[2]];
+          }else{
+            state = [right*nVec[1],0,0];
+          }
+        }else{
+          if (down !== 0){ //[1,0,0] or [-1,0,0]
+            state = [down*nVec[0],0,0];
+            nVec = [0,0,-down*tempState[2]];
+          }else{
+            state = [0,-right*nVec[0],0];
+          }
+        }
+      }else if(state[1] === 1){//[0,1,0]
+        var tempState = state;
+        index = [right, -down, 0];
+        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+          if (down !== 0){
+            state = [0,0,-down*nVec[2]];
+            nVec = [0,down*tempState[1],0];
+          }else{
+            state = [right*nVec[2],0,0];
+          }
+        }else{
+          if (down !== 0){ //[1,0,0] or [-1,0,0]
+            state = [down*nVec[0],0,0];
+            nVec = [0,-down*tempState[1],0];
+          }else{
+            state = [0,0,-right*nVec[0]];
+          }
+        }
+      }else if(state[1] === -1){ //[0,-1,0]
+        var tempState = state;
+        index = [right, -down, 0];
+        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+          if (down !== 0){
+            state = [0,0,down*nVec[2]];
+            nVec = [0,-down*tempState[1],0];
+          }else{
+            state = [-right*nVec[2],0,0];
+          }
+        }else{
+          if (down !== 0){ //[1,0,0] or [-1,0,0]
+            state = [down*nVec[0],0,0];
+            nVec = [0,-down*tempState[1],0];
+          }else{
+            state = [0,0,right*nVec[0]];
+          }
+        }
+      }else if(state[0] === 1){ //[1,0,0]
+        var tempState = state;
+        index = [right, -down, 0];
+        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+          if (down !== 0){
+            state = [0,0,down*nVec[2]];
+            nVec = [-down*tempState[0],0,0];
+          }else{
+            state = [0,-right*nVec[2],0];
+          }
+        }else{
+          if (down !== 0){ //[0,1,0] or [0,-1,0]
+            state = [0,down*nVec[1],0];
+            nVec = [-down*tempState[0],0,0];
+          }else{
+            state = [0,0,right*nVec[1]];
+          }
+        }
+      }else{ //[-1,0,0]
+        var tempState = state;
+        index = [right, -down, 0];
+        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+          if (down !== 0){
+            state = [0,0,down*nVec[2]];
+            nVec = [-down*tempState[0],0,0];
+          }else{
+            state = [0,right*nVec[2],0];
+          }
+        }else{
+          if (down !== 0){ //[0,1,0] or [0,-1,0]
+            state = [0,down*nVec[1],0];
+            nVec = [-down*tempState[0],0,0];
+          }else{
+            state = [0,0,-right*nVec[1]];
+          }
+        }
+      }
+
+
       transitionable.set(1, {
           duration: 1000, curve: Easing.outBack
       });      
-      console.log('index', index);
+      console.log('right: ', right);
+      console.log('down: ', down);
+      console.log('state: ', state);
+      console.log('nVec: ', nVec);
       console.log('delta', delta);
     });
 
@@ -62,59 +178,16 @@ define(function(require, exports, module) {
           position[0] += index[0];
           position[1] += index[1];
           position[2] += index[2];
-          console.log('complete transition', position);
           index = [0,0,0];
           delta = [0,0];
+          right = 0;
+          down = 0;
           transitionable.reset(0);
           transitionable.halt();
         }
 
-        if(state === [0,0,1]){
-          index = [right, up, 0];
-          if (up !== 0){
-            state = [-up,0,0];
-          }else{
-            state = [0,-right,0];
-          }
-        }else if(state = [0,0,-1]){
-          index = [-right, up, 0];
-          if (up !== 0){
-            state = [-up,0,0];
-          }else{
-            state = [0,right,0];
-          }
-        }else if(state = [0,1,0]){
-          index = [0, right, up];
-          if (up !== 0){
-            state = [0,0,-up];
-          }else{
-            state = [0,-right,0];
-          }
-        }else if(state = [0,-1,0]){
-          index = [0, right, -up];
-          if (up !== 0){
-            state = [0,0,up];
-          }else{
-            state = [0,-right,0];
-          }
-        }else if(state = [1,0,0]){
-          index = [up, 0, -right];
-          if (up !== 0){
-            state = [-up,0,0];
-          }else{
-            state = [0,0,right];
-          }
-        }else{
-          index = [up, 0, right];
-          if (up !== 0){
-            state = [-up,0,0];
-          }else{
-            state = [0,0,-right];
-          }
-        }
-
         var trans = Transform.rotate((position[1]+index[1]*rotateAng)*Math.PI/2, 
-          (position[0]+index[0]*rotateAng)*Math.PI/2, 
+          (position[0]+index[0]*rotateAng)*Math.PI/2,
           (position[2]+index[2]*rotateAng)*Math.PI/2);
         return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
       }

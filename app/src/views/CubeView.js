@@ -14,9 +14,12 @@ define(function(require, exports, module) {
         // needed to add surface listeners from ancestor view
         this.surfaces = [];
 
-        this.matrix = [];
-        this.surfaceTranslations = undefined;
-        this.surfaceRotations = undefined;
+        var rootModifier = new Modifier({
+          size: [this.options.size, this.options.size],
+          translate: Transform.translate([this.options.size/2,this.options.size/2, this.options.size/2])
+        });
+
+        this.rootNode = this.add(rootModifier);
 
         _createCube.call(this);
     }
@@ -92,7 +95,7 @@ define(function(require, exports, module) {
         surfaceModifier.setTransform( matrixData, {duration: 0});
 
         // add to view's context for presentation
-        this.add(surfaceModifier).add(surface);
+        this.rootNode.add(surfaceModifier).add(surface);
       }
     }
 });

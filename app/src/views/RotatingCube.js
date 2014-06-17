@@ -53,8 +53,9 @@ define(function(require, exports, module) {
         var self = this;
         var rotateModifier = new Modifier({
             transform: function () {
-                var trans = Transform.rotate(self.position[1]/100, self.position[0]/100, 0);
-                return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
+
+                return Transform.rotate(self.position[1]/100, self.position[0]/100, 0);
+
             }
         });
 

@@ -44,13 +44,14 @@ define(function(require, exports, module) {
         [Math.PI/2, 0, 0],// bottom
         [-Math.PI/2, 0, 0]// top
       ];
+      var letters = ['Z', '-Z', 'X', '-X', 'Y', '-Y'];
 
       for (var i=0;i<6;i++) {
 
         // create initial cube surfaces
         var surface = new Surface({
           size: [this.options.size*2, this.options.size*2],
-          content: '<p>F</p>',
+          content: '<p><h1>'+letters[i]+'</h1></p>',
           properties: {
             textAlign: 'center',
             webkitBackfaceVisibility: 'visible',

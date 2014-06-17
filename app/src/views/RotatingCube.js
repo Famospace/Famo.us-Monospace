@@ -88,11 +88,11 @@ define(function(require, exports, module) {
 
       var trans = quaternionUpdate.getTransform();
 
-      // var trans = quaternion.slerp(quaternionUpdate, transitionable.get());
+      var trans = quaternionUpdate.slerp(quaternion.getTransform(), 0.5);
 
 
-      return trans;
-      // return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
+      // return trans;
+      return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
     });
     var mainCube = new CubeView();
     var node = this.add(rotationModifier).add(mainCube);

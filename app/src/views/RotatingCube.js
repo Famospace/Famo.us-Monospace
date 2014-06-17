@@ -25,9 +25,9 @@ define(function(require, exports, module) {
     this.add(backgroundSurface);
 
     var delta = [0, 0]; //movement of the mouse
-    var position = [0,1,2]; //total number of turns in each direction
+    var position = [0,0,0]; //total number of turns in each direction
     var state = [0,0,1]; //current front face
-    var nVec = [0,1,0]; //current top face
+    var nVec = [0,-1,0]; //current top face
     var index = [0,0,0]; //90 degree turn unit
     var left = 0;
     var down = 0;
@@ -230,8 +230,8 @@ define(function(require, exports, module) {
         var rotTrans = Transform.rotate((index[0]*rotateAng)*Math.PI/2,
           (index[1]*rotateAng)*Math.PI/2,
           (index[2]*rotateAng)*Math.PI/2);
-        var trans = Transform.multiply(finalTrans, rotTrans);
-        return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
+        return Transform.multiply(finalTrans, rotTrans);
+        // return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
 
         // var trans = Transform.rotate((position[0]+index[0]*rotateAng)*Math.PI/2,
         //   (position[1]+index[1]*rotateAng)*Math.PI/2,

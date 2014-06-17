@@ -3,11 +3,19 @@ define(function(require, exports, module) {
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
     var StateModifier = require('famous/modifiers/StateModifier');
-    var Modifier = require('famous/core/Modifier');
+    var Modifier      = require('famous/core/Modifier');
+
     var Timer = require('famous/utilities/Timer');
 
     function CubeView() {
         View.apply(this, arguments);
+
+        this.rootModifier = new Modifier({
+          size: [this.options.size, this.options.size],
+          translate: Transform.translate([this.options.size/2,this.options.size/2, this.options.size/2])
+        });
+
+        this.rootNode = this.add(this.rootModifier);
 
         this.matrix = [];
         this.surfaceTranslations = undefined;
@@ -86,7 +94,7 @@ define(function(require, exports, module) {
         surfaceModifier.setTransform( matrixData, {duration: 0});
 
         // add to view's context for presentation
-        this.add(surfaceModifier).add(surface);
+        this.rootNode.add(surfaceModifier).add(surface);
       }
     }
 

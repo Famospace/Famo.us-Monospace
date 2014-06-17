@@ -5,54 +5,20 @@ define(function(require, exports, module) {
     var Modifier       = require('famous/core/Modifier');
     var StateModifier  = require('famous/modifiers/StateModifier');
     var MouseSync      = require('famous/inputs/MouseSync');
-    var Transitionable = require('famous/transitions/Transitionable');
 
     var CubeView = require('views/CubeView');
+    var DestroyerCube = require('views/DestroyerCube');
 
     function RotatingCube() {
         View.apply(this, arguments);
 
-
-        var backgroundSurface = new Surface({
-            size: [undefined, undefined]
-        });
-
-        var sync = new MouseSync();
-
-        backgroundSurface.pipe(sync);
-
-        this.add(backgroundSurface);
-
-        var position = [0, 0];
-
-        sync.on('update', function (data) {
-            position[0] += data.delta[0];
-            position[1] -= data.delta[1];
-        });
-
-        var rotateModifier = new Modifier({
-            transform: function () {
-                var trans = Transform.rotate(position[1]/100, position[0]/100, 0);
-                return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
-            }
-        });
-
-        var node = this.add(rotateModifier);
-
-        var smallCube = new CubeView({ size: 50 });
-
-        var smallCubeModifier = new Modifier({
-            transform: Transform.translate(150, 150, 150)
-        });
-
-        smallCube.pipe(sync);
+        this.position = [0, 0];
         
-        node.add(smallCubeModifier).add(smallCube);
-
-        var cube = new CubeView();
-
-        node.add(cube);
-
+        _createRotateModifier.call(this);
+        _createBackground.call(this);
+        _setBackgroundListeners.call(this);
+        _createParentCube.call(this);
+        _createDestroyerCube.call(this);
     }
 
     RotatingCube.prototype = Object.create(View.prototype);
@@ -60,5 +26,53 @@ define(function(require, exports, module) {
 
     RotatingCube.DEFAULT_OPTIONS = {};
 
+    function _createDestroyerCube () {
+        var destroyerCube = new DestroyerCube();
+        this.node.add(destroyerCube);
+    }
+
+    function _createParentCube () {
+        this.cube = new CubeView();
+
+        for (var j=0;j<this.cube.surfaces.length;j++) {
+            this.cube.surfaces[j].setProperties({pointerEvents: 'none'});
+        }
+
+        this.node.add(this.cube);
+    }
+
+    function _createBackground () {
+        this.backgroundSurface = new Surface({
+            size: [undefined, undefined]
+        });
+
+        this.add(this.backgroundSurface);
+    }
+
+    function _createRotateModifier () {
+        var self = this;
+        var rotateModifier = new Modifier({
+            transform: function () {
+                var trans = Transform.rotate(self.position[1]/100, self.position[0]/100, 0);
+                return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
+            }
+        });
+
+        this.node = this.add(rotateModifier);
+    }
+
+    function _setBackgroundListeners () {
+        var ParentCubeSync = new MouseSync();
+
+        this.backgroundSurface.pipe(ParentCubeSync);
+
+        ParentCubeSync.on('update', function (data) {
+            this.position[0] += data.delta[0];
+            this.position[1] -= data.delta[1];
+        }.bind(this));
+    }
+
     module.exports = RotatingCube;
+
+
 });

@@ -25,10 +25,9 @@ define(function(require, exports, module) {
     this.add(backgroundSurface);
 
     var delta = [0, 0]; //movement of the mouse
-    var position = [0,0,0]; //total number of turns in each direction
-    var state = [0,0,1]; //current front face
-    var nVec = [0,-1,0]; //current top face
-    var index = [0,0,0]; //90 degree turn unit
+    this.state = [0,0,1]; //current front face
+    this.nVec = [0,-1,0]; //current top face
+    this.index = [0,0,0]; //90 degree turn unit
     var left = 0;
     var down = 0;
 
@@ -40,7 +39,6 @@ define(function(require, exports, module) {
     });
 
     sync.on('end', function () {
-      console.log()
       if (Math.abs(delta[0]) > Math.abs(delta[1])){
         left = delta[0] > 0 ? -1 : 1;
         // index[0] = delta[0] > 0 ? 1 : -1; 
@@ -49,195 +47,39 @@ define(function(require, exports, module) {
         // index[1] = delta[0] > 0 ? 1 : -1; 
       }
 
-      if(state[2] === 1){ //[0,0,1]
-        var tempState = state;
-        if (nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
-          if (down !== 0){
-            index = [down*nVec[1], 0, 0];
-            state = [0,down*nVec[1],0];
-            nVec = [0,0,-down*tempState[2]];
-          }else{
-            index = [0, left*nVec[1], 0];
-            state = [-left*nVec[1],0,0];
-          }
-        }else{ //nVec = [1,0,0] or [-1,0,0] 
-          if (down !== 0){ 
-            index = [0, -down*nVec[0], 0];
-            state = [down*nVec[0],0,0];
-            nVec = [0,0,-down*tempState[2]];
-          }else{
-            index = [left*nVec[0], 0, 0];
-            // index = [left*nVec[0], 0, 0];
-            state = [0, left*nVec[0],0];
-          }
-        }
-      }else if(state[2] === -1){ //[0,0,-1]
-        var tempState = state;
-        if (nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
-          if (down !== 0){
-            index = [-down*nVec[1], 0, 0];
-            state = [0,-down*nVec[1],0];
-            nVec = [0,0,-down*tempState[2]];
-          }else{
-            index = [0, left*nVec[1], 0];
-            state = [left*nVec[1],0,0];
-          }
-        }else{
-          if (down !== 0){ //[1,0,0] or [-1,0,0]
-            index = [0, down*nVec[0], 0];
-            state = [down*nVec[0],0,0];
-            nVec = [0,0,-down*tempState[2]];
-          }else{
-            index = [left*nVec[0], 0, 0];
-            state = [0, -left*nVec[0],0];
-          }
-        }
-      }else if(state[1] === 1){//[0,1,0]
-        var tempState = state;
-        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
-          if (down !== 0){
-            index = [-down*nVec[2], 0, 0];
-            state = [0,0,down*nVec[2]];
-            nVec = [0,-down*tempState[1],0];
-          }else{
-            index = [0, 0, left*nVec[2]];
-            state = [left*nVec[2],0,0];
-          }
-        }else{
-          if (down !== 0){ //[1,0,0] or [-1,0,0]
-            index = [0, 0, down*nVec[0]];
-            state = [down*nVec[0],0,0];
-            nVec = [0,-down*tempState[1],0];
-          }else{
-            index = [left*nVec[0], 0, 0];
-            state = [0,0,-left*nVec[0]];
-          }
-        }
-      }else if(state[1] === -1){ //[0,-1,0]
-        var tempState = state;
-        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
-          if (down !== 0){
-            index = [-down*nVec[2], 0, 0];
-            state = [0,0,-down*nVec[2]];
-            nVec = [0,down*tempState[1],0];
-          }else{
-            index = [0, 0, left*nVec[2]];
-            state = [left*nVec[2],0,0];
-          }
-        }else{
-          if (down !== 0){ //[1,0,0] or [-1,0,0]
-            index = [0, 0, down*nVec[0]];
-            state = [-down*nVec[0],0,0];
-            nVec = [0,down*tempState[1],0];
-          }else{
-            index = [left*nVec[0], 0, 0];
-            state = [0,0,-left*nVec[0]];
-          }
-        }
-      }else if(state[0] === 1){ //[1,0,0]
-        var tempState = state;
-        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
-          if (down !== 0){
-            index = [0, -down*nVec[2], 0];
-            state = [0,0,-down*nVec[2]];
-            nVec = [down*tempState[0],0,0];
-          }else{
-            index = [0, 0, left*nVec[2]];
-            state = [0,left*nVec[2],0];
-          }
-        }else{
-          if (down !== 0){ //[0,1,0] or [0,-1,0]
-            index = [0, 0, down*nVec[1]];
-            state = [0,-down*nVec[1],0];
-            nVec = [down*tempState[0],0,0];
-          }else{
-            index = [0, left*nVec[1], 0];
-            state = [0,0,-left*nVec[1]];
-          }
-        }
-      }else{ //[-1,0,0]
-        var tempState = state;
-        if (nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
-          if (down !== 0){
-            index = [0, down*nVec[2], 0];
-            state = [0,0,-down*nVec[2]];
-            nVec = [down*tempState[0],0,0];
-          }else{
-            index = [0, 0, left*nVec[2]];
-            state = [0,-left*nVec[2],0];
-          }
-        }else{
-          if (down !== 0){ //[0,1,0] or [0,-1,0]
-            index = [0, 0, -down*nVec[1]];
-            state = [0,-down*nVec[1],0];
-            nVec = [down*tempState[0],0,0];
-          }else{
-            index = [0, left*nVec[1], 0];
-            state = [0,0, left*nVec[1]];
-          }
-        }
-      }
-
+      updateStateTransition.call(this,left,down);
 
       transitionable.set(1, {
           duration: 1000, curve: Easing.outBack
       });      
       console.log('left: ', left);
       console.log('down: ', down);
-      console.log('state: ', state);
-      console.log('nVec: ', nVec);
+      console.log('state: ', this.state);
+      console.log('nVec: ', this.nVec);
       console.log('delta', delta);
-    });
+    }.bind(this));
+
+    var rotation = Transform.rotate(0,0,0);
 
     var rotateModifier = new Modifier({
       transform: function () {
         var rotateAng = transitionable.get();
-        if (rotateAng  > .99999){
-          position[0] += index[0];
-          if (Math.abs(position[0]) === 4){
-            position[0] = 0;
-          }
-          position[1] += index[1];
-          if (Math.abs(position[1]) === 4){
-            position[1] = 0;
-          }
-          position[2] += index[2];
-          if (Math.abs(position[2]) === 4){
-            position[2] = 0;
-          }
-          index = [0,0,0];
+        if (rotateAng  > 0.99999){
+          rotation = mapStateTransition(this.state, this.nVec);
+          console.log(rotation);
+          this.index = [0,0,0];
           delta = [0,0];
           left = 0;
           down = 0;
           transitionable.reset(0);
           transitionable.halt();
-          console.log('position: ', position);
         }
-        // var trans = Transform.rotateX((rotateAng)*Math.PI/2)
-        // var trans = Transform.rotate((0)*Math.PI/2,(0)*Math.PI/2,(rotateAng)*Math.PI/2);
-        // return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
-        
-        // var orderTrans = orderTransfrom(state,nVec, position);
-        // var trans = Transform.multiply(orderTrans,
-        //   Transform.rotate((index[0]*rotateAng)*Math.PI/2,
-        //     (index[1]*rotateAng)*Math.PI/2,
-        //     (index[2]*rotateAng)*Math.PI/2
-        //   )
-        // );
-        // return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
 
-        var finalTrans = Transform.rotate(position[0]*Math.PI/2,position[1]*Math.PI/2,position[2]*Math.PI/2);
-        var rotTrans = Transform.rotate((index[0]*rotateAng)*Math.PI/2,
-          (index[1]*rotateAng)*Math.PI/2,
-          (index[2]*rotateAng)*Math.PI/2);
-        return Transform.multiply(finalTrans, rotTrans);
-        // return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
-
-        // var trans = Transform.rotate((position[0]+index[0]*rotateAng)*Math.PI/2,
-        //   (position[1]+index[1]*rotateAng)*Math.PI/2,
-        //   (position[2]+index[2]*rotateAng)*Math.PI/2);
-        // return Transform.aboutOrigin([window.innerWidth/2, window.innerHeight/2, 0], trans);
-      }
+        var rotTrans = Transform.rotate((this.index[0]*rotateAng)*Math.PI/2,
+          (this.index[1]*rotateAng)*Math.PI/2,
+          (this.index[2]*rotateAng)*Math.PI/2);
+        return Transform.multiply(rotation, rotTrans);
+      }.bind(this)
     });
 
     var node = this.add(rotateModifier);
@@ -260,49 +102,186 @@ define(function(require, exports, module) {
 
   }
 
-  function orderTransfrom(state, nVec, position){
-    var counter = [0,0,0];
-    if (state[0]!==0){
-      var firstTrans = Transform.rotateX(position[0]*Math.PI/2);
-      counter[0]++;
-    }else if(state[1] !== 0){
-      var firstTrans = Transform.rotateY(position[1]*Math.PI/2);
-      counter[1]++;
-    }else{
-      var firstTrans = Transform.rotateZ(position[2]*Math.PI/2);
-      counter[2]++;
-    }
-
-    if (nVec[0]!==0){
-      var secondTrans = Transform.rotateX(position[0]*Math.PI/2);
-      counter[0]++;
-    }else if(nVec[1] !== 0){
-      var secondTrans = Transform.rotateY(position[1]*Math.PI/2);
-      counter[1]++;
-    }else{
-      var secondTrans = Transform.rotateZ(position[2]*Math.PI/2);
-      counter[2]++;
-    }
-
-    if (counter[0] === 0){
-      var thirdTrans = Transform.rotateX(position[0]*Math.PI/2);
-    }else if(counter[1] === 0){
-      var thirdTrans = Transform.rotateY(position[1]*Math.PI/2);
-    }else{
-      var thirdTrans = Transform.rotateZ(position[2]*Math.PI/2);
-    }
-    var finalTrans = Transform.multiply(
-      Transform.multiply(firstTrans,secondTrans),
-      thirdTrans
-    );
-
-    return finalTrans;
-  }
-
   RotatingCube.prototype = Object.create(View.prototype);
   RotatingCube.prototype.constructor = RotatingCube;
 
   RotatingCube.DEFAULT_OPTIONS = {};
+
+  function updateStateTransition(left, down){
+    console.log('test', this.nVec);
+    if(this.state[2] === 1){ //[0,0,1]
+      var tempState = this.state;
+      if (this.nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
+        if (down !== 0){
+          this.index = [down*this.nVec[1], 0, 0];
+          this.state = [0,down*this.nVec[1],0];
+          this.nVec = [0,0,-down*tempState[2]];
+        }else{
+          this.index = [0, left*this.nVec[1], 0];
+          this.state = [-left*this.nVec[1],0,0];
+        }
+      }else{ //this.nVec = [1,0,0] or [-1,0,0] 
+        if (down !== 0){ 
+          this.index = [0, -down*this.nVec[0], 0];
+          this.state = [down*this.nVec[0],0,0];
+          this.nVec = [0,0,-down*tempState[2]];
+        }else{
+          this.index = [left*this.nVec[0], 0, 0];
+          // this.index = [left*this.nVec[0], 0, 0];
+          this.state = [0, left*this.nVec[0],0];
+        }
+      }
+    }else if(this.state[2] === -1){ //[0,0,-1]
+      var tempState = this.state;
+      if (this.nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
+        if (down !== 0){
+          this.index = [-down*this.nVec[1], 0, 0];
+          this.state = [0,down*this.nVec[1],0];
+          this.nVec = [0,0,-down*tempState[2]];
+        }else{
+          this.index = [0, left*this.nVec[1], 0];
+          this.state = [left*this.nVec[1],0,0];
+        }
+      }else{
+        if (down !== 0){ //[1,0,0] or [-1,0,0]
+          this.index = [0, down*this.nVec[0], 0];
+          this.state = [down*this.nVec[0],0,0];
+          this.nVec = [0,0,-down*tempState[2]];
+        }else{
+          this.index = [left*this.nVec[0], 0, 0];
+          this.state = [0, -left*this.nVec[0],0];
+        }
+      }
+    }else if(this.state[1] === 1){//[0,1,0]
+      var tempState = this.state;
+      if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+        if (down !== 0){
+          this.index = [-down*this.nVec[2], 0, 0];
+          this.state = [0,0,down*this.nVec[2]];
+          this.nVec = [0,-down*tempState[1],0];
+        }else{
+          this.index = [0, 0, left*this.nVec[2]];
+          this.state = [left*this.nVec[2],0,0];
+        }
+      }else{
+        if (down !== 0){ //[1,0,0] or [-1,0,0]
+          this.index = [0, 0, down*this.nVec[0]];
+          this.state = [down*this.nVec[0],0,0];
+          this.nVec = [0,-down*tempState[1],0];
+        }else{
+          this.index = [left*this.nVec[0], 0, 0];
+          this.state = [0,0,-left*this.nVec[0]];
+        }
+      }
+    }else if(this.state[1] === -1){ //[0,-1,0]
+      var tempState = this.state;
+      if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+        if (down !== 0){
+          this.index = [down*this.nVec[2], 0, 0];
+          this.state = [0,0,down*this.nVec[2]];
+          this.nVec = [0,-down*tempState[1],0];
+        }else{
+          this.index = [0, 0, left*this.nVec[2]];
+          this.state = [-left*this.nVec[2],0,0];
+        }
+      }else{
+        if (down !== 0){ //[1,0,0] or [-1,0,0]
+          this.index = [0, 0, -down*this.nVec[0]];
+          this.state = [down*this.nVec[0],0,0];
+          this.nVec = [0,-down*tempState[1],0];
+        }else{
+          this.index = [left*this.nVec[0], 0, 0];
+          this.state = [0,0,left*this.nVec[0]];
+        }
+      }
+    }else if(this.state[0] === 1){ //[1,0,0]
+      var tempState = this.state;
+      if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+        if (down !== 0){
+          this.index = [0, down*this.nVec[2], 0];
+          this.state = [0,0,down*this.nVec[2]];
+          this.nVec = [-down*tempState[0],0,0];
+        }else{
+          this.index = [0, 0, left*this.nVec[2]];
+          this.state = [0,-left*this.nVec[2],0];
+        }
+      }else{
+        if (down !== 0){ //[0,1,0] or [0,-1,0]
+          this.index = [0, 0, -down*this.nVec[1]];
+          this.state = [0,down*this.nVec[1],0];
+          this.nVec = [-down*tempState[0],0,0];
+        }else{
+          this.index = [0, left*this.nVec[1], 0];
+          this.state = [0,0,left*this.nVec[1]];
+        }
+      }
+    }else{ //[-1,0,0]
+      var tempState = this.state;
+      if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
+        if (down !== 0){
+          this.index = [0, -down*this.nVec[2], 0];
+          this.state = [0,0,down*this.nVec[2]];
+          this.nVec = [-down*tempState[0],0,0];
+        }else{
+          this.index = [0, 0, left*this.nVec[2]];
+          this.state = [0,left*this.nVec[2],0];
+        }
+      }else{
+        if (down !== 0){ //[0,1,0] or [0,-1,0]
+          this.index = [0, 0, down*this.nVec[1]];
+          this.state = [0,down*this.nVec[1],0];
+          this.nVec = [-down*tempState[0],0,0];
+        }else{
+          this.index = [0, left*this.nVec[1], 0];
+          this.state = [0,0, -left*this.nVec[1]];
+        }
+      }
+    }
+  }
+
+  function mapStateTransition(state, nVec){
+    var rotationMap = {
+      '1,0,0':  {'rotate': [0,-1,0],
+                 '0,-1,0': [0,0,0],
+                 '0,1,0':  [2,0,0],
+                 '0,0,1':  [1,0,0],
+                 '0,0,-1': [-1,0,0]},
+      '-1,0,0': {'rotate': [0,1,0],
+                 '0,-1,0': [0,0,0],
+                 '0,1,0':  [2,0,0],
+                 '0,0,1':  [1,0,0],
+                 '0,0,-1': [-1,0,0]},
+      '0,-1,0': {'rotate': [-1,0,0],
+                 '0,0,-1': [0,0,0],
+                 '0,0,1':  [0,2,0],
+                 '1,0,0':  [0,1,0],
+                 '-1,0,0': [0,-1,0]},
+      '0,1,0':  {'rotate': [1,0,0],
+                 '0,0,1': [0,0,0],
+                 '0,0,-1':  [0,2,0],
+                 '1,0,0':  [0,-1,0],
+                 '-1,0,0': [0,1,0]},
+      '0,0,-1': {'rotate': [0,2,0],
+                 '0,-1,0': [0,0,0],
+                 '0,1,0':  [0,0,2],
+                 '1,0,0':  [0,0,-1],
+                 '-1,0,0': [0,0,1]},
+      '0,0,1':  {'rotate': [0,0,0],
+                 '0,-1,0': [0,0,0],
+                 '0,1,0':  [0,0,2],
+                 '1,0,0':  [0,0,-1],
+                 '-1,0,0': [0,0,1]}
+    };
+
+
+    var first = rotationMap[state]['rotate'];
+    var second =  rotationMap[state][nVec];
+
+    var trans = Transform.multiply(Transform.rotate(first[0]*Math.PI/2,first[1]*Math.PI/2,first[2]*Math.PI/2),
+      Transform.rotate(second[0]*Math.PI/2,second[1]*Math.PI/2,second[2]*Math.PI/2));
+
+    return trans;
+  }
 
   module.exports = RotatingCube;
 });

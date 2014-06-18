@@ -121,7 +121,7 @@ define(function(require, exports, module) {
     }
 
     function updateStateTransition(left, down){
-      console.log('test', this.nVec);
+      // console.log('test', this.nVec);
       if(this.state[2] === 1){ //[0,0,1]
         var tempState = this.state;
         if (this.nVec[1] !== 0){ //[0,1,0] or [0,-1,0]

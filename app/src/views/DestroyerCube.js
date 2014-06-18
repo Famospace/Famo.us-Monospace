@@ -27,14 +27,14 @@ define(function(require, exports, module) {
 
     DestroyerCube.prototype.setPosition = function(pos){
         this.position = pos;
-    }
+    };
 
     function _createDestroyer () {
         var destroyerCube = new CubeView({ size: 50 });
 
         for (var i=0;i<destroyerCube.surfaces.length;i++) {
-            destroyerCube.surfaces[i].setProperties({ 
-                backgroundColor: this.options.color, 
+            destroyerCube.surfaces[i].setProperties({
+                backgroundColor: this.options.color,
                 opacity: 0.25 });
             destroyerCube.surfaces[i].setContent('');
         }

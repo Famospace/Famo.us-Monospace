@@ -7,9 +7,7 @@ define(function(require, exports, module) {
     var MouseSync      = require('famous/inputs/MouseSync');
     var Transitionable = require('famous/transitions/Transitionable');
     var Easing         = require('famous/transitions/Easing');
-
-    var CubeView = require('views/CubeView');
-    var DestroyerCube = require('views/DestroyerCube');
+    var GameBoard = require('views/GameBoard');
 
     function RotatingCube() {
         View.apply(this, arguments);
@@ -28,29 +26,19 @@ define(function(require, exports, module) {
         _createRotateModifier.call(this);
         _createBackground.call(this);
         _setBackgroundListeners.call(this);
-        _createParentCube.call(this);
-        // _createDestroyerCube.call(this);
+        _createGameBoard.call(this);
         _setListeners.call(this);
     }
 
     RotatingCube.prototype = Object.create(View.prototype);
     RotatingCube.prototype.constructor = RotatingCube;
 
-    RotatingCube.DEFAULT_OPTIONS = {};
+    RotatingCube.DEFAULT_OPTIONS = {
+    };
 
-    function _createDestroyerCube () {
-        var destroyerCube = new DestroyerCube();
-        this.node.add(destroyerCube);
-    }
-
-    function _createParentCube () {
-        this.cube = new CubeView();
-
-        for (var j=0;j<this.cube.surfaces.length;j++) {
-            this.cube.surfaces[j].setProperties({pointerEvents: 'none'});
-        }
-
-        this.node.add(this.cube);
+    function _createGameBoard() {
+      this.gameBoard = new GameBoard();
+      this.node.add(this.gameBoard);
     }
 
     function _createBackground () {
@@ -124,7 +112,12 @@ define(function(require, exports, module) {
     }
 
     function _setListeners() {
-        this.destroyerCube.subscribe(this._eventOutput);
+        this.gameBoard.pipe(this._eventInput);
+
+        this._eventInput.on('movingCube', function(data){
+          console.log('from BG to RC', data);
+          this._eventOutput.emit('movingCube', data);
+        }.bind(this));
     }
 
     function updateStateTransition(left, down){

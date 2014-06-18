@@ -2,23 +2,16 @@ define(function(require, exports, module) {
     var View          = require('famous/core/View');
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
-    var StateModifier = require('famous/modifiers/StateModifier');
-    var Modifier       = require('famous/core/Modifier');
-
-
-    var CubeView = require('views/CubeView');
+    var Modifier      = require('famous/core/Modifier');
+    var CubeView      = require('views/CubeView');
 
     function DestroyerCube() {
         View.apply(this, arguments);
 
-        this.position = this.options.position;
-        this.positionXY = [3, 3];
+        this.position = this.options.startPosition;
         this.downData = undefined;
         this.upData = undefined;
 
-        this._eventInput.on('coordinateUpdate', function(data){
-            console.log('DC view', data);
-        });
 
         _createDestroyer.call(this);
         _setMovementListeners.call(this);
@@ -28,14 +21,21 @@ define(function(require, exports, module) {
     DestroyerCube.prototype.constructor = DestroyerCube;
 
     DestroyerCube.DEFAULT_OPTIONS = {
-        position: [150, 150, 150]
+        startPosition: [150,150,150],
+        color: 'blue'
+    };
+
+    DestroyerCube.prototype.setPosition = function(pos){
+        this.position = pos;
     };
 
     function _createDestroyer () {
         var destroyerCube = new CubeView({ size: 50 });
 
         for (var i=0;i<destroyerCube.surfaces.length;i++) {
-            destroyerCube.surfaces[i].setProperties({ backgroundColor: 'blue', opacity: 0.25 });
+            destroyerCube.surfaces[i].setProperties({
+                backgroundColor: this.options.color,
+                opacity: 0.25 });
             destroyerCube.surfaces[i].setContent('');
         }
 
@@ -48,51 +48,55 @@ define(function(require, exports, module) {
         this.destroyerCube = destroyerCube;
 
         this.add(destroyerModifier).add(this.destroyerCube);
-
     }
 
     function _setMovementListeners () {
+        var movement;
         for (var i=0;i<this.destroyerCube.surfaces.length;i++) {
             this.destroyerCube.surfaces[i].on('mousedown', function (data) {
                 this.downData = data;
             }.bind(this));
             this.destroyerCube.surfaces[i].on('mouseup', function (data) {
                 this.upData = data;
-                _moveSmallCube(this.downData, this.upData, this.positionXY, this.position);
+                movement = _calculateMovement(this.downData, this.upData);
+                this._eventOutput.emit('movingCube', movement);
             }.bind(this));
         }
     }
 
-    function _moveSmallCube (downData, upData, positionXY, position) {
+    function _calculateMovement (downData, upData) {
         var xDelta = Math.abs(downData.x - upData.x);
         var yDelta = Math.abs(downData.y - upData.y);
+        var output = {};
         if (xDelta > 1 || yDelta > 1) {
             // vertical
             if (yDelta > xDelta) {
                 // move up
-                if (downData.y - upData.y > 0 && positionXY[1] > 0) {
-                    positionXY[1]--;
-                    position[1] -= 100;                     
+                if (downData.y - upData.y > 0) {
+                    output.down = false;
+                    output.left = false;                     
                 } 
                 // move down
-                if (downData.y - upData.y < 0 && positionXY[1] < 3) {
-                    positionXY[1]++;
-                    position[1] += 100;                           
+                if (downData.y - upData.y < 0) {
+                    output.down = true; 
+                    output.left = false;                     
+                         
                 }
             // horizontal
             } else {
                 // move left
-                if (downData.x - upData.x > 0 && positionXY[0] > 0) {
-                    positionXY[0]--;
-                    position[0] -= 100;                           
+                if (downData.x - upData.x > 0) {
+                    output.down = false;
+                    output.left = true;                          
                 }
                 // move right
-                if (downData.x - upData.x < 0 && positionXY[0] < 3) {
-                    positionXY[0]++;
-                    position[0] += 100;
+                if (downData.x - upData.x < 0) {
+                    output.down = false;
+                    output.left = false;
                 }
             }
         }
+        return output;
     }
 
     module.exports = DestroyerCube;

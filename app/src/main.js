@@ -12,8 +12,6 @@ define(function(require, exports, module) {
   });
 
   var mainContext = Engine.createContext();
-
   mainContext.setPerspective(1000);
   mainContext.add(modifier).add(rotatingCube);
-
 });

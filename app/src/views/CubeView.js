@@ -3,9 +3,10 @@ define(function(require, exports, module) {
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
     var StateModifier = require('famous/modifiers/StateModifier');
-    var Modifier      = require('famous/core/Modifier');
-
+    var Modifier = require('famous/core/Modifier');
     var Timer = require('famous/utilities/Timer');
+    var Transitionable = require('famous/transitions/Transitionable');
+
 
     function CubeView() {
         View.apply(this, arguments);
@@ -27,7 +28,7 @@ define(function(require, exports, module) {
     CubeView.prototype.constructor = CubeView;
 
     CubeView.DEFAULT_OPTIONS = {
-      size: 100
+      size: 200,
     };
 
     module.exports = CubeView;

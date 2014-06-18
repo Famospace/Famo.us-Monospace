@@ -21,6 +21,7 @@ define(function(require, exports, module) {
     DestroyerCube.prototype.constructor = DestroyerCube;
 
     DestroyerCube.DEFAULT_OPTIONS = {
+        size: 100,
         startPosition: [150,150,150],
         color: 'blue'
     };
@@ -30,7 +31,7 @@ define(function(require, exports, module) {
     };
 
     function _createDestroyer () {
-        var destroyerCube = new CubeView({ size: 50 });
+        var destroyerCube = new CubeView({ size: this.options.size });
 
         for (var i=0;i<destroyerCube.surfaces.length;i++) {
             destroyerCube.surfaces[i].setProperties({

@@ -25,29 +25,35 @@ define(function(require, exports, module) {
     GameBoard.prototype = Object.create(View.prototype);
     GameBoard.prototype.constructor = GameBoard;
 
+    GameBoard.prototype.setIs2D = function(bool){
+        this.is2D = bool;
+    };
+
     GameBoard.DEFAULT_OPTIONS = {
-      destroyer:[150, 150, 150],
-      destroyerColor: 'blue',
-      smallCube:[
-        [-150, -150, -150],
-        [-50, -150, -150],
-        [50, -150, -150],
-        [150, -150, -150]
-      ],
-      smallCubeColor: 'red'
+        mainCubeSize: 400,
+        destroyer:[150, 150, 150],
+        destroyerColor: 'blue',
+        smallCube:[
+            [-150, -150, -150],
+            [-50, -150, -150],
+            [50, -150, -150],
+            [150, -150, -150]
+        ],
+        smallCubeColor: 'red'
     };
 
     function _createDestroyerCube () {
         this.destroyerCube = new DestroyerCube({
             position: this.options.destroyer,
-            color: this.options.destroyerColor
+            color: this.options.destroyerColor,
+            size: this.options.mainCubeSize/4
         });
         this.node.add(this.destroyerCube);
     }
 
     function _createParentCube () {
         this.cube = new CubeView({
-            size:200
+            size: this.options.mainCubeSize
         });
 
         for (var j=0;j<this.cube.surfaces.length;j++) {
@@ -61,7 +67,8 @@ define(function(require, exports, module) {
         for (var i=0; i<this.options.smallCube.length; i++){
             var smallCube = new SmallCube({
                 startPosition: this.options.smallCube[i],
-                cubeColor: this.options.smallCubeColor
+                cubeColor: this.options.smallCubeColor,
+                size: this.options.mainCubeSize/4
             });
             this.smallCubes.push(smallCube);
             this.node.add(smallCube);

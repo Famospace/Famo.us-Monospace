@@ -10,26 +10,28 @@ define(function(require, exports, module) {
 
         this.position = this.options.startPosition;
 
-        _createWhiteCube.call(this);
+        _createSmallCube.call(this);
     }
 
     SmallCube.prototype = Object.create(View.prototype);
     SmallCube.prototype.constructor = SmallCube;
 
-    SmallCube.prototype.setPositio = function(pos){
-        this.positon=pos;
+    SmallCube.prototype.setPosition = function(pos){
+        this.position=pos;
     };
 
     SmallCube.DEFAULT_OPTIONS = {
+        size: 100,
         startPosition: [-100, -100, 0],
         cubeColor: 'white'
     };
 
-    function _createWhiteCube () {
-        var smallCube = new CubeView({ size: 50 });
+    function _createSmallCube () {
+        var smallCube = new CubeView({ size: this.options.size });
 
         for (var i=0;i<smallCube.surfaces.length;i++) {
             smallCube.surfaces[i].setProperties({
+                size: this.options.size,
                 backgroundColor: this.options.cubeColor,
                 opacity: 0.25
             });

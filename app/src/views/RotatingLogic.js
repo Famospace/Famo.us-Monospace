@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     var Easing         = require('famous/transitions/Easing');
     var GameBoard = require('views/GameBoard');
 
-    function RotatingCube() {
+    function RotatingLogic() {
         View.apply(this, arguments);
 
         this.position = [0, 0]; //mouse movement
@@ -30,14 +30,21 @@ define(function(require, exports, module) {
         _setListeners.call(this);
     }
 
-    RotatingCube.prototype = Object.create(View.prototype);
-    RotatingCube.prototype.constructor = RotatingCube;
+    RotatingLogic.prototype = Object.create(View.prototype);
+    RotatingLogic.prototype.constructor = RotatingLogic;
 
-    RotatingCube.DEFAULT_OPTIONS = {
+    RotatingLogic.DEFAULT_OPTIONS = {
+      mainCubeSize: 400,
+      destroyer: undefined,
+      smallCube: undefined
     };
 
     function _createGameBoard() {
-      this.gameBoard = new GameBoard();
+      this.gameBoard = new GameBoard({
+        mainCubeSize: this.options.mainCubeSize,
+        destroyer: this.options.destroyer,
+        smallCube: this.options.smallCube
+      });
       this.node.add(this.gameBoard);
     }
 
@@ -308,7 +315,7 @@ define(function(require, exports, module) {
     }
 
 
-    module.exports = RotatingCube;
+    module.exports = RotatingLogic;
 
 
 });

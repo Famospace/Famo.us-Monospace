@@ -36,12 +36,12 @@ define(function(require, exports, module) {
     function _createCube () {
 
       var surfaceTranslations = [
-        [0, 0, this.options.size], // front
-        [0, 0, -this.options.size], // back
-        [this.options.size, 0, 0], // right
-        [-this.options.size, 0, 0], // left
-        [0, this.options.size, 0], // bottom
-        [0, -this.options.size, 0] // top
+        [0, 0, this.options.size/2], // front
+        [0, 0, -this.options.size/2], // back
+        [this.options.size/2, 0, 0], // right
+        [-this.options.size/2, 0, 0], // left
+        [0, this.options.size/2, 0], // bottom
+        [0, -this.options.size/2, 0] // top
       ];
 
       var surfaceRotations = [
@@ -58,7 +58,7 @@ define(function(require, exports, module) {
 
         // create initial cube surfaces
         var surface = new Surface({
-          size: [this.options.size*2, this.options.size*2],
+          size: [this.options.size, this.options.size],
           content: '<p><h1>'+letters[i]+'</h1></p>',
           properties: {
             textAlign: 'center',

@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
   gameLogic._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
-      mainContext.setPerspective(0);
+      mainContext.setPerspective(1000000);
     } else {
       mainContext.setPerspective(1000);
     }

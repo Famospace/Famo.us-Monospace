@@ -75,24 +75,20 @@ define(function(require, exports, module) {
                 // move up
                 if (downData.y - upData.y > 0) {
                     output.down = false;
-                    output.left = false;                     
                 } 
                 // move down
                 if (downData.y - upData.y < 0) {
                     output.down = true; 
-                    output.left = false;                     
                          
                 }
             // horizontal
             } else {
                 // move left
                 if (downData.x - upData.x > 0) {
-                    output.down = false;
                     output.left = true;                          
                 }
                 // move right
                 if (downData.x - upData.x < 0) {
-                    output.down = false;
                     output.left = false;
                 }
             }

@@ -33,7 +33,8 @@ define(function(require, exports, module) {
             smallCube.surfaces[i].setProperties({
                 size: this.options.size,
                 backgroundColor: this.options.cubeColor,
-                opacity: 0.25
+                opacity: 0.25,
+                pointerEvents: 'none'
             });
         }
 

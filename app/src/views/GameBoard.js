@@ -33,18 +33,12 @@ define(function(require, exports, module) {
         mainCubeSize: 400,
         destroyer:[150, 150, 150],
         destroyerColor: 'blue',
-        smallCube:[
-            [-150, -150, -150],
-            [-50, -150, -150],
-            [50, -150, -150],
-            [150, -150, -150]
-        ],
         smallCubeColor: 'red'
     };
 
     function _createDestroyerCube () {
         this.destroyerCube = new DestroyerCube({
-            position: this.options.destroyer,
+            startPosition: _convertToPixels.call(this,this.options.destroyer),
             color: this.options.destroyerColor,
             size: this.options.mainCubeSize/4
         });
@@ -66,7 +60,7 @@ define(function(require, exports, module) {
         this.smallCubes = [];
         for (var i=0; i<this.options.smallCube.length; i++){
             var smallCube = new SmallCube({
-                startPosition: this.options.smallCube[i],
+                startPosition: _convertToPixels.call(this,this.options.smallCube[i]),
                 cubeColor: this.options.smallCubeColor,
                 size: this.options.mainCubeSize/4
             });
@@ -87,6 +81,16 @@ define(function(require, exports, module) {
             this._eventOutput.emit('movingCube', data);
         }.bind(this));
     }
+
+    function _convertToPixels(array) {
+        var output = [
+            (array[0]-1.5)*this.options.mainCubeSize/4,
+            (array[1]-1.5)*this.options.mainCubeSize/4,
+            (array[2]-1.5)*this.options.mainCubeSize/4
+        ];
+        return output;
+    };
+
     module.exports = GameBoard;
 
 });

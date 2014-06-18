@@ -10,18 +10,17 @@ define(function(require, exports, module) {
     function CubeView() {
         View.apply(this, arguments);
 
-        this.rootModifier = new Modifier({
+        // needed to add surface listeners from ancestor view
+        this.surfaces = [];
+
+        var rootModifier = new Modifier({
           size: [this.options.size, this.options.size],
           translate: Transform.translate([this.options.size/2,this.options.size/2, this.options.size/2])
         });
 
-        this.rootNode = this.add(this.rootModifier);
+        this.rootNode = this.add(rootModifier);
 
-        this.matrix = [];
-        this.surfaceTranslations = undefined;
-        this.surfaceRotations = undefined;
-
-        _createCube.call(this);       
+        _createCube.call(this);
     }
 
     CubeView.prototype = Object.create(View.prototype);
@@ -63,10 +62,11 @@ define(function(require, exports, module) {
           properties: {
             textAlign: 'center',
             webkitBackfaceVisibility: 'visible',
-            border: '1px solid black',
-            pointerEvents: 'none'
+            border: '1px solid black'
           }
         });
+
+        this.surfaces.push(surface);
 
         // create initial cube modifiers
         var surfaceModifier = new Modifier({
@@ -97,5 +97,4 @@ define(function(require, exports, module) {
         this.rootNode.add(surfaceModifier).add(surface);
       }
     }
-
 });

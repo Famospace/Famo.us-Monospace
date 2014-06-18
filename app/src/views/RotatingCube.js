@@ -17,20 +17,20 @@ define(function(require, exports, module) {
         this.position = [0, 0]; //mouse movement
         this.state = [0,0,1]; //current front face
         this.nVec = [0,-1,0]; //current top face
+        this.rVec = [1,0,0]; //current right face
         this.index = [0,0,0]; //90 degree turn unit
         this.left = 0; //rotate left
         this.down = 0; //rotate down
         this.rotation = Transform.rotate(0,0,0); //initial transfrom matrix
-
         
         this.transitionable = new Transitionable(0);
-
 
         _createRotateModifier.call(this);
         _createBackground.call(this);
         _setBackgroundListeners.call(this);
         _createParentCube.call(this);
         // _createDestroyerCube.call(this);
+        _setListeners.call(this);
     }
 
     RotatingCube.prototype = Object.create(View.prototype);
@@ -38,10 +38,10 @@ define(function(require, exports, module) {
 
     RotatingCube.DEFAULT_OPTIONS = {};
 
-    // function _createDestroyerCube () {
-    //     var destroyerCube = new DestroyerCube();
-    //     this.node.add(destroyerCube);
-    // }
+    function _createDestroyerCube () {
+        var destroyerCube = new DestroyerCube();
+        this.node.add(destroyerCube);
+    }
 
     function _createParentCube () {
         this.cube = new CubeView();
@@ -75,6 +75,12 @@ define(function(require, exports, module) {
               this.down = 0;
               this.transitionable.reset(0);
               this.transitionable.halt();
+
+              var updateObj = {
+                nVec: this.nVec,
+                rVec: this.rVec
+              };
+              this._eventOutput.emit('coordinateUpdate', updateObj);
             }
 
             var rotTrans = Transform.rotate((this.index[0]*rotateAng)*Math.PI/2,
@@ -107,14 +113,18 @@ define(function(require, exports, module) {
             updateStateTransition.call(this,this.left,this.down);
 
             this.transitionable.set(1, {
-                duration: 1000, curve: Easing.outBack
+                duration: 500, curve: Easing.outBack
             });      
             console.log('left: ', this.left);
             console.log('down: ', this.down);
             console.log('state: ', this.state);
             console.log('nVec: ', this.nVec);
-            console.log('delta', this.position);
+            console.log('rVec', this.rVec);
         }.bind(this));
+    }
+
+    function _setListeners() {
+        this.destroyerCube.subscribe(this._eventOutput);
     }
 
     function updateStateTransition(left, down){
@@ -129,6 +139,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, left*this.nVec[1], 0];
             this.state = [-left*this.nVec[1],0,0];
+            this.rVec = [0,0,-left*tempState[2]];
           }
         }else{ //this.nVec = [1,0,0] or [-1,0,0] 
           if (down !== 0){ 
@@ -137,8 +148,8 @@ define(function(require, exports, module) {
             this.nVec = [0,0,-down*tempState[2]];
           }else{
             this.index = [left*this.nVec[0], 0, 0];
-            // this.index = [left*this.nVec[0], 0, 0];
             this.state = [0, left*this.nVec[0],0];
+            this.rVec = [0,0,-left*tempState[2]];
           }
         }
       }else if(this.state[2] === -1){ //[0,0,-1]
@@ -151,6 +162,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, left*this.nVec[1], 0];
             this.state = [left*this.nVec[1],0,0];
+            this.rVec = [0,0,-left*tempState[2]];
           }
         }else{
           if (down !== 0){ //[1,0,0] or [-1,0,0]
@@ -160,6 +172,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [left*this.nVec[0], 0, 0];
             this.state = [0, -left*this.nVec[0],0];
+            this.rVec = [0,0,-left*tempState[2]];
           }
         }
       }else if(this.state[1] === 1){//[0,1,0]
@@ -172,6 +185,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, 0, left*this.nVec[2]];
             this.state = [left*this.nVec[2],0,0];
+            this.rVec = [0,-left*tempState[1],0];
           }
         }else{
           if (down !== 0){ //[1,0,0] or [-1,0,0]
@@ -181,6 +195,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [left*this.nVec[0], 0, 0];
             this.state = [0,0,-left*this.nVec[0]];
+            this.rVec = [0,-left*tempState[1],0];
           }
         }
       }else if(this.state[1] === -1){ //[0,-1,0]
@@ -193,6 +208,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, 0, left*this.nVec[2]];
             this.state = [-left*this.nVec[2],0,0];
+            this.rVec = [0,-left*tempState[1],0];
           }
         }else{
           if (down !== 0){ //[1,0,0] or [-1,0,0]
@@ -202,6 +218,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [left*this.nVec[0], 0, 0];
             this.state = [0,0,left*this.nVec[0]];
+            this.rVec = [0,-left*tempState[1],0];
           }
         }
       }else if(this.state[0] === 1){ //[1,0,0]
@@ -214,6 +231,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, 0, left*this.nVec[2]];
             this.state = [0,-left*this.nVec[2],0];
+            this.rVec = [-left*tempState[0],0,0];
           }
         }else{
           if (down !== 0){ //[0,1,0] or [0,-1,0]
@@ -223,6 +241,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, left*this.nVec[1], 0];
             this.state = [0,0,left*this.nVec[1]];
+            this.rVec = [-left*tempState[0],0,0];
           }
         }
       }else{ //[-1,0,0]
@@ -235,6 +254,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, 0, left*this.nVec[2]];
             this.state = [0,left*this.nVec[2],0];
+            this.rVec = [-left*tempState[0],0,0];
           }
         }else{
           if (down !== 0){ //[0,1,0] or [0,-1,0]
@@ -244,6 +264,7 @@ define(function(require, exports, module) {
           }else{
             this.index = [0, left*this.nVec[1], 0];
             this.state = [0,0, -left*this.nVec[1]];
+            this.rVec = [-left*tempState[0],0,0];
           }
         }
       }

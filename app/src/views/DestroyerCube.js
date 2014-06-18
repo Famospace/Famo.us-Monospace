@@ -16,6 +16,10 @@ define(function(require, exports, module) {
         this.downData = undefined;
         this.upData = undefined;
 
+        this._eventInput.on('coordinateUpdate', function(data){
+            console.log('DC view', data);
+        });
+
         _createDestroyer.call(this);
         _setMovementListeners.call(this);
     }

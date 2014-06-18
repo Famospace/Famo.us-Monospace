@@ -11,7 +11,7 @@ define(function(require, exports, module) {
     function DestroyerCube() {
         View.apply(this, arguments);
 
-        this.position = [150, 150, 150];
+        this.position = this.options.position;
         this.positionXY = [3, 3];
         this.downData = undefined;
         this.upData = undefined;
@@ -23,7 +23,9 @@ define(function(require, exports, module) {
     DestroyerCube.prototype = Object.create(View.prototype);
     DestroyerCube.prototype.constructor = DestroyerCube;
 
-    DestroyerCube.DEFAULT_OPTIONS = {};
+    DestroyerCube.DEFAULT_OPTIONS = {
+        position: [150, 150, 150]
+    };
 
     function _createDestroyer () {
         var destroyerCube = new CubeView({ size: 50 });

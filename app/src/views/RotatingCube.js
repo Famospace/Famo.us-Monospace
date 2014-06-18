@@ -30,7 +30,7 @@ define(function(require, exports, module) {
         _createBackground.call(this);
         _setBackgroundListeners.call(this);
         _createParentCube.call(this);
-        _createDestroyerCube.call(this);
+        // _createDestroyerCube.call(this);
     }
 
     RotatingCube.prototype = Object.create(View.prototype);
@@ -38,10 +38,10 @@ define(function(require, exports, module) {
 
     RotatingCube.DEFAULT_OPTIONS = {};
 
-    function _createDestroyerCube () {
-        var destroyerCube = new DestroyerCube();
-        this.node.add(destroyerCube);
-    }
+    // function _createDestroyerCube () {
+    //     var destroyerCube = new DestroyerCube();
+    //     this.node.add(destroyerCube);
+    // }
 
     function _createParentCube () {
         this.cube = new CubeView();
@@ -118,7 +118,7 @@ define(function(require, exports, module) {
     }
 
     function updateStateTransition(left, down){
-      console.log('test', this.nVec);
+      // console.log('test', this.nVec);
       if(this.state[2] === 1){ //[0,0,1]
         var tempState = this.state;
         if (this.nVec[1] !== 0){ //[0,1,0] or [0,-1,0]

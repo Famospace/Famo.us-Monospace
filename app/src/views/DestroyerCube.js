@@ -68,28 +68,27 @@ define(function(require, exports, module) {
     function _calculateMovement (downData, upData) {
         var xDelta = Math.abs(downData.x - upData.x);
         var yDelta = Math.abs(downData.y - upData.y);
-        var output = {};
+        var output = [0,0];
         if (xDelta > 1 || yDelta > 1) {
             // vertical
             if (yDelta > xDelta) {
                 // move up
                 if (downData.y - upData.y > 0) {
-                    output.down = false;
+                    output = [0,1];
                 } 
                 // move down
                 if (downData.y - upData.y < 0) {
-                    output.down = true; 
-                         
+                    output = [0,-1]; 
                 }
             // horizontal
             } else {
                 // move left
                 if (downData.x - upData.x > 0) {
-                    output.left = true;                          
+                    output = [-1,0];                          
                 }
                 // move right
                 if (downData.x - upData.x < 0) {
-                    output.left = false;
+                    output = [1,0];
                 }
             }
         }

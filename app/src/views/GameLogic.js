@@ -76,6 +76,7 @@ define(function(require, exports, module) {
                 this.is2d = !this.is2d;
                 _convertTo2d.call(this);
             } else {
+                // _deny3D.call(this);
                 this._eventOutput.trigger('is2d', false);
                 this.is2d = !this.is2d;
                 _convertTo3d.call(this);
@@ -85,11 +86,19 @@ define(function(require, exports, module) {
         this.node.add(modifier).add(devSurface);
     }
 
+    // function _deny3D () {
+    //   this._eventOutput.trigger('is2d', false);
+    //   Timer.setInterval(function () {
+    //     this._eventOutput.trigger('is2d', true);
+    //   }.bind(this), 600);
+    //   this._eventOutput.trigger('is2d', false);
+    // }
+
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
-            destroyer: this.options.destroyer,
-            smallCube: this.options.smallCube
+            destroyer: this.destroyerCubeLocation,
+            smallCube: this.board
         });
         this.node.add(this.rotatingLogic);
     }
@@ -161,20 +170,6 @@ define(function(require, exports, module) {
         console.log('no cube removed', pos);
     }
 
-    // function _update2dTable (smallCube){
-    //     var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
-    //     var key = '' + smallCube[currentAxis.x] + smallCube[currentAxis.y];
-    //     if (this.twoDDataStructure[key]){
-    //         var index = 0;
-    //         for (var i = 0; i < this.twoDDataStructure[key].length; i++) {
-    //             if( this.twoDDataStructure[key][i][currentAxis.z] === smallCube[currentAxis.z]){
-    //                 index = i;
-    //             }
-    //         };
-    //         this.twoDDataStructure[key].slice(i,1);
-    //     }
-    // }
-
     function _ableToConvertTo2d () {
       // Are any cubes are in front of destroyerCube
         // yes: deny conversion to 2d
@@ -216,16 +211,6 @@ define(function(require, exports, module) {
     }
 
     function _convertTo2d () {
-      // Check if conversion to 2D is allowed
-      if (_ableToConvertTo2d) {
-        // later, make this bounce back to 3d
-                // this._eventOutput.trigger('is2d', false);
-                // Timer.setInterval(function () {
-                //   this._eventOutput.trigger('is2d', true);
-                // }.bind(this), 600);
-        // return false;
-      }
-
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
       console.log(currentAxis);
       var key = '';
@@ -255,7 +240,7 @@ define(function(require, exports, module) {
 
       }
 
-      // console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
+      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
     function _convertTo3d () {

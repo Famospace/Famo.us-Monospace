@@ -81,15 +81,18 @@ define(function(require, exports, module) {
     }
 
     function _setListeners() {
-        if (this.is2D){
-            this.destroyerCube.pipe(this._eventInput);
+        this._eventInput.on('is2d', function(data){
+            console.log('GB is2d', data);
+            if (data){
+                this.destroyerCube.pipe(this._eventInput);
+            }else{
+                this.destroyerCube.unpipe(this._eventInput);
+            }
+        }.bind(this));
 
-        }else{
-            this.destroyerCube.unpipe(this._eventInput);
-        }
-
-        this._eventInput.on('movingCube', function(data){
-            this._eventOutput.emit('movingCube', data);
+        this._eventInput.on('movingCubeToGB', function(data){
+            console.log('GB movingCube', data);
+            this._eventOutput.emit('movingCubeToRL', data);
         }.bind(this));
     }
 

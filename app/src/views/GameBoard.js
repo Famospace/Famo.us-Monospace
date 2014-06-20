@@ -35,7 +35,7 @@ define(function(require, exports, module) {
         for (var i = 0; i < this.smallCubes.length; i++){
             var cubePos = this.smallCubes[i].getPosition();
             if (cubePos[0] === posPix[0] && cubePos[1] === posPix[1] && cubePos[2] === posPix[2]){
-                this.smallCubes.setPosition( _convertToPixels.call(this, [-10000,0,0]));
+                this.smallCubes[i].setPosition( _convertToPixels.call(this, [-10000,-10000,0]));
             }
         }
     };

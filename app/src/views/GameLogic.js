@@ -11,11 +11,10 @@ define(function(require, exports, module) {
         var rootModifier = new Modifier();
         this.node = this.add(rootModifier);
 
-        // this.normalCubes = [];
+        this.twoDDataStructure = {};
         this.is2d = false;
-        this.board = this.options.board;
         this.destroyerCubeLocation = this.options.destroyerCube;
-        this.currentSmallCubePos = this.options.smallCube;
+        this.board = this.board || _forceSlice(this.options.smallCube);
 
         _createRotatingLogic.call(this);
         _createDevPerspectiveToggle.call(this);
@@ -33,7 +32,7 @@ define(function(require, exports, module) {
              [0, 0, 0 ],
              [1, 0, 0 ],
              [2, 0, 0 ],
-             [3, 0, 0 ], 
+             [3, 0, 0 ],
 
              [0, 1, 0 ],
              [1, 1, 0 ],
@@ -68,14 +67,14 @@ define(function(require, exports, module) {
         });
 
         devSurface.on('click', function () {
-            if (this.is2d === false
-                // && _ableToConvertTo2d() === true
-                ) {
+            if (this.is2d === false && _ableToConvertTo2d() === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.is2d = !this.is2d;
+                _convertTo2d.call(this);
             } else {
                 this._eventOutput.trigger('is2d', false);
                 this.is2d = !this.is2d;
+                _convertTo3d.call(this);
             }
         }.bind(this));
 
@@ -92,141 +91,116 @@ define(function(require, exports, module) {
         this.node.add(this.rotatingLogic);
     }
 
-
-
-
-
-
-
     function _ableToConvertTo2d () {
-    // Are any cubes are in front of destroyerCube
-      // yes: deny conversion to 2d
-        // return false
-      // no:
-        return true;
+      // Are any cubes are in front of destroyerCube
+        // yes: deny conversion to 2d
+          // return false
+        // no:
+          return true;
+    }
+
+    function _findCurrentXY (nVec, rVec, state) {
+
+      // GOAL:
+      //   using nVec and rVec
+      //     identify which index is current X and current Y in cube positional data
+
+      var result = {}, i, j, k;
+
+      // from nVec:
+        for (i=0;i<nVec.length;i++) {
+          if (nVec[i] !== 0) {
+            result.y = i;
+            result.yPosNeg = 1 * nVec[i];
+            break;
+          }
+        }
+        
+      // from rVec:
+        for (j=0;j<rVec.length;j++) {
+          if (rVec[j] !== 0) {
+            result.x = j;
+            result.xPosNeg = 1 * rVec[j];
+            break;
+          }
+        }
+
+        for (k=0;k<state.length;k++) {
+          if (state[k] !== 0) {
+            result.z = k;
+            result.zPosNeg = 1 * state[k];
+            break;
+          }
+        }
+
+        return result;
     }
 
     function _convertTo2d () {
-    // Is this allowed?
-      if (!_ableToConvertTo2d) {
-        // later, make this convert to 2d then bounce back to 3d
+      // Check if conversion to 2D is allowed
+      if (_ableToConvertTo2d) {
+        // later, make this bounce back to 3d
         return false;
       }
 
-      // enable this later
-      // twoDMode = true;
+      var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+      var key = '';
+      var smallCube;
+      
+      this.currentSmallCubePos = _forceSlice(this.board);
 
-    // If allowed:
-      var nVec = gameLogic.parentCube.nVec;
-      var state = gameLogic.parentCube.state;
-      var cubeSize = gameLogic.cubeSize;
-      var rVec = null; // something
-
-      // record all positions of cubes
-      currentSmallCubePos = gameLogic.board;
-
-      // identify current state
-      var stateIndex = null;
-      var statePosNeg = 1;
-      for (var i=0;i<state.length;i++) {
-        if (state[i] !== 0) {
-          stateIndex = i;
-          statePosNeg = statePosNeg * state[i];
-          break;
+      // creates twoDDataStructure
+        // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
+      for (var j=0;j<this.currentSmallCubePos.length;j++) {
+        smallCube = this.currentSmallCubePos[j];
+        key = '';
+        if (currentAxis.xPosNeg > 0) {
+          key += smallCube[currentAxis.x];
+        } else {
+          if (smallCube[currentAxis.x] === 0) key += 3;
+          if (smallCube[currentAxis.x] === 1) key += 2;
+          if (smallCube[currentAxis.x] === 2) key += 1;
+          if (smallCube[currentAxis.x] === 3) key += 0;
         }
+
+        if (currentAxis.yPosNeg < 0) {
+          key += smallCube[currentAxis.y];
+        } else {
+          if (smallCube[currentAxis.y] === 0) key += 3;
+          if (smallCube[currentAxis.y] === 1) key += 2;
+          if (smallCube[currentAxis.y] === 2) key += 1;
+          if (smallCube[currentAxis.y] === 3) key += 0;
+        }
+
+        if (!this.twoDDataStructure[key]) {
+          this.twoDDataStructure[key] = [smallCube];
+        } else {
+          this.twoDDataStructure[key].push(smallCube);
+          if (currentAxis.zPosNeg > 0) {
+            this.twoDDataStructure[key].sort(function (a, b) { return b[2] - a[2]; });
+          } else {
+            this.twoDDataStructure[key].sort(function (a, b) { return a[2] - b[2]; });
+          }
+        }
+
       }
 
-      // find indeces that are NOT 'z'
-      var firstOtherIndex;
-      var secondOtherIndex;
-
-      if (stateIndex === 0) {
-        firstOtherIndex = 1;
-        secondOtherIndex = 2;
-      } else if (stateIndex === 1) {
-        firstOtherIndex = 0;
-        secondOtherIndex = 2;
-      } else {
-        firstOtherIndex = 0;
-        secondOtherIndex = 1;
-      }
-
-      var overlappingHash = {};
-
-
-      // translate all cubes to front face
-      for (var j=0;j<gameLogic.board.length;j++) {
-        gameLogic.board[j][stateIndex] = 3 * statePosNeg;
-        // if (overlappingHash[])
-      }
-
-      // create arrays for overlapping boxes !!!
-
-
-
-
-
-      console.log(
-        'state: ',stateIndex * statePosNeg,
-        '\nFirst Cube\'s state index:', gameLogic.board[0]
-        );
-          // toggle something?
-          // record allowed moves
+      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
     function _convertTo3d () {
-      // returns boxes to original positions
+      this.twoDDataStructure = {};
+    }
+
+    function _forceSlice (array) {
+      var newArray = [];
+      for (var i=0;i<array.length;i++) {
+        newArray.push(array[i].slice());
+      }
+      return newArray;
     }
 
 
-
-
-
-
-
-
-
-
-
-/*
-
-    function _createDestroyerCube () {
-        var dcLocation = [
-            this.destroyerCubeLocation[0] * this.cubeSize, 
-            this.destroyerCubeLocation[1] * this.cubeSize, 
-            this.destroyerCubeLocation[2] * this.cubeSize
-        ];
-
-        this.destroyerCube = new DestroyerCube({position: dcLocation});
-        this.parentCube.node.add(this.destroyerCube);
-    }
-
-    function _createNormalCubes () {
-        for (var i=0;i<this.board.length;i++) {
-
-            var cube = new CubeView({size: 50});
-
-            var cubeMod = new Modifier({
-                transform: Transform.translate(
-                    this.board[i][0] * this.cubeSize, 
-                    this.board[i][1] * this.cubeSize, 
-                    this.board[i][2] * this.cubeSize
-                )
-            });
-
-            for (var j=0;j<cube.surfaces.length;j++) {
-                cube.surfaces[j].setProperties({ pointerEvents: 'none' });
-            }
-
-            this.normalCubes.push(cube);
-
-            this.parentCube.node
-                .add(cubeMod)
-                .add(cube);
-        }
-    }
-
-*/
 
     module.exports = GameLogic;
 });

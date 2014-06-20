@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
     var Modifier      = require('famous/core/Modifier');
+    var Timer      = require('famous/utilities/Timer');
     var RotatingLogic = require('views/RotatingLogic');
 
     function GameLogic() {
@@ -33,22 +34,22 @@ define(function(require, exports, module) {
           [0, 0, 0 ],
           [1, 0, 0 ],
           [2, 0, 0 ],
-          [3, 0, 0 ],
+          [3, 0, 0 ]//,
    
-          [0, 1, 0 ],
-          [1, 1, 0 ],
-          [2, 1, 0 ],
-          [3, 1, 0 ], 
+          // [0, 1, 0 ],
+          // [1, 1, 0 ],
+          // [2, 1, 0 ],
+          // [3, 1, 0 ], 
          
-          [0, 2, 0 ],
-          [1, 2, 0 ],
-          [2, 2, 0 ],
-          [3, 2, 0 ],
+          // [0, 2, 0 ],
+          // [1, 2, 0 ],
+          // [2, 2, 0 ],
+          // [3, 2, 0 ],
          
-          [0, 3, 0 ],
-          [1, 3, 0 ],
-          [2, 3, 0 ],
-          [3, 3, 0 ]
+          // [0, 3, 0 ],
+          // [1, 3, 0 ],
+          // [2, 3, 0 ],
+          // [3, 3, 0 ]
         ]
     };
 
@@ -178,12 +179,17 @@ define(function(require, exports, module) {
 
     function _convertTo2d () {
       // Check if conversion to 2D is allowed
-      if (!_ableToConvertTo2d) {
+      if (_ableToConvertTo2d) {
         // later, make this bounce back to 3d
-        return false;
+                // this._eventOutput.trigger('is2d', false);
+                // Timer.setInterval(function () {
+                //   this._eventOutput.trigger('is2d', true);
+                // }.bind(this), 600);
+        // return false;
       }
 
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+      console.log(currentAxis);
       var key = '';
       var smallCube;
       
@@ -193,33 +199,19 @@ define(function(require, exports, module) {
         // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
       for (var j=0;j<this.currentSmallCubePos.length;j++) {
         smallCube = this.currentSmallCubePos[j];
-        key = '';
-        if (currentAxis.xPosNeg > 0) {
-          key += smallCube[currentAxis.x];
-        } else {
-          if (smallCube[currentAxis.x] === 0) key += 3;
-          if (smallCube[currentAxis.x] === 1) key += 2;
-          if (smallCube[currentAxis.x] === 2) key += 1;
-          if (smallCube[currentAxis.x] === 3) key += 0;
-        }
 
-        if (currentAxis.yPosNeg < 0) {
-          key += smallCube[currentAxis.y];
-        } else {
-          if (smallCube[currentAxis.y] === 0) key += 3;
-          if (smallCube[currentAxis.y] === 1) key += 2;
-          if (smallCube[currentAxis.y] === 2) key += 1;
-          if (smallCube[currentAxis.y] === 3) key += 0;
-        }
+        key = '';
+        key += smallCube[currentAxis.x];
+        key += smallCube[currentAxis.y];
 
         if (!this.twoDDataStructure[key]) {
           this.twoDDataStructure[key] = [smallCube];
         } else {
           this.twoDDataStructure[key].push(smallCube);
           if (currentAxis.zPosNeg > 0) {
-            this.twoDDataStructure[key].sort(function (a, b) { return b[2] - a[2]; });
+            this.twoDDataStructure[key].sort(function (a, b) { return b[currentAxis.z] - a[currentAxis.z]; });
           } else {
-            this.twoDDataStructure[key].sort(function (a, b) { return a[2] - b[2]; });
+            this.twoDDataStructure[key].sort(function (a, b) { return a[currentAxis.z] - b[currentAxis.z]; });
           }
         }
 

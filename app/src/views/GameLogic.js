@@ -28,26 +28,25 @@ define(function(require, exports, module) {
         mainCubeSize: 400,
         destroyer: [ 3,  3,  3 ],
         smallCube: [
-             // normal cubes
-             [0, 0, 0 ],
-             [1, 0, 0 ],
-             [2, 0, 0 ],
-             [3, 0, 0 ],
-
-             [0, 1, 0 ],
-             [1, 1, 0 ],
-             [2, 1, 0 ],
-             [3, 1, 0 ], 
-            
-             [0, 2, 0 ],
-             [1, 2, 0 ],
-             [2, 2, 0 ],
-             [3, 2, 0 ],
-            
-             [0, 3, 0 ],
-             [1, 3, 0 ],
-             [2, 3, 0 ],
-             [3, 3, 0 ]
+          [0, 0, 0 ],
+          [1, 0, 0 ],
+          [2, 0, 0 ],
+          [3, 0, 0 ],
+   
+          [0, 1, 0 ],
+          [1, 1, 0 ],
+          [2, 1, 0 ],
+          [3, 1, 0 ], 
+         
+          [0, 2, 0 ],
+          [1, 2, 0 ],
+          [2, 2, 0 ],
+          [3, 2, 0 ],
+         
+          [0, 3, 0 ],
+          [1, 3, 0 ],
+          [2, 3, 0 ],
+          [3, 3, 0 ]
         ]
     };
 
@@ -96,44 +95,39 @@ define(function(require, exports, module) {
         // yes: deny conversion to 2d
           // return false
         // no:
-          return true;
+      return true;
     }
 
     function _findCurrentXY (nVec, rVec, state) {
-
-      // GOAL:
-      //   using nVec and rVec
-      //     identify which index is current X and current Y in cube positional data
+      // identifies which index is current X, Y, and Z
 
       var result = {}, i, j, k;
 
-      // from nVec:
-        for (i=0;i<nVec.length;i++) {
-          if (nVec[i] !== 0) {
-            result.y = i;
-            result.yPosNeg = 1 * nVec[i];
-            break;
-          }
+      for (i=0;i<nVec.length;i++) {
+        if (nVec[i] !== 0) {
+          result.y = i;
+          result.yPosNeg = 1 * nVec[i];
+          break;
         }
-        
-      // from rVec:
-        for (j=0;j<rVec.length;j++) {
-          if (rVec[j] !== 0) {
-            result.x = j;
-            result.xPosNeg = 1 * rVec[j];
-            break;
-          }
-        }
+      }
 
-        for (k=0;k<state.length;k++) {
-          if (state[k] !== 0) {
-            result.z = k;
-            result.zPosNeg = 1 * state[k];
-            break;
-          }
+      for (j=0;j<rVec.length;j++) {
+        if (rVec[j] !== 0) {
+          result.x = j;
+          result.xPosNeg = 1 * rVec[j];
+          break;
         }
+      }
 
-        return result;
+      for (k=0;k<state.length;k++) {
+        if (state[k] !== 0) {
+          result.z = k;
+          result.zPosNeg = 1 * state[k];
+          break;
+        }
+      }
+
+      return result;
     }
 
     function _convertTo2d () {
@@ -199,8 +193,6 @@ define(function(require, exports, module) {
       }
       return newArray;
     }
-
-
 
     module.exports = GameLogic;
 });

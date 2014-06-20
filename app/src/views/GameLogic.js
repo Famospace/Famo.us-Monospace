@@ -71,10 +71,12 @@ define(function(require, exports, module) {
         });
 
         devSurface.on('click', function () {
-            if (this.is2d === false && _ableToConvertTo2d() === true) {
+            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.is2d = !this.is2d;
-                _convertTo2d.call(this);
+                _create2dDataStructure.call(this);
+            } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
+                _deny3D.call(this);
             } else {
                 this._eventOutput.trigger('is2d', false);
                 this.is2d = !this.is2d;
@@ -85,11 +87,18 @@ define(function(require, exports, module) {
         this.node.add(modifier).add(devSurface);
     }
 
+    function _deny3D () {
+      this._eventOutput.trigger('is2d', true);
+      Timer.setTimeout(function () {
+        this._eventOutput.trigger('is2d', false);
+      }.bind(this), 600);
+    }
+
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
-            destroyer: this.options.destroyer,
-            smallCube: this.options.smallCube
+            destroyer: this.destroyerCubeLocation,
+            smallCube: this.board
         });
         this.node.add(this.rotatingLogic);
     }
@@ -161,26 +170,26 @@ define(function(require, exports, module) {
         console.log('no cube removed', pos);
     }
 
-    // function _update2dTable (smallCube){
-    //     var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
-    //     var key = '' + smallCube[currentAxis.x] + smallCube[currentAxis.y];
-    //     if (this.twoDDataStructure[key]){
-    //         var index = 0;
-    //         for (var i = 0; i < this.twoDDataStructure[key].length; i++) {
-    //             if( this.twoDDataStructure[key][i][currentAxis.z] === smallCube[currentAxis.z]){
-    //                 index = i;
-    //             }
-    //         };
-    //         this.twoDDataStructure[key].slice(i,1);
-    //     }
-    // }
-
     function _ableToConvertTo2d () {
-      // Are any cubes are in front of destroyerCube
-        // yes: deny conversion to 2d
-          // return false
-        // no:
-      return true;
+      _create2dDataStructure.call(this);
+      // find current zAxis and zPosNeg
+      var currentAxis = _findCurrentXY.call(this, this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+      // find current destroyerCubeLocation
+      var dcLocation = this.destroyerCubeLocation;
+      var key =  '';
+      key += dcLocation[currentAxis.x];
+      key += dcLocation[currentAxis.y];
+
+      // find current twoDDataStructure
+      var currentSmallCubePos = this.twoDDataStructure;
+      var match = currentSmallCubePos[key];
+
+      return ( match &&
+                (
+                  ( currentAxis.zPosNeg > 0 && (dcLocation[currentAxis.z] < match[0][currentAxis.z])) ||
+                  ( currentAxis.zPosNeg < 0 && (dcLocation[currentAxis.z] > match[0][currentAxis.z]))
+                )
+             ) ? false : true;
     }
 
     function _findCurrentXY (nVec, rVec, state) {
@@ -215,23 +224,13 @@ define(function(require, exports, module) {
       return result;
     }
 
-    function _convertTo2d () {
-      // Check if conversion to 2D is allowed
-      if (_ableToConvertTo2d) {
-        // later, make this bounce back to 3d
-                // this._eventOutput.trigger('is2d', false);
-                // Timer.setInterval(function () {
-                //   this._eventOutput.trigger('is2d', true);
-                // }.bind(this), 600);
-        // return false;
-      }
+    function _create2dDataStructure () {
 
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
-      console.log(currentAxis);
       var key = '';
       var smallCube;
-
-      var currentSmallCubePos = _forceSlice(this.board);
+      
+     var currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
       // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
@@ -255,7 +254,7 @@ define(function(require, exports, module) {
 
       }
 
-      // console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
+      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
     function _convertTo3d () {

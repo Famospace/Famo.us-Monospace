@@ -75,8 +75,9 @@ define(function(require, exports, module) {
                 this._eventOutput.trigger('is2d', true);
                 this.is2d = !this.is2d;
                 _create2dDataStructure.call(this);
+            } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
+                _deny3D.call(this);
             } else {
-                // _deny3D.call(this);
                 this._eventOutput.trigger('is2d', false);
                 this.is2d = !this.is2d;
                 _convertTo3d.call(this);
@@ -86,13 +87,12 @@ define(function(require, exports, module) {
         this.node.add(modifier).add(devSurface);
     }
 
-    // function _deny3D () {
-    //   this._eventOutput.trigger('is2d', false);
-    //   Timer.setInterval(function () {
-    //     this._eventOutput.trigger('is2d', true);
-    //   }.bind(this), 600);
-    //   this._eventOutput.trigger('is2d', false);
-    // }
+    function _deny3D () {
+      this._eventOutput.trigger('is2d', true);
+      Timer.setTimeout(function () {
+        this._eventOutput.trigger('is2d', false);
+      }.bind(this), 600);
+    }
 
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({

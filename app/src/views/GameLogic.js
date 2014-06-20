@@ -70,10 +70,9 @@ define(function(require, exports, module) {
         });
 
         devSurface.on('click', function () {
-            if (this.is2d === false && _ableToConvertTo2d() === true) {
+            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.is2d = !this.is2d;
-                _convertTo2d.call(this);
             } else {
                 this._eventOutput.trigger('is2d', false);
                 this.is2d = !this.is2d;
@@ -155,11 +154,25 @@ define(function(require, exports, module) {
     }
 
     function _ableToConvertTo2d () {
-      // Are any cubes are in front of destroyerCube
-        // yes: deny conversion to 2d
-          // return false
-        // no:
-      return true;
+      _create2dDataStructure.call(this);
+      // find current zAxis and zPosNeg
+      var currentAxis = _findCurrentXY.call(this, this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+      // find current destroyerCubeLocation
+      var dcLocation = this.destroyerCubeLocation;
+      var key =  '';
+      key += dcLocation[currentAxis.x];
+      key += dcLocation[currentAxis.y];
+
+      // find current twoDDataStructure
+      var currentSmallCubePos = this.twoDDataStructure;
+      var match = currentSmallCubePos[key];
+
+      return ( match &&
+                (
+                  ( currentAxis.zPosNeg > 0 && (dcLocation[currentAxis.z] < match[0][currentAxis.z])) ||
+                  ( currentAxis.zPosNeg < 0 && (dcLocation[currentAxis.z] > match[0][currentAxis.z]))
+                )
+             ) ? false : true;
     }
 
     function _findCurrentXY (nVec, rVec, state) {
@@ -194,26 +207,16 @@ define(function(require, exports, module) {
       return result;
     }
 
-    function _convertTo2d () {
-      // Check if conversion to 2D is allowed
-      if (_ableToConvertTo2d) {
-        // later, make this bounce back to 3d
-                // this._eventOutput.trigger('is2d', false);
-                // Timer.setInterval(function () {
-                //   this._eventOutput.trigger('is2d', true);
-                // }.bind(this), 600);
-        // return false;
-      }
+    function _create2dDataStructure () {
 
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
-      console.log(currentAxis);
       var key = '';
       var smallCube;
       
       this.currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
-        // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
+      // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
       for (var j=0;j<this.currentSmallCubePos.length;j++) {
         smallCube = this.currentSmallCubePos[j];
 

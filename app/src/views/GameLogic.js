@@ -15,6 +15,7 @@ define(function(require, exports, module) {
         this.twoDDataStructure = {};
         this.is2d = false;
         this.board = this.board || _forceSlice(this.options.smallCube);
+        this.currentSmallCubePos = _forceSlice(this.board);
         this.destroyerCubeLocation = this.options.destroyer;
 
         _createRotatingLogic.call(this);
@@ -29,27 +30,27 @@ define(function(require, exports, module) {
 
     GameLogic.DEFAULT_OPTIONS = {
         mainCubeSize: 400,
-        destroyer: [ 3,  3,  3 ],
+        destroyer: [ 3,  0,  3 ],
         smallCube: [
           [0, 0, 0 ],
           [1, 0, 0 ],
           [2, 0, 0 ],
-          [3, 0, 0 ]//,
+          [3, 0, 0 ],
    
-          // [0, 1, 0 ],
-          // [1, 1, 0 ],
-          // [2, 1, 0 ],
-          // [3, 1, 0 ], 
+          [0, 1, 0 ],
+          [1, 1, 0 ],
+          [2, 1, 0 ],
+          [3, 1, 0 ], 
          
-          // [0, 2, 0 ],
-          // [1, 2, 0 ],
-          // [2, 2, 0 ],
-          // [3, 2, 0 ],
+          [0, 2, 0 ],
+          [1, 2, 0 ],
+          [2, 2, 0 ],
+          [3, 2, 0 ],
          
-          // [0, 3, 0 ],
-          // [1, 3, 0 ],
-          // [2, 3, 0 ],
-          // [3, 3, 0 ]
+          [0, 3, 0 ],
+          [1, 3, 0 ],
+          [2, 3, 0 ],
+          [3, 3, 0 ]
         ]
     };
 
@@ -102,7 +103,8 @@ define(function(require, exports, module) {
             console.log('nVec pos:', this.rotatingLogic.nVec);
             console.log('rVec pos:', this.rotatingLogic.rVec);
 
-            var newPos = this.destroyerCubeLocation;
+            var requestedPos = this.destroyerCubeLocation.slice();
+
             var didUpdate = false;
             for (var i =0; i<this.destroyerCubeLocation.length; i++){
                 var tempUpdate = this.destroyerCubeLocation[i]
@@ -110,17 +112,32 @@ define(function(require, exports, module) {
                     + this.rotatingLogic.nVec[i]*data[1];
 
                 if (tempUpdate >= 0 && tempUpdate <= 3){
-                    newPos[i] = tempUpdate;
+                    requestedPos[i] = tempUpdate;
                     didUpdate = true;
                 }
             }
-            if (didUpdate){
+
+            var newPos = _DCcanMove.call(this, requestedPos);           
+
+            if (newPos){
                 this.destroyerCubeLocation = newPos;
                 _removeSmallCube.call(this, newPos);
                 this.rotatingLogic.setDestroyerPosition(newPos);
                 console.log('New Pos:', newPos);
             }
         }.bind(this));
+    }
+
+    function _DCcanMove (newPos) {
+      var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+
+      var newPos2D = [newPos[currentAxis.x], newPos[currentAxis.y]].join('');
+
+      if (this.twoDDataStructure[newPos2D]) {
+        return this.twoDDataStructure[newPos2D].pop();
+      }
+
+      return false;
     }
 
     function _removeSmallCube(pos){

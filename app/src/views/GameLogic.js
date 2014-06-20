@@ -95,17 +95,17 @@ define(function(require, exports, module) {
 
     function _setListeners (){
         this.rotatingLogic.pipe(this._eventInput);
+        this.rotatingLogic.subscribe(this._eventOutput);
     }
 
     function _destroyerMovement(){
-        this._eventInput.on('movingCube', function(data){
+        this._eventInput.on('movingCubeToGL', function(data){
             console.log('original pos:', this.destroyerCubeLocation);
             console.log('nVec pos:', this.rotatingLogic.nVec);
             console.log('rVec pos:', this.rotatingLogic.rVec);
 
             var requestedPos = this.destroyerCubeLocation.slice();
 
-            var didUpdate = false;
             for (var i =0; i<this.destroyerCubeLocation.length; i++){
                 var tempUpdate = this.destroyerCubeLocation[i]
                     + this.rotatingLogic.rVec[i]*data[0] 
@@ -113,7 +113,6 @@ define(function(require, exports, module) {
 
                 if (tempUpdate >= 0 && tempUpdate <= 3){
                     requestedPos[i] = tempUpdate;
-                    didUpdate = true;
                 }
             }
 
@@ -133,26 +132,47 @@ define(function(require, exports, module) {
 
       var newPos2D = [newPos[currentAxis.x], newPos[currentAxis.y]].join('');
 
+      console.log('2d pos:', newPos2D);
+      console.log('2d structure:', this.twoDDataStructure);
+
       if (this.twoDDataStructure[newPos2D]) {
-        return this.twoDDataStructure[newPos2D].pop();
+        if(this.twoDDataStructure[newPos2D].length > 0){
+            console.log('in pop');
+            return this.twoDDataStructure[newPos2D].pop();
+        }
       }
 
       return false;
     }
 
     function _removeSmallCube(pos){
-        console.log('board', this);
-        for(var i =0; i < this.currentSmallCubePos.length; i++){
-            if (this.currentSmallCubePos[i][0] === pos[0] 
-                && this.currentSmallCubePos[i][1] === pos[1] 
-                && this.currentSmallCubePos[i][2] === pos[2]){
-                this.currentSmallCubePos.slice(i,1);
-                console.log('removed cube', pos);
+        // console.log('board', this);
+        for(var i =0; i < this.board.length; i++){
+            if (this.board[i][0] === pos[0]
+                && this.board[i][1] === pos[1]
+                && this.board[i][2] === pos[2]){
+                console.log('array', this.board);
+                this.board.splice(i,1);
+                console.log('array', this.board);
                 return;
             }
         }
         console.log('no cube removed', pos);
     }
+
+    // function _update2dTable (smallCube){
+    //     var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+    //     var key = '' + smallCube[currentAxis.x] + smallCube[currentAxis.y];
+    //     if (this.twoDDataStructure[key]){
+    //         var index = 0;
+    //         for (var i = 0; i < this.twoDDataStructure[key].length; i++) {
+    //             if( this.twoDDataStructure[key][i][currentAxis.z] === smallCube[currentAxis.z]){
+    //                 index = i;
+    //             }
+    //         };
+    //         this.twoDDataStructure[key].slice(i,1);
+    //     }
+    // }
 
     function _ableToConvertTo2d () {
       // Are any cubes are in front of destroyerCube
@@ -210,12 +230,12 @@ define(function(require, exports, module) {
       var key = '';
       var smallCube;
       
-      this.currentSmallCubePos = _forceSlice(this.board);
+      var currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
         // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
-      for (var j=0;j<this.currentSmallCubePos.length;j++) {
-        smallCube = this.currentSmallCubePos[j];
+      for (var j=0;j<currentSmallCubePos.length;j++) {
+        smallCube = currentSmallCubePos[j];
 
         key = '';
         key += smallCube[currentAxis.x];
@@ -234,7 +254,7 @@ define(function(require, exports, module) {
 
       }
 
-      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
+      // console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
     function _convertTo3d () {

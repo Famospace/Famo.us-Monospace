@@ -60,7 +60,7 @@ define(function(require, exports, module) {
             this.destroyerCube.surfaces[i].on('mouseup', function (data) {
                 this.upData = data;
                 movement = _calculateMovement(this.downData, this.upData);
-                this._eventOutput.emit('movingCube', movement);
+                this._eventOutput.emit('movingCubeToGB', movement);
             }.bind(this));
         }
     }

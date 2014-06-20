@@ -71,10 +71,10 @@ define(function(require, exports, module) {
         });
 
         devSurface.on('click', function () {
-            if (this.is2d === false && _ableToConvertTo2d() === true) {
+            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.is2d = !this.is2d;
-                _convertTo2d.call(this);
+                _create2dDataStructure.call(this);
             } else {
                 // _deny3D.call(this);
                 this._eventOutput.trigger('is2d', false);
@@ -171,11 +171,25 @@ define(function(require, exports, module) {
     }
 
     function _ableToConvertTo2d () {
-      // Are any cubes are in front of destroyerCube
-        // yes: deny conversion to 2d
-          // return false
-        // no:
-      return true;
+      _create2dDataStructure.call(this);
+      // find current zAxis and zPosNeg
+      var currentAxis = _findCurrentXY.call(this, this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
+      // find current destroyerCubeLocation
+      var dcLocation = this.destroyerCubeLocation;
+      var key =  '';
+      key += dcLocation[currentAxis.x];
+      key += dcLocation[currentAxis.y];
+
+      // find current twoDDataStructure
+      var currentSmallCubePos = this.twoDDataStructure;
+      var match = currentSmallCubePos[key];
+
+      return ( match &&
+                (
+                  ( currentAxis.zPosNeg > 0 && (dcLocation[currentAxis.z] < match[0][currentAxis.z])) ||
+                  ( currentAxis.zPosNeg < 0 && (dcLocation[currentAxis.z] > match[0][currentAxis.z]))
+                )
+             ) ? false : true;
     }
 
     function _findCurrentXY (nVec, rVec, state) {
@@ -210,13 +224,13 @@ define(function(require, exports, module) {
       return result;
     }
 
-    function _convertTo2d () {
+    function _create2dDataStructure () {
+
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
-      console.log(currentAxis);
       var key = '';
       var smallCube;
-
-      var currentSmallCubePos = _forceSlice(this.board);
+      
+     var currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
       // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }

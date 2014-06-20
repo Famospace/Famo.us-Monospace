@@ -31,30 +31,28 @@ define(function(require, exports, module) {
 
     GameLogic.DEFAULT_OPTIONS = {
         mainCubeSize: 400,
-        destroyer: Levels.demoLevel.destroyer,
-        smallCube: Levels.demoLevel.smallCube,
-        // destroyer: [ 3,  0,  3 ],
-        // smallCube: [
-        //   [0, 0, 0 ],
-        //   [1, 0, 0 ],
-        //   [2, 0, 0 ],
-        //   [3, 0, 0 ],
+        destroyer: [ 3,  0,  3 ],
+        smallCube: [
+          [0, 0, 0 ],
+          [1, 0, 0 ],
+          [2, 0, 0 ],
+          [3, 0, 0 ],
    
-        //   [0, 1, 0 ],
-        //   [1, 1, 0 ],
-        //   [2, 1, 0 ],
-        //   [3, 1, 0 ], 
+          [0, 1, 0 ],
+          [1, 1, 0 ],
+          [2, 1, 0 ],
+          [3, 1, 0 ], 
          
-        //   [0, 2, 0 ],
-        //   [1, 2, 0 ],
-        //   [2, 2, 0 ],
-        //   [3, 2, 0 ],
+          [0, 2, 0 ],
+          [1, 2, 0 ],
+          [2, 2, 0 ],
+          [3, 2, 0 ],
          
-        //   [0, 3, 0 ],
-        //   [1, 3, 0 ],
-        //   [2, 3, 0 ],
-        //   [3, 3, 0 ]
-        // ]
+          [0, 3, 0 ],
+          [1, 3, 0 ],
+          [2, 3, 0 ],
+          [3, 3, 0 ]
+        ]
     };
 
     function _createDevPerspectiveToggle () {
@@ -89,9 +87,7 @@ define(function(require, exports, module) {
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
-            // destroyer: Levels.demoLevel.destroyer,
             destroyer: this.options.destroyer,
-            // smallCube: Levels.demoLevel.smallCube
             smallCube: this.options.smallCube
         });
         this.node.add(this.rotatingLogic);

@@ -20,6 +20,10 @@ define(function(require, exports, module) {
         this.position=pos;
     };
 
+    SmallCube.prototype.getPosition = function(){
+        return this.position;
+    };
+
     SmallCube.DEFAULT_OPTIONS = {
         size: 100,
         startPosition: [-100, -100, 0],

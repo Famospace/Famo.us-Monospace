@@ -33,6 +33,10 @@ define(function(require, exports, module) {
     RotatingLogic.prototype = Object.create(View.prototype);
     RotatingLogic.prototype.constructor = RotatingLogic;
 
+    RotatingLogic.prototype.setDestroyerPosition = function(pos){
+      this.gameBoard.setDestroyerPosition(pos);
+    }
+
     RotatingLogic.DEFAULT_OPTIONS = {
       mainCubeSize: 400,
       destroyer: undefined,
@@ -314,8 +318,5 @@ define(function(require, exports, module) {
       return trans;
     }
 
-
     module.exports = RotatingLogic;
-
-
 });

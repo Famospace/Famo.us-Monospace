@@ -13,11 +13,13 @@ define(function(require, exports, module) {
 
         this.twoDDataStructure = {};
         this.is2d = false;
-        this.destroyerCubeLocation = this.options.destroyerCube;
         this.board = this.board || _forceSlice(this.options.smallCube);
+        this.destroyerCubeLocation = this.options.destroyer;
 
         _createRotatingLogic.call(this);
         _createDevPerspectiveToggle.call(this);
+        _destroyerMovement.call(this);
+        _setListeners.call(this);
     }
 
     GameLogic.prototype = Object.create(View.prototype);
@@ -81,13 +83,57 @@ define(function(require, exports, module) {
     }
 
     function _createRotatingLogic () {
-
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
             destroyer: this.options.destroyer,
             smallCube: this.options.smallCube
         });
         this.node.add(this.rotatingLogic);
+    }
+
+    function _setListeners (){
+        this.rotatingLogic.pipe(this._eventInput);
+    }
+
+    function _destroyerMovement(){
+        this._eventInput.on('movingCube', function(data){
+            console.log('original pos:', this.destroyerCubeLocation);
+            console.log('nVec pos:', this.rotatingLogic.nVec);
+            console.log('rVec pos:', this.rotatingLogic.rVec);
+
+            var newPos = this.destroyerCubeLocation;
+            var didUpdate = false;
+            for (var i =0; i<this.destroyerCubeLocation.length; i++){
+                var tempUpdate = this.destroyerCubeLocation[i]
+                    + this.rotatingLogic.rVec[i]*data[0] 
+                    + this.rotatingLogic.nVec[i]*data[1];
+
+                if (tempUpdate >= 0 && tempUpdate <= 3){
+                    newPos[i] = tempUpdate;
+                    didUpdate = true;
+                }
+            }
+            if (didUpdate){
+                this.destroyerCubeLocation = newPos;
+                _removeSmallCube.call(this, newPos);
+                this.rotatingLogic.setDestroyerPosition(newPos);
+                console.log('New Pos:', newPos);
+            }
+        }.bind(this));
+    }
+
+    function _removeSmallCube(pos){
+        console.log('board', this);
+        for(var i =0; i < this.currentSmallCubePos.length; i++){
+            if (this.currentSmallCubePos[i][0] === pos[0] 
+                && this.currentSmallCubePos[i][1] === pos[1] 
+                && this.currentSmallCubePos[i][2] === pos[2]){
+                this.currentSmallCubePos.slice(i,1);
+                console.log('removed cube', pos);
+                return;
+            }
+        }
+        console.log('no cube removed', pos);
     }
 
     function _ableToConvertTo2d () {

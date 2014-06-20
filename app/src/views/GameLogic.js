@@ -3,8 +3,10 @@ define(function(require, exports, module) {
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
     var Modifier      = require('famous/core/Modifier');
-    var Timer      = require('famous/utilities/Timer');
+    var Timer         = require('famous/utilities/Timer');
     var RotatingLogic = require('views/RotatingLogic');
+
+    var Levels        = require('../../content/levels');
 
     function GameLogic() {
         View.apply(this, arguments);
@@ -15,7 +17,6 @@ define(function(require, exports, module) {
         this.twoDDataStructure = {};
         this.is2d = false;
         this.board = this.board || _forceSlice(this.options.smallCube);
-        this.currentSmallCubePos = _forceSlice(this.board);
         this.destroyerCubeLocation = this.options.destroyer;
 
         _createRotatingLogic.call(this);
@@ -229,11 +230,11 @@ define(function(require, exports, module) {
       console.log(currentAxis);
       var key = '';
       var smallCube;
-      
+
       var currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
-        // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
+      // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
       for (var j=0;j<currentSmallCubePos.length;j++) {
         smallCube = currentSmallCubePos[j];
 

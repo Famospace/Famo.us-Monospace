@@ -103,6 +103,10 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this.parentCubeSync.on('end', function () {
+            if (Math.abs(this.position[0]) < 5 && Math.abs(this.position[1]) < 5) {
+              this.position = [0, 0];
+              return false;
+            }
             if (Math.abs(this.position[0]) > Math.abs(this.position[1])){
                 this.left = this.position[0] > 0 ? -1 : 1;
             } else{

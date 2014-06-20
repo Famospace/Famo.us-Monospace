@@ -3,8 +3,10 @@ define(function(require, exports, module) {
     var Surface       = require('famous/core/Surface');
     var Transform     = require('famous/core/Transform');
     var Modifier      = require('famous/core/Modifier');
-    var Timer      = require('famous/utilities/Timer');
+    var Timer         = require('famous/utilities/Timer');
     var RotatingLogic = require('views/RotatingLogic');
+
+    var Levels        = require('../../content/levels');
 
     function GameLogic() {
         View.apply(this, arguments);
@@ -15,7 +17,6 @@ define(function(require, exports, module) {
         this.twoDDataStructure = {};
         this.is2d = false;
         this.board = this.board || _forceSlice(this.options.smallCube);
-        this.currentSmallCubePos = _forceSlice(this.board);
         this.destroyerCubeLocation = this.options.destroyer;
 
         _createRotatingLogic.call(this);
@@ -30,28 +31,30 @@ define(function(require, exports, module) {
 
     GameLogic.DEFAULT_OPTIONS = {
         mainCubeSize: 400,
-        destroyer: [ 3,  0,  3 ],
-        smallCube: [
-          [0, 0, 0 ],
-          [1, 0, 0 ],
-          [2, 0, 0 ],
-          [3, 0, 0 ],
+        destroyer: Levels.demoLevel.destroyer,
+        smallCube: Levels.demoLevel.smallCube,
+        // destroyer: [ 3,  0,  3 ],
+        // smallCube: [
+        //   [0, 0, 0 ],
+        //   [1, 0, 0 ],
+        //   [2, 0, 0 ],
+        //   [3, 0, 0 ],
    
-          [0, 1, 0 ],
-          [1, 1, 0 ],
-          [2, 1, 0 ],
-          [3, 1, 0 ], 
+        //   [0, 1, 0 ],
+        //   [1, 1, 0 ],
+        //   [2, 1, 0 ],
+        //   [3, 1, 0 ], 
          
-          [0, 2, 0 ],
-          [1, 2, 0 ],
-          [2, 2, 0 ],
-          [3, 2, 0 ],
+        //   [0, 2, 0 ],
+        //   [1, 2, 0 ],
+        //   [2, 2, 0 ],
+        //   [3, 2, 0 ],
          
-          [0, 3, 0 ],
-          [1, 3, 0 ],
-          [2, 3, 0 ],
-          [3, 3, 0 ]
-        ]
+        //   [0, 3, 0 ],
+        //   [1, 3, 0 ],
+        //   [2, 3, 0 ],
+        //   [3, 3, 0 ]
+        // ]
     };
 
     function _createDevPerspectiveToggle () {
@@ -86,7 +89,9 @@ define(function(require, exports, module) {
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
+            // destroyer: Levels.demoLevel.destroyer,
             destroyer: this.options.destroyer,
+            // smallCube: Levels.demoLevel.smallCube
             smallCube: this.options.smallCube
         });
         this.node.add(this.rotatingLogic);
@@ -213,12 +218,12 @@ define(function(require, exports, module) {
       var key = '';
       var smallCube;
       
-      this.currentSmallCubePos = _forceSlice(this.board);
+     var currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
       // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
-      for (var j=0;j<this.currentSmallCubePos.length;j++) {
-        smallCube = this.currentSmallCubePos[j];
+      for (var j=0;j<currentSmallCubePos.length;j++) {
+        smallCube = currentSmallCubePos[j];
 
         key = '';
         key += smallCube[currentAxis.x];

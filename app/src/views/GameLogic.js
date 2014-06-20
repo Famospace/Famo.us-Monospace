@@ -178,7 +178,7 @@ define(function(require, exports, module) {
 
     function _convertTo2d () {
       // Check if conversion to 2D is allowed
-      if (_ableToConvertTo2d) {
+      if (!_ableToConvertTo2d) {
         // later, make this bounce back to 3d
         return false;
       }

@@ -16,8 +16,8 @@ define(function(require, exports, module) {
 
         this.twoDDataStructure = {};
         this.is2d = false;
-        this.board = this.board || _forceSlice(this.options.smallCube);
-        this.destroyerCubeLocation = this.options.destroyer;
+        this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
+        this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
 
         _createRotatingLogic.call(this);
         _createDevPerspectiveToggle.call(this);
@@ -74,7 +74,6 @@ define(function(require, exports, module) {
             if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.is2d = !this.is2d;
-                _create2dDataStructure.call(this);
             } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
                 _deny3D.call(this);
             } else {
@@ -97,8 +96,8 @@ define(function(require, exports, module) {
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
-            destroyer: this.destroyerCubeLocation,
-            smallCube: this.board
+            destroyer: Levels.demoLevel.destroyer,
+            smallCube: Levels.demoLevel.smallCube
         });
         this.node.add(this.rotatingLogic);
     }
@@ -144,11 +143,15 @@ define(function(require, exports, module) {
 
       console.log('2d pos:', newPos2D);
       console.log('2d structure:', this.twoDDataStructure);
+      console.log('2d array:', this.twoDDataStructure[newPos2D]);
+
 
       if (this.twoDDataStructure[newPos2D]) {
         if(this.twoDDataStructure[newPos2D].length > 0){
             console.log('in pop');
-            return this.twoDDataStructure[newPos2D].pop();
+            var output = this.twoDDataStructure[newPos2D].pop();
+            console.log('2d structure after:', this.twoDDataStructure);
+            return output;
         }
       }
 
@@ -162,6 +165,7 @@ define(function(require, exports, module) {
                 && this.board[i][1] === pos[1]
                 && this.board[i][2] === pos[2]){
                 console.log('array', this.board);
+                console.log('remove', pos);
                 this.board.splice(i,1);
                 console.log('array', this.board);
                 return;

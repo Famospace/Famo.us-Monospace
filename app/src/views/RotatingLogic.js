@@ -108,42 +108,6 @@ define(function(require, exports, module) {
             this.position[1] += data.delta[1];
         }.bind(this));
 
-
-        /*
-
-
-        this.backgroundSurface.on('touchstart', function (asdf) {
-          this.touched = true;
-        })
-
-
-
-
-        this.backgroundSurface.on('dblclick', function (data) {
-            console.log('dblclick: ', data);
-
-            // emit event for perpective toggle (!)
-
-        }.bind(this));
-
-        this.backgroundSurface.on('touchstart', function (data) {
-            console.log('touchstart: ',data);
-
-            // emit event for perpective toggle (!)
-
-        }.bind(this));
-
-
-        */
-
-
-
-
-
-
-
-
-
         this.parentCubeMouseSync.on('end', function () {
             if (Math.abs(this.position[0]) < 5 && Math.abs(this.position[1]) < 5) {
               this.position = [0, 0];

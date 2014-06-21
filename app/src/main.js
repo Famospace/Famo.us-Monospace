@@ -25,6 +25,14 @@ define(function(require, exports, module) {
   //   }
   // });
 
+  demoView._eventOutput.on('is2d', function (boolean) {
+    if (boolean) {
+      mainContext.setPerspective(1000000);
+    } else {
+      mainContext.setPerspective(1000);
+    }
+  });
+
   mainContext.add(modifier).add(demoView);
 
 });

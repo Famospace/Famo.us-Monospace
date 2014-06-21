@@ -6,10 +6,11 @@ define(function(require, exports, module) {
     var Transitionable  = require('famous/transitions/Transitionable');
     var Timer           = require('famous/utilities/Timer');
     var Modifier        = require('famous/core/Modifier');
+    var Easing          = require('famous/transitions/Easing');
+    
     var GameLogic       = require('views/GameLogic');
     var RotatingLogic   = require('views/RotatingLogic');
-    
-    var Levels        = require('../../content/levels');
+    var Levels          = require('../../content/levels');
 
 
 
@@ -27,12 +28,12 @@ define(function(require, exports, module) {
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
 
-      Timer.setTimeout(function () {_createDemoBoard.call(this);}.bind(this), 15000);
-      _startWordCrash.call(this);
+      // Timer.setTimeout(function () {_createDemoBoard.call(this);}.bind(this), 20500);
+      // _startWordCrash.call(this); // takes 3.5 seconds
 
       // Timer.setTimeout(function () {
         _startDemoPlay.call(this);
-      // }.bind(this), 1000);
+      // }.bind(this), 3000);
     }
 
     DemoView.prototype = Object.create(View.prototype);
@@ -46,7 +47,7 @@ define(function(require, exports, module) {
       var modifier = new Modifier({
         align: [0.5, 0.5],
         origin: [0.5, 0.5],
-        transform: Transform.translate(1000, 0, 0)
+        transform: Transform.translate(0, 0, 0)
       });
 
       this.node.add(modifier).add(this.gameLogic);
@@ -56,14 +57,19 @@ define(function(require, exports, module) {
     function _startWordCrash () {
       var transitionable = new Transitionable(0);
 
-      var words = ['ONE', 'TWO', 'THREE'];
+      var words = ['Crush the Red Cubes', 'Munipulate in 3D', 'Destroy in 2D'];
 
       // words crash down
       for (var i=0;i<words.length;i++) {
 
         var surface = new Surface({
-          size: [150, 100],
-          content: words[i]
+          size: [175, 100],
+          content: words[i],
+          properties: {
+            fontWeight: 'bold',
+            fontFamily: 'Helvetica',
+            textAlign: 'center'
+          }
         });
 
         var surfaceMod = new StateModifier({
@@ -75,51 +81,38 @@ define(function(require, exports, module) {
         this.reusableModifiers.push(surfaceMod);
         
         this.node.add(this.reusableModifiers[i]).add(this.reusableSurfaces[i]);
-
-
       }
 
-      Timer.setTimeout(function () {
-        this.reusableModifiers[0].setTransform(
-          Transform.translate(0, window.innerHeight/2 - 150, 0),
-              { method: 'spring', period: 600, dampingRatio: 0.15 }
-        );
-      }.bind(this), 50);
+      this.reusableModifiers[0].setTransform(
+        Transform.translate(0, window.innerHeight/2 - 150, 0),
+            {duration: 1000, curve: Easing.outBack}
+      );
 
-      Timer.setTimeout(function () {
-        this.reusableModifiers[1].setTransform(
-          Transform.translate(0, window.innerHeight/2 - 100, 0),
-              { method: 'spring', period: 600, dampingRatio: 0.15 }
-        );
-      }.bind(this), 100);
+      this.reusableModifiers[1].setTransform(
+        Transform.translate(0, window.innerHeight/2 - 100, 0),
+            {duration: 1000, curve: Easing.outBack}
+      );
 
-      Timer.setTimeout(function () {
-        this.reusableModifiers[2].setTransform(
-          Transform.translate(0, window.innerHeight/2 - 50, 0),
-              { method: 'spring', period: 600, dampingRatio: 0.15 }
-        );
-      }.bind(this), 150);
-
-
-
+      this.reusableModifiers[2].setTransform(
+        Transform.translate(0, window.innerHeight/2 - 50, 0),
+            {duration: 1000, curve: Easing.outBack}
+      );
 
       // words slide out
       Timer.setTimeout(function () {
         this.reusableModifiers[0].setTransform(
-          Transform.translate(-100, 0, 0),
-              { method: 'spring', period: 600, dampingRatio: 0.15 }
+          Transform.translate(0, 2000, 0),
+              {duration: 1000, curve: Easing.inBack}
         );
         this.reusableModifiers[1].setTransform(
-          Transform.translate(-100, 0, 0),
-              { method: 'spring', period: 600, dampingRatio: 0.15 }
+          Transform.translate(0, 2000, 0),
+              {duration: 1000, curve: Easing.inBack}
         );
         this.reusableModifiers[2].setTransform(
-          Transform.translate(-100, 0, 0),
-              { method: 'spring', period: 600, dampingRatio: 0.15 }
+          Transform.translate(0, 2000, 0),
+              {duration: 1000, curve: Easing.inBack}
         );
-      }.bind(this), 250);     
-
-
+      }.bind(this), 2500);
     }
 
     function _startDemoPlay () {
@@ -158,6 +151,10 @@ define(function(require, exports, module) {
 
 
         var perspecModifier = new Modifier ({
+        // transform: Transform.translate(0, 2000, 0),
+          // align: [0.5, 0.97],
+          // origin: [0.5, 0.97],
+
             size: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
                 return [100, 75];
@@ -177,23 +174,25 @@ define(function(require, exports, module) {
 
         this.node.add(perspecModifier).add(perspectiveButton);
 
-      // demoBoardModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
+        // for testing
+      demoBoardModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
+      perspecModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
 
     //     board slides in
-      demoBoardModifier.setTransform(Transform.rotate(Math.PI, 0, -Math.PI/2),{duration: 2000, curve: 'easeInOut'});
+      // demoBoardModifier.setTransform(Transform.rotate(Math.PI, 0, -Math.PI/2),{duration: 2000, curve: 'easeInOut'});
       
 
     //     rotate twice
-      demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI), {duration: 1000, curve: 'easeInOut'});
+      // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
+      // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI), {duration: 1000, curve: 'easeInOut'});
 
     //     switch to 2D
-      Timer.setTimeout(function () {
-        this._eventOutput.emit('is2d', true);
-        perspectiveButton.setContent('3D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      }.bind(this), 4500);
+      // Timer.setTimeout(function () {
+      //   this._eventOutput.emit('is2d', true);
+      //   perspectiveButton.setContent('3D');
+      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      // }.bind(this), 4500);
 
 
 
@@ -202,27 +201,27 @@ define(function(require, exports, module) {
 
 
       //     switch to 3D
-      Timer.setTimeout(function () {
-        this._eventOutput.emit('is2d', false);
-        perspectiveButton.setContent('2D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      }.bind(this), 7000);
+      // Timer.setTimeout(function () {
+      //   this._eventOutput.emit('is2d', false);
+      //   perspectiveButton.setContent('2D');
+      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      // }.bind(this), 7000);
 
       // rotate three more times
-      Timer.setTimeout(function () {
-        demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-        demoBoardModifier.setTransform(Transform.rotate(0, Math.PI, Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-        demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      }.bind(this), 7500);
+      // Timer.setTimeout(function () {
+      //   demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
+      //   demoBoardModifier.setTransform(Transform.rotate(0, Math.PI, Math.PI/2), {duration: 1000, curve: 'easeInOut'});
+      //   demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
+      // }.bind(this), 7500);
 
     //     switch to 2D
-      Timer.setTimeout(function () {
-        this._eventOutput.emit('is2d', true);
-        perspectiveButton.setContent('3D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      }.bind(this), 11000);
+      // Timer.setTimeout(function () {
+      //   this._eventOutput.emit('is2d', true);
+      //   perspectiveButton.setContent('3D');
+      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      // }.bind(this), 11000);
 
 
       //       crush
@@ -231,18 +230,18 @@ define(function(require, exports, module) {
 
 
     //     switch to 3D
-      Timer.setTimeout(function () {
-        this._eventOutput.emit('is2d', false);
-        perspectiveButton.setContent('2D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      }.bind(this), 14500);
+      // Timer.setTimeout(function () {
+      //   this._eventOutput.emit('is2d', false);
+      //   perspectiveButton.setContent('2D');
+      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      // }.bind(this), 14500);
 
 
       //     win
-      Timer.setTimeout(function () {
-        demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
-      }.bind(this), 16000);
+      // Timer.setTimeout(function () {
+      //   demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
+      // }.bind(this), 16000);
 
     }
 

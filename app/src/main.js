@@ -18,27 +18,27 @@ define(function(require, exports, module) {
   mainContext.setPerspective(1000);
 
 
-  /////////////////// NORMAL //////////////////////
-
-
-  // demoView._eventOutput.on('is2d', function (boolean) {
-  //   if (boolean) {
-  //     mainContext.setPerspective(1000000);
-  //   } else {
-  //     mainContext.setPerspective(1000);
-  //   }
-  // });
-  // mainContext.add(modifier).add(demoView);
-
   //////////////// INTRO VIDEO ///////////////////
 
-  gameLogic._eventOutput.on('is2d', function (boolean) {
+
+  demoView._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
       mainContext.setPerspective(1000);
     }
   });
-  mainContext.add(modifier).add(gameLogic);
+  mainContext.add(modifier).add(demoView);
+
+
+  /////////////////// NORMAL //////////////////////
+  // gameLogic._eventOutput.on('is2d', function (boolean) {
+  //   if (boolean) {
+  //     mainContext.setPerspective(1000000);
+  //   } else {
+  //     mainContext.setPerspective(1000);
+  //   }
+  // });
+  // mainContext.add(modifier).add(gameLogic);
 
 });

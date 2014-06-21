@@ -26,7 +26,7 @@ define(function(require, exports, module) {
     this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
 
     _createRotatingLogic.call(this);
-    _createDevPerspectiveToggle.call(this);
+    _createPerspectiveButton.call(this);
     _destroyerMovement.call(this);
     _setListeners.call(this);
   }
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
     
     // Set Game logic default options with default game board
     GameLogic.DEFAULT_OPTIONS = {
-      mainCubeSize: 400,
+      mainCubeSize: 250,
       destroyer: [ 3,  0,  3 ],
       smallCube: [
         [0, 0, 0 ],
@@ -61,37 +61,63 @@ define(function(require, exports, module) {
       ]
     };
 
-    // Create a button to toggle between 2D-3D (this function may be removed)
-    function _createDevPerspectiveToggle () {
-      var devSurface = new Surface({
-        size: [50, 50],
-        content: 'Toggle 2D/3D',
-        properties: {
-          textAlign: 'center',
-          color: 'red',
-          backgroundColor: 'black'
-        }
-      });
+    function _createPerspectiveButton () {
+        this.perspectiveButton = new Surface({
+          size: [undefined, undefined],
+          content: '<div>2D</div>',
+          properties: {
+            fontSize: '3rem',
+            textAlign: 'center',
+            lineHeight: '75px',
+            verticalAlign: 'middle',
+            color: 'red',
+            backgroundColor: 'black',
+            borderRadius: '20px',
+            cursor: 'pointer'
+          }
+        });
 
-      var modifier = new Modifier ({
-        origin: [0.1, 0.1]
-      });
-      
-      // On click, trigger the is2d event to main.js and rotating logic view
-      devSurface.on('click', function () {
-        if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-          this._eventOutput.trigger('is2d', true);
-          this.is2d = !this.is2d;
-        } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
-          _deny3D.call(this);
-        } else {
-          this._eventOutput.trigger('is2d', false);
-          this.is2d = !this.is2d;
-          _convertTo3d.call(this);
-        }
-      }.bind(this));
 
-      this.node.add(modifier).add(devSurface);
+        var modifier = new Modifier ({
+            size: function () {
+              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+                return [100, 75];
+              } else {
+                return [75, 75];
+              }
+            }.bind(this),
+            align: function () {
+              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+                return [0.5, 0.5];
+              } else {
+                return [0.5, 0.5];
+              }
+            }.bind(this),
+            origin: function () {
+              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+                return [0.5, 0.95];
+              } else {
+                return [0.05, 0.5];
+              }
+            }.bind(this),
+        });
+
+        this.perspectiveButton.on('click', function () {
+            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
+                this._eventOutput.trigger('is2d', true);
+                this.perspectiveButton.setContent('3D');
+                this.is2d = !this.is2d;
+            } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
+                _deny3D.call(this);
+            } else {
+                this._eventOutput.trigger('is2d', false);
+                this.perspectiveButton.setContent('2D');
+                this.is2d = !this.is2d;
+                _convertTo3d.call(this);
+            }
+        }.bind(this));
+
+        this.node.add(modifier).add(this.perspectiveButton);
     }
 
     // A visual effect created for an illegal 3D to 2D transition

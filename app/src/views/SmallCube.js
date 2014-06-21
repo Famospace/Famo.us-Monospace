@@ -33,27 +33,27 @@ define(function(require, exports, module) {
   SmallCube.DEFAULT_OPTIONS = {
     size: 100,
     startPosition: [-150, -150, -150],
-    cubeColor: 'white'
+    cubeColor: 'white',
+    opacity: 1
   };
   
   // create small cube
   function _createSmallCube () {
     var smallCube = new CubeView({ size: this.options.size });
 
-    //set properties to each of the cube surface
     for (var i=0;i<smallCube.surfaces.length;i++) {
-      smallCube.surfaces[i].setProperties({
-        size: this.options.size,
-        backgroundColor: this.options.cubeColor,
-        opacity: 0.25
-      });
+        smallCube.surfaces[i].setProperties({
+            size: this.options.size,
+            backgroundColor: this.options.cubeColor,
+            opacity: this.options.opacity,
+            pointerEvents: 'none'
+        });
     }
-    
-    // create small cube modifier
+
     var smallCubeModifier = new Modifier({
-      transform: function () {
-        return Transform.translate(this.position[0], this.position[1], this.position[2]);
-      }.bind(this)
+        transform: function () {
+            return Transform.translate(this.position[0], this.position[1], this.position[2]);
+        }.bind(this)
     });
 
     this.smallCube = smallCube;

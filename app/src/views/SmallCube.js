@@ -27,7 +27,9 @@ define(function(require, exports, module) {
     SmallCube.DEFAULT_OPTIONS = {
         size: 100,
         startPosition: [-100, -100, 0],
-        cubeColor: 'white'
+        cubeColor: 'white',
+        opacity: 1
+        // opacity: 0.25
     };
 
     function _createSmallCube () {
@@ -37,7 +39,7 @@ define(function(require, exports, module) {
             smallCube.surfaces[i].setProperties({
                 size: this.options.size,
                 backgroundColor: this.options.cubeColor,
-                opacity: 0.25,
+                opacity: this.options.opacity,
                 pointerEvents: 'none'
             });
         }

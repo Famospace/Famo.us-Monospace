@@ -35,8 +35,9 @@ define(function(require, exports, module) {
 
         for (var i=0;i<destroyerCube.surfaces.length;i++) {
             destroyerCube.surfaces[i].setProperties({
-                backgroundColor: this.options.color,
-                opacity: 0.25 });
+                backgroundColor: this.options.color
+                // ,opacity: 0.25 
+            });
             destroyerCube.surfaces[i].setContent('');
         }
 

@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var StateModifier  = require('famous/modifiers/StateModifier');
     var Transitionable = require('famous/transitions/Transitionable');
     var Easing         = require('famous/transitions/Easing');
+    var Timer          = require('famous/utilities/Timer');
     var GameBoard      = require('views/GameBoard');
 
     var MouseSync      = require('famous/inputs/MouseSync');
@@ -95,6 +96,7 @@ define(function(require, exports, module) {
     }
 
     function _setBackgroundListeners () {
+
         this.parentCubeMouseSync = new MouseSync();
         this.parentCubeTouchSync = new TouchSync();
 
@@ -106,10 +108,41 @@ define(function(require, exports, module) {
             this.position[1] += data.delta[1];
         }.bind(this));
 
-        this.parentCubeTouchSync.on('update', function (data) {
-            this.position[0] += data.delta[0];
-            this.position[1] += data.delta[1];
+
+        /*
+
+
+        this.backgroundSurface.on('touchstart', function (asdf) {
+          this.touched = true;
+        })
+
+
+
+
+        this.backgroundSurface.on('dblclick', function (data) {
+            console.log('dblclick: ', data);
+
+            // emit event for perpective toggle (!)
+
         }.bind(this));
+
+        this.backgroundSurface.on('touchstart', function (data) {
+            console.log('touchstart: ',data);
+
+            // emit event for perpective toggle (!)
+
+        }.bind(this));
+
+
+        */
+
+
+
+
+
+
+
+
 
         this.parentCubeMouseSync.on('end', function () {
             if (Math.abs(this.position[0]) < 5 && Math.abs(this.position[1]) < 5) {
@@ -132,6 +165,11 @@ define(function(require, exports, module) {
             // console.log('state: ', this.state);
             // console.log('nVec: ', this.nVec);
             // console.log('rVec', this.rVec);
+        }.bind(this));
+
+        this.parentCubeTouchSync.on('update', function (data) {
+            this.position[0] += data.delta[0];
+            this.position[1] += data.delta[1];
         }.bind(this));
 
         this.parentCubeTouchSync.on('end', function () {

@@ -4,10 +4,12 @@ define(function(require, exports, module) {
     var Transform      = require('famous/core/Transform');
     var Modifier       = require('famous/core/Modifier');
     var StateModifier  = require('famous/modifiers/StateModifier');
-    var MouseSync      = require('famous/inputs/MouseSync');
     var Transitionable = require('famous/transitions/Transitionable');
     var Easing         = require('famous/transitions/Easing');
-    var GameBoard = require('views/GameBoard');
+    var GameBoard      = require('views/GameBoard');
+
+    var MouseSync      = require('famous/inputs/MouseSync');
+    var TouchSync      = require('famous/inputs/TouchSync');
 
     function RotatingLogic() {
         View.apply(this, arguments);
@@ -93,16 +95,23 @@ define(function(require, exports, module) {
     }
 
     function _setBackgroundListeners () {
-        this.parentCubeSync = new MouseSync();
+        this.parentCubeMouseSync = new MouseSync();
+        this.parentCubeTouchSync = new TouchSync();
 
-        this.backgroundSurface.pipe(this.parentCubeSync);
+        this.backgroundSurface.pipe(this.parentCubeMouseSync);
+        this.backgroundSurface.pipe(this.parentCubeTouchSync);
 
-        this.parentCubeSync.on('update', function (data) {
+        this.parentCubeMouseSync.on('update', function (data) {
             this.position[0] += data.delta[0];
             this.position[1] += data.delta[1];
         }.bind(this));
 
-        this.parentCubeSync.on('end', function () {
+        this.parentCubeTouchSync.on('update', function (data) {
+            this.position[0] += data.delta[0];
+            this.position[1] += data.delta[1];
+        }.bind(this));
+
+        this.parentCubeMouseSync.on('end', function () {
             if (Math.abs(this.position[0]) < 5 && Math.abs(this.position[1]) < 5) {
               this.position = [0, 0];
               return false;
@@ -124,6 +133,24 @@ define(function(require, exports, module) {
             // console.log('nVec: ', this.nVec);
             // console.log('rVec', this.rVec);
         }.bind(this));
+
+        this.parentCubeTouchSync.on('end', function () {
+            if (Math.abs(this.position[0]) < 5 && Math.abs(this.position[1]) < 5) {
+              this.position = [0, 0];
+              return false;
+            }
+            if (Math.abs(this.position[0]) > Math.abs(this.position[1])){
+                this.left = this.position[0] > 0 ? -1 : 1;
+            } else{
+                this.down = this.position[1] > 0 ? 1 : -1;
+            }
+
+            updateStateTransition.call(this,this.left,this.down);
+
+            this.transitionable.set(1, {
+                duration: 500, curve: Easing.outBack
+            });      
+        }.bind(this));
     }
 
     function _setListeners() {
@@ -138,10 +165,22 @@ define(function(require, exports, module) {
         this._eventInput.on('is2d', function(data){
           console.log('RL is2d', data);
           if (data){
-            this.backgroundSurface.unpipe(this.parentCubeSync);
+            this.backgroundSurface.unpipe(this.parentCubeMouseSync);
             this.backgroundSurface.setProperties({pointerEvents: 'none'});
           } else{
-            this.backgroundSurface.pipe(this.parentCubeSync);
+            this.backgroundSurface.pipe(this.parentCubeMouseSync);
+            this.backgroundSurface.setProperties({pointerEvents: 'auto'});
+          }
+          this._eventOutput.emit('is2d', data);
+        }.bind(this));
+
+        this._eventInput.on('is2d', function(data){
+          console.log('RL is2d', data);
+          if (data){
+            this.backgroundSurface.unpipe(this.parentCubeTouchSync);
+            this.backgroundSurface.setProperties({pointerEvents: 'none'});
+          } else{
+            this.backgroundSurface.pipe(this.parentCubeTouchSync);
             this.backgroundSurface.setProperties({pointerEvents: 'auto'});
           }
           this._eventOutput.emit('is2d', data);

@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var Modifier      = require('famous/core/Modifier');
     var Timer         = require('famous/utilities/Timer');
     var RotatingLogic = require('views/RotatingLogic');
+    var Buzz          = require("buzz");
 
     var Levels        = require('../../content/levels');
 
@@ -13,6 +14,8 @@ define(function(require, exports, module) {
 
         var rootModifier = new Modifier();
         this.node = this.add(rootModifier);
+        this.mySound = new Buzz.sound("content/sounds/flap.wav");
+
 
         this.twoDDataStructure = {};
         this.is2d = false;
@@ -130,6 +133,7 @@ define(function(require, exports, module) {
             if (newPos){
                 this.destroyerCubeLocation = newPos;
                 _removeSmallCube.call(this, newPos);
+                this.mySound.load().play();
                 this.rotatingLogic.setDestroyerPosition(newPos);
                 console.log('New Pos:', newPos);
             }

@@ -95,7 +95,7 @@ define(function(require, exports, module) {
         this.node = this.add(rotateModifier);
     }
 
-    function _setBackgroundListeners () {
+function _setBackgroundListeners () {
 
         this.parentCubeMouseSync = new MouseSync();
         this.parentCubeTouchSync = new TouchSync();

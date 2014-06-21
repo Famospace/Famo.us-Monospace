@@ -17,8 +17,9 @@ define(function(require, exports, module) {
 
     // Create sound objects
     this.mySound = new Buzz.sound("content/sounds/die.wav");
+    this.mySound.load();
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
-
+    this.completeSound.load();
 
     this.twoDDataStructure = {};
     this.is2d = false;
@@ -81,7 +82,7 @@ define(function(require, exports, module) {
         var modifier = new Modifier ({
             size: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [100, 75];
+                return [75, 75];
               } else {
                 return [75, 75];
               }
@@ -95,7 +96,7 @@ define(function(require, exports, module) {
             }.bind(this),
             origin: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [0.5, 0.95];
+                return [0.5, 0.98];
               } else {
                 return [0.05, 0.5];
               }
@@ -167,9 +168,9 @@ define(function(require, exports, module) {
         var newPos = _DCcanMove.call(this, requestedPos);           
 
         if (newPos){
+          this.mySound.play();
           this.destroyerCubeLocation = newPos;
           _removeSmallCube.call(this, newPos);
-          this.mySound.load().play();
           this.rotatingLogic.setDestroyerPosition(newPos);
         }
       }.bind(this));
@@ -208,7 +209,7 @@ define(function(require, exports, module) {
                 console.log('array', this.board.length);
                 if(this.board.length < 1){
                   console.log('complete');
-                  this.completeSound.load().play();
+                  this.completeSound.play();
                 }
                 return;
             }

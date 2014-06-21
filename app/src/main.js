@@ -20,7 +20,7 @@ define(function(require, exports, module) {
 
   var mainContext = Engine.createContext();
 
-  mainContext.setPerspective(1000);
+  mainContext.setPerspective(600);
 
 
   //////////////// INTRO VIDEO ///////////////////
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
     if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
-      mainContext.setPerspective(1000);
+      mainContext.setPerspective(600);
     }
   });
   mainContext.add(modifier).add(gameLogic);

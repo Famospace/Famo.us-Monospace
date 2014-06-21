@@ -53,9 +53,9 @@ define(function(require, exports, module) {
   GameBoard.DEFAULT_OPTIONS = {
     mainCubeSize: 400,
     destroyer: undefined,
-    destroyerColor: 'blue',
+    destroyerColor: '#66CCFF',
     smallCube: undefined,
-    smallCubeColor: 'red'
+    smallCubeColor: '#FF6600'
   };
 
   // Create the destroyer cube

@@ -58,6 +58,25 @@ define(function(require, exports, module) {
     this.add(destroyerModifier).add(this.destroyerCube);
   }
 
+
+  // function _setMovementListeners () {
+  //   var movement;
+  //   for (var i=0;i<this.destroyerCube.surfaces.length;i++) {
+  //     // Listen for mouse down event and save data
+  //     this.destroyerCube.surfaces[i].on('mousedown', function (data) {
+  //       this.downData = data;
+  //     }.bind(this));
+  //     // listen on mouse up even and save data in order to determine the diff
+  //     // between mouse down and up
+  //     // emit the event along with the direction
+  //     this.destroyerCube.surfaces[i].on('mouseup', function (data) {
+  //       this.upData = data;
+  //       movement = _calculateMovement(this.downData, this.upData);
+  //       this._eventOutput.emit('movingCubeToGB', movement);
+  //     }.bind(this));
+  //   }
+  // }
+
   // Listen to the mouse movement on the destroyer cube and emit event which will 
   // include the direction that the cube should move
   function _setMovementListeners () {
@@ -74,6 +93,23 @@ define(function(require, exports, module) {
         this.upData = data;
         movement = _calculateMovement(this.downData, this.upData);
         this._eventOutput.emit('movingCubeToGB', movement);
+      }.bind(this));
+
+      this.destroyerCube.surfaces[i].on('touchstart', function (data) {
+        this.downData = {
+          x: data.changedTouches[0].clientX,
+          y: data.changedTouches[0].clientY
+        };
+      }.bind(this));
+
+      this.destroyerCube.surfaces[i].on('touchend', function (data) {
+        this.upData = {
+          x: data.changedTouches[0].clientX,
+          y: data.changedTouches[0].clientY
+        };
+        movement = _calculateMovement(this.downData, this.upData);
+        this._eventOutput.emit('movingCubeToGB', movement);
+        this.downData = undefined;
       }.bind(this));
     }
   }

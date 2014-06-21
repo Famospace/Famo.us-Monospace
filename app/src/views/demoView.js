@@ -7,7 +7,10 @@ define(function(require, exports, module) {
     var Timer           = require('famous/utilities/Timer');
     var Modifier        = require('famous/core/Modifier');
     var GameLogic       = require('views/GameLogic');
-    var RotatingLogic       = require('views/RotatingLogic');
+    var RotatingLogic   = require('views/RotatingLogic');
+    
+    var Levels        = require('../../content/levels');
+
 
 
     var SpringTransition = require('famous/transitions/SpringTransition');
@@ -24,8 +27,8 @@ define(function(require, exports, module) {
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
 
-      // Timer.setTimeout(function () {_createDemoBoard.call(this);}.bind(this), 5000);
-      // _startWordCrash.call(this);
+      Timer.setTimeout(function () {_createDemoBoard.call(this);}.bind(this), 15000);
+      _startWordCrash.call(this);
 
       // Timer.setTimeout(function () {
         _startDemoPlay.call(this);
@@ -125,8 +128,8 @@ define(function(require, exports, module) {
 
       var demoBoard = new RotatingLogic({
           mainCubeSize: 250,
-          destroyer: [0, 0, 0], 
-          smallCube: [[3, 0, 0], [0, 1, 0], [3, 2, 1]]
+          destroyer: Levels.introVideo.destroyer, 
+          smallCube: Levels.introVideo.smallCube
       });
       this.node.add(this.rotatingLogic);
 
@@ -172,70 +175,75 @@ define(function(require, exports, module) {
             }.bind(this),
         });
 
-        // perspectiveButton.on('click', function () {
-        //     if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-        //         this._eventOutput.trigger('is2d', true);
-        //         perspectiveButton.setContent('3D');
-        //         this.is2d = !this.is2d;
-        //     } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
-        //         _deny3D.call(this);
-        //     } else {
-        //         this._eventOutput.trigger('is2d', false);
-        //         perspectiveButton.setContent('2D');
-        //         this.is2d = !this.is2d;
-        //         _convertTo3d.call(this);
-        //     }
-        // }.bind(this));
-
         this.node.add(perspecModifier).add(perspectiveButton);
 
+      // demoBoardModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
 
     //     board slides in
       demoBoardModifier.setTransform(Transform.rotate(Math.PI, 0, -Math.PI/2),{duration: 2000, curve: 'easeInOut'});
+      
 
     //     rotate twice
       demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
       demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI), {duration: 1000, curve: 'easeInOut'});
 
     //     switch to 2D
-
-      // Timer.setTimeout(function () {
-      //   this._eventOutput.emit('is2d', true);
-      //   perspectiveButton.setContent('3D');
-      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'})
-      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'})
-      // }.bind(this), 4500);
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', true);
+        perspectiveButton.setContent('3D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), 4500);
 
 
 
       //       crush
-      //     switch to 3D
 
-      // Timer.setTimeout(function () {
-      //   this._eventOutput.emit('is2d', false);
-      //   perspectiveButton.setContent('2D');
-      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'})
-      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'})
-      // }.bind(this), 7000);
+
+
+      //     switch to 3D
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', false);
+        perspectiveButton.setContent('2D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), 7000);
 
       // rotate three more times
-
-      // Timer.setTimeout(function () {
+      Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
         demoBoardModifier.setTransform(Transform.rotate(0, Math.PI, Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-        // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      // }.bind(this), 7500);
+        demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
+      }.bind(this), 7500);
 
+    //     switch to 2D
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', true);
+        perspectiveButton.setContent('3D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), 11000);
 
 
       //       crush
       //       crush
       //       crush
+
+
+    //     switch to 3D
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', false);
+        perspectiveButton.setContent('2D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), 14500);
+
+
       //     win
-
-      // Timer.setTimeout(function () {
+      Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
-      // }.bind(this), 12000);
+      }.bind(this), 16000);
+
     }
 
     function _removeBoard () {

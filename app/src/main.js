@@ -5,7 +5,7 @@ define(function(require, exports, module) {
   var GameLogic       = require('views/GameLogic');
   var DemoView        = require('views/DemoView');
 
-  // var gameLogic = new GameLogic();
+  var gameLogic = new GameLogic();
   var demoView = new DemoView();
 
   var modifier = new Modifier({
@@ -17,22 +17,28 @@ define(function(require, exports, module) {
 
   mainContext.setPerspective(1000);
 
-  // gameLogic._eventOutput.on('is2d', function (boolean) {
+
+  /////////////////// NORMAL //////////////////////
+
+
+  // demoView._eventOutput.on('is2d', function (boolean) {
   //   if (boolean) {
   //     mainContext.setPerspective(1000000);
   //   } else {
   //     mainContext.setPerspective(1000);
   //   }
   // });
+  // mainContext.add(modifier).add(demoView);
 
-  demoView._eventOutput.on('is2d', function (boolean) {
+  //////////////// INTRO VIDEO ///////////////////
+
+  gameLogic._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
       mainContext.setPerspective(1000);
     }
   });
-
-  mainContext.add(modifier).add(demoView);
+  mainContext.add(modifier).add(gameLogic);
 
 });

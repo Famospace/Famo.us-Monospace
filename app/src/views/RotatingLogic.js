@@ -93,16 +93,20 @@ define(function(require, exports, module) {
     }
 
     function _setBackgroundListeners () {
-        var ParentCubeSync = new MouseSync();
+        this.parentCubeSync = new MouseSync();
 
-        this.backgroundSurface.pipe(ParentCubeSync);
+        this.backgroundSurface.pipe(this.parentCubeSync);
 
-        ParentCubeSync.on('update', function (data) {
+        this.parentCubeSync.on('update', function (data) {
             this.position[0] += data.delta[0];
             this.position[1] += data.delta[1];
         }.bind(this));
 
-        ParentCubeSync.on('end', function () {
+        this.parentCubeSync.on('end', function () {
+            if (Math.abs(this.position[0]) < 5 && Math.abs(this.position[1]) < 5) {
+              this.position = [0, 0];
+              return false;
+            }
             if (Math.abs(this.position[0]) > Math.abs(this.position[1])){
                 this.left = this.position[0] > 0 ? -1 : 1;
             } else{
@@ -114,20 +118,33 @@ define(function(require, exports, module) {
             this.transitionable.set(1, {
                 duration: 500, curve: Easing.outBack
             });      
-            console.log('left: ', this.left);
-            console.log('down: ', this.down);
-            console.log('state: ', this.state);
-            console.log('nVec: ', this.nVec);
-            console.log('rVec', this.rVec);
+            // console.log('left: ', this.left);
+            // console.log('down: ', this.down);
+            // console.log('state: ', this.state);
+            // console.log('nVec: ', this.nVec);
+            // console.log('rVec', this.rVec);
         }.bind(this));
     }
 
     function _setListeners() {
         this.gameBoard.pipe(this._eventInput);
+        this.gameBoard.subscribe(this._eventOutput);
 
-        this._eventInput.on('movingCube', function(data){
-          console.log('from BG to RC', data);
-          this._eventOutput.emit('movingCube', data);
+        this._eventInput.on('movingCubeToRL', function(data){
+          // console.log('from BG to RC', data);
+          this._eventOutput.emit('movingCubeToGL', data);
+        }.bind(this));
+
+        this._eventInput.on('is2d', function(data){
+          console.log('RL is2d', data);
+          if (data){
+            this.backgroundSurface.unpipe(this.parentCubeSync);
+            this.backgroundSurface.setProperties({pointerEvents: 'none'});
+          } else{
+            this.backgroundSurface.pipe(this.parentCubeSync);
+            this.backgroundSurface.setProperties({pointerEvents: 'auto'});
+          }
+          this._eventOutput.emit('is2d', data);
         }.bind(this));
     }
 

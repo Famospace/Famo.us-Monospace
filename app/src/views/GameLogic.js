@@ -30,7 +30,8 @@ define(function(require, exports, module) {
     
 
     GameLogic.DEFAULT_OPTIONS = {
-        mainCubeSize: 400,
+        mainCubeSize: 250,
+        // mainCubeSize: 400,
         destroyer: [ 3,  0,  3 ],
         smallCube: [
           [0, 0, 0 ],

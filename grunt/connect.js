@@ -6,7 +6,8 @@ module.exports =  function (grunt) {
       port: grunt.option('port') || 1337,
       livereload: grunt.option('livereload') || 35729,
       // Change this to '0.0.0.0' to access the server from outside
-      hostname: grunt.option('hostname') || 'localhost'
+      hostname: '0.0.0.0'
+      // hostname: '192.168.161.217' || grunt.option('hostname') || 'localhost'
     },
     livereload: {
       options: {

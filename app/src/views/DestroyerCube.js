@@ -54,13 +54,32 @@ define(function(require, exports, module) {
     function _setMovementListeners () {
         var movement;
         for (var i=0;i<this.destroyerCube.surfaces.length;i++) {
+
             this.destroyerCube.surfaces[i].on('mousedown', function (data) {
                 this.downData = data;
             }.bind(this));
+            
             this.destroyerCube.surfaces[i].on('mouseup', function (data) {
                 this.upData = data;
                 movement = _calculateMovement(this.downData, this.upData);
                 this._eventOutput.emit('movingCubeToGB', movement);
+            }.bind(this));
+
+            this.destroyerCube.surfaces[i].on('touchstart', function (data) {
+                this.downData = {
+                    x: data.changedTouches[0].clientX,
+                    y: data.changedTouches[0].clientY
+                };
+            }.bind(this));
+
+            this.destroyerCube.surfaces[i].on('touchend', function (data) {
+                this.upData = {
+                    x: data.changedTouches[0].clientX,
+                    y: data.changedTouches[0].clientY
+                };
+                movement = _calculateMovement(this.downData, this.upData);
+                this._eventOutput.emit('movingCubeToGB', movement);
+                this.downData = undefined;
             }.bind(this));
         }
     }

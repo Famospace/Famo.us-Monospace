@@ -117,15 +117,16 @@ define(function(require, exports, module) {
 
     function _startDemoPlay () {
 
-    // board slides in
-      var demoBoard = new RotatingLogic({
-          mainCubeSize: 250,
-          destroyer: Levels.introVideo.destroyer, 
-          smallCube: Levels.introVideo.smallCube
-      });
-      this.node.add(this.rotatingLogic);
+      // How do i pass in the board!???
+        // and destroyer cube???!
 
-      var demoBoardModifier = new StateModifier({
+      this.gameLogic = new GameLogic();
+          // this.gameLogic.rotatingLogic.mainCubeSize = 250;
+
+          // this.gameLogic.rotatingLogic.destroyer = Levels.introVideo.destroyer; 
+
+          // this.gameLogic.rotatingLogic.smallCube = Levels.introVideo.smallCube;
+      var demoBoardModifier = new Modifier({
         align: [0.5, 0.5],
         origin: [0.5, 0.5],
         transform: Transform.multiply(
@@ -134,7 +135,24 @@ define(function(require, exports, module) {
         )
       });
 
-      this.node.add(demoBoardModifier).add(demoBoard);
+    // board slides in
+      // var demoBoard = new RotatingLogic({
+      //     mainCubeSize: 250,
+      //     destroyer: Levels.introVideo.destroyer, 
+      //     smallCube: Levels.introVideo.smallCube
+      // });
+      // this.node.add(this.rotatingLogic);
+
+      // var demoBoardModifier = new StateModifier({
+      //   align: [0.5, 0.5],
+      //   origin: [0.5, 0.5],
+      //   transform: Transform.multiply(
+      //       Transform.rotate(Math.PI/2, Math.PI/2, Math.PI/2),
+      //       Transform.translate(1000, 0, 0)
+      //   )
+      // });
+
+      this.node.add(demoBoardModifier).add(this.gameLogic.rotatingLogic);
 
         var perspectiveButton = new Surface({
           size: [undefined, undefined],
@@ -194,7 +212,7 @@ define(function(require, exports, module) {
         perspectiveButton.setContent('3D');
         perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-        this.gameLogic._eventOutput.trigger('movingCubeToGB', [-1, 0]);
+        this.gameLogic._eventInput.emit('movingCubeToGL', [-1, 0]);
       }.bind(this), 4000);
 
       //       crush

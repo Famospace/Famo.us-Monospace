@@ -16,8 +16,10 @@ define(function(require, exports, module) {
 
         this.twoDDataStructure = {};
         this.is2d = false;
-        this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
-        this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
+
+        //hardcoded!
+        this.board = Levels.introVideo.smallCube
+        this.destroyerCubeLocation = Levels.introVideo.destroyer;
 
         _createRotatingLogic.call(this);
         _createPerspectiveButton.call(this);
@@ -125,8 +127,10 @@ define(function(require, exports, module) {
     function _createRotatingLogic () {
         this.rotatingLogic = new RotatingLogic({
             mainCubeSize: this.options.mainCubeSize,
-            destroyer: Levels.demoLevel.destroyer,
-            smallCube: Levels.demoLevel.smallCube
+            destroyer: this.destroyerCubeLocation,
+            // destroyer: Levels.demoLevel.destroyer,
+            smallCube: this.board
+            // smallCube: Levels.demoLevel.smallCube
         });
         this.node.add(this.rotatingLogic);
     }
@@ -164,6 +168,7 @@ define(function(require, exports, module) {
             }
         }.bind(this));
     }
+    GameLogic.prototype._destroyerMovement = _destroyerMovement;
 
     function _DCcanMove (newPos) {
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);

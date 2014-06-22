@@ -212,8 +212,12 @@ define(function(require, exports, module) {
         perspectiveButton.setContent('3D');
         perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-        this.gameLogic._eventInput.emit('movingCubeToGL', [-1, 0]);
+        // this.gameLogic._eventInput.emit('movingCubeToGL', [-1, 0]);
       }.bind(this), 4000);
+      
+      Timer.setTimeout(function () {
+        this.gameLogic._eventInput.trigger('movingCubeToGL', [-1, 0]);
+      }.bind(this), 5000);
 
       //       crush
       console.log(this.gameLogic);

@@ -110,7 +110,6 @@ define(function(require, exports, module) {
                 }
             }
         }
-        console.log('output: ', output)
         return output;
     }
 

@@ -168,7 +168,6 @@ define(function(require, exports, module) {
             }
         }.bind(this));
     }
-    GameLogic.prototype._destroyerMovement = _destroyerMovement;
 
     function _DCcanMove (newPos) {
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
@@ -207,6 +206,8 @@ define(function(require, exports, module) {
         }
         console.log('no cube removed', pos);
     }
+
+    GameLogic.prototype._removeSmallCube = _removeSmallCube;
 
     function _ableToConvertTo2d () {
       _create2dDataStructure.call(this);

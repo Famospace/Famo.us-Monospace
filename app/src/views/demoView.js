@@ -117,6 +117,8 @@ define(function(require, exports, module) {
 
     function _startDemoPlay () {
 
+      var demoTimer = 4000;
+
       // How do i pass in the board!???
         // and destroyer cube???!
 
@@ -212,53 +214,96 @@ define(function(require, exports, module) {
         perspectiveButton.setContent('3D');
         perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-        // this.gameLogic._eventInput.emit('movingCubeToGL', [-1, 0]);
-      }.bind(this), 4000);
+      }.bind(this), demoTimer);
       
-      Timer.setTimeout(function () {
-        this.gameLogic._eventInput.trigger('movingCubeToGL', [-1, 0]);
-      }.bind(this), 5000);
-
       //       crush
-      console.log(this.gameLogic);
-
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        this.gameLogic.rotatingLogic.setDestroyerPosition([0, 3, 1]);
+        this.gameLogic._removeSmallCube([0, 3, 1]);
+      }.bind(this), demoTimer);
 
       //     switch to 3D
-      // Timer.setTimeout(function () {
-      //   this._eventOutput.emit('is2d', false);
-      //   perspectiveButton.setContent('2D');
-      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      // }.bind(this), 7000);
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', false);
+        perspectiveButton.setContent('2D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
 
-      // rotate three more times
-      // Timer.setTimeout(function () {
-      //   demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      //   demoBoardModifier.setTransform(Transform.rotate(0, Math.PI, Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      //   demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      // }.bind(this), 7500);
+      // rotate up
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
 
-    //     switch to 2D
-      // Timer.setTimeout(function () {
-      //   this._eventOutput.emit('is2d', true);
-      //   perspectiveButton.setContent('3D');
-      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      // }.bind(this), 11000);
+      //     switch to 2D
+      demoTimer += 1500;
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', true);
+        perspectiveButton.setContent('3D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
 
+      //   crush
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        this.gameLogic.rotatingLogic.setDestroyerPosition([0, 2, 2]);
+        this.gameLogic._removeSmallCube([0, 2, 2]);
+      }.bind(this), demoTimer);
 
-      //       crush
-      //       crush
-      //       crush
-
+      //   crush
+      demoTimer += 500;
+      Timer.setTimeout(function () {
+        this.gameLogic.rotatingLogic.setDestroyerPosition([0, 1, 3]);
+        this.gameLogic._removeSmallCube([0, 1, 3]);
+      }.bind(this), demoTimer);
 
     //     switch to 3D
-      // Timer.setTimeout(function () {
-      //   this._eventOutput.emit('is2d', false);
-      //   perspectiveButton.setContent('2D');
-      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      // }.bind(this), 14500);
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', false);
+        perspectiveButton.setContent('2D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
+
+
+      // rotate up
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        demoBoardModifier.setTransform(Transform.rotate(Math.PI, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
+
+      //     switch to 2D
+      demoTimer += 1500;
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', true);
+        perspectiveButton.setContent('3D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
+
+      //   crush
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        this.gameLogic.rotatingLogic.setDestroyerPosition([3, 0, 3]);
+        this.gameLogic._removeSmallCube([3, 0, 3]);
+      }.bind(this), demoTimer);
+
+      demoTimer += 500;
+      Timer.setTimeout(function () {
+        this.gameLogic.rotatingLogic.setDestroyerPosition([2, 0, 2]);
+        this.gameLogic._removeSmallCube([2, 0, 2]);
+      }.bind(this), demoTimer);
+
+      demoTimer += 500;
+      Timer.setTimeout(function () {
+        this.gameLogic.rotatingLogic.setDestroyerPosition([1, 0, 1]);
+        this.gameLogic._removeSmallCube([1, 0, 1]);
+      }.bind(this), demoTimer);
 
 
       //     win

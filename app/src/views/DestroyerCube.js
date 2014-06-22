@@ -62,6 +62,7 @@ define(function(require, exports, module) {
                 this.upData = data;
                 movement = _calculateMovement(this.downData, this.upData);
                 this._eventOutput.emit('movingCubeToGB', movement);
+                console.log("here: ", movement)
             }.bind(this));
 
             this.destroyerCube.surfaces[i].on('touchstart', function (data) {

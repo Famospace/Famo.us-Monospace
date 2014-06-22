@@ -33,7 +33,7 @@ define(function(require, exports, module) {
 
       // Timer.setTimeout(function () {
         _startDemoPlay.call(this);
-      // }.bind(this), 3000);
+      // }.bind(this), 4000);
     }
 
     DemoView.prototype = Object.create(View.prototype);
@@ -118,7 +118,6 @@ define(function(require, exports, module) {
     function _startDemoPlay () {
 
     // board slides in
-
       var demoBoard = new RotatingLogic({
           mainCubeSize: 250,
           destroyer: Levels.introVideo.destroyer, 
@@ -129,7 +128,10 @@ define(function(require, exports, module) {
       var demoBoardModifier = new StateModifier({
         align: [0.5, 0.5],
         origin: [0.5, 0.5],
-        transform: Transform.translate(1000, 0, 0)
+        transform: Transform.multiply(
+            Transform.rotate(Math.PI/2, Math.PI/2, Math.PI/2),
+            Transform.translate(1000, 0, 0)
+        )
       });
 
       this.node.add(demoBoardModifier).add(demoBoard);
@@ -149,12 +151,8 @@ define(function(require, exports, module) {
           }
         });
 
-
         var perspecModifier = new Modifier ({
-        // transform: Transform.translate(0, 2000, 0),
-          // align: [0.5, 0.97],
-          // origin: [0.5, 0.97],
-
+            transform: Transform.translate(0, 2000, 0),
             size: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
                 return [100, 75];
@@ -162,7 +160,13 @@ define(function(require, exports, module) {
                 return [75, 75];
               }
             }.bind(this),
-            align: [0.5, 0.5],
+            align: function () {
+              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+                return [0.5, 0.5];
+              } else {
+                return [0.5, 0.5];
+              }
+            }.bind(this),
             origin: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
                 return [0.5, 0.95];
@@ -174,30 +178,27 @@ define(function(require, exports, module) {
 
         this.node.add(perspecModifier).add(perspectiveButton);
 
-        // for testing
-      demoBoardModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
+        // perspectiveButton slides in
       perspecModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
-
+    
     //     board slides in
-      // demoBoardModifier.setTransform(Transform.rotate(Math.PI, 0, -Math.PI/2),{duration: 2000, curve: 'easeInOut'});
+      demoBoardModifier.setTransform(Transform.translate(0,0,0),{duration: 2000, curve: 'easeInOut'});
       
 
-    //     rotate twice
-      // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI/2), {duration: 1000, curve: 'easeInOut'});
-      // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 0, -Math.PI), {duration: 1000, curve: 'easeInOut'});
+    //     rotate right
+      demoBoardModifier.setTransform(Transform.rotate(0, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
 
     //     switch to 2D
-      // Timer.setTimeout(function () {
-      //   this._eventOutput.emit('is2d', true);
-      //   perspectiveButton.setContent('3D');
-      //   perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-      //   perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
-      // }.bind(this), 4500);
-
-
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', true);
+        perspectiveButton.setContent('3D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic._eventOutput.trigger('movingCubeToGB', [-1, 0]);
+      }.bind(this), 4000);
 
       //       crush
-
+      console.log(this.gameLogic);
 
 
       //     switch to 3D

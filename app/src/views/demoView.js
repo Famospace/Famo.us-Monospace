@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     
     var GameLogic       = require('views/GameLogic');
     var RotatingLogic   = require('views/RotatingLogic');
-    var MenuView        = require('views/MenuView');
+    // var MenuView    = require('views/MenuView');
     var Levels          = require('../../content/levels');
 
     function DemoView() {
@@ -23,25 +23,51 @@ define(function(require, exports, module) {
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
 
-      // // takes 4.5 seconds
-      // _startWordCrash.call(this); 
 
-      // // takes 21.5 seconds
-      // Timer.setTimeout(function () {
-      //   _startDemoPlay.call(this);
-      //   _startDemoText.call(this);
-      // }.bind(this), 5000);
+      // takes 4.5 seconds
+      _startWordCrash.call(this); 
 
-      // show menu
-      // Timer.setTimeout(function () {
-        _showMenu.call(this);
-      // }.bind(this), 22500);
+      // takes 21.5 seconds
+      Timer.setTimeout(function () {
+        _startDemoPlay.call(this);
+        _startDemoText.call(this);
+        _createSkipButton.call(this);
+      }.bind(this), 5000);
     }
 
     DemoView.prototype = Object.create(View.prototype);
     DemoView.prototype.constructor = DemoView;
 
     DemoView.DEFAULT_OPTIONS = {};
+
+    function _createSkipButton () {
+      var skip = new Surface({
+        size: [175, 100],
+        content: 'Skip',
+        properties: {
+          fontWeight: 'bold',
+          fontFamily: 'Helvetica',
+          textAlign: 'center'
+        }
+      });
+
+      var skipMod = new StateModifier({
+        align: [1, 1],
+        origin: [1, 1],
+      });
+
+
+      skip.on('touchstart', function (data) {
+        this._eventOutput.emit('mainMenu');
+      }.bind(this));
+
+      skip.on('click', function (data) {
+        this._eventOutput.emit('mainMenu');
+      }.bind(this));
+
+      this.node.add(skip);
+
+    }
 
     function _createDemoBoard () {
 
@@ -391,42 +417,10 @@ define(function(require, exports, module) {
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-    }
-
-    function _showMenu () {
-      // menu slides in
-
-    var titleSurface = new Surface({
-      content: 'Famonospace',
-      size: [undefined, undefined],
-      properties: {
-        backgroundColor: 'black'
-      }
-    });
-
-    var titleSurfaceMod = new StateModifier({
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5]
-    });
-
-    this.node.add(titleSurfaceMod).add(titleSurfaceMod);
-
-            var surface = new Surface({
-          size: [175, 100],
-          content: 'words[i]',
-          properties: {
-            fontWeight: 'bold',
-            fontFamily: 'Helvetica',
-            textAlign: 'center'
-          }
-        });
-
-        var surfaceMod = new StateModifier({
-          align: [0.5, 0],
-          origin: [0.5, 0]
-        });
-        
-        this.node.add(surfaceMod).add(surface);
+      demoTimer += 500;
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('mainMenu');
+      }.bind(this), demoTimer);
 
     }
 

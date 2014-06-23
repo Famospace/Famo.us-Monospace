@@ -4,9 +4,9 @@ define(function(require, exports, module) {
   var Modifier        = require('famous/core/Modifier');
   var GameLogic       = require('views/GameLogic');
   var DemoView        = require('views/DemoView');
+  var MenuView        = require('views/MenuView');
 
-  var gameLogic = new GameLogic();
-  var demoView = new DemoView();
+
 
   var modifier = new Modifier({
     align: [0.5, 0.5],
@@ -17,21 +17,46 @@ define(function(require, exports, module) {
 
   mainContext.setPerspective(1000);
 
+   //////////////// Main Menu ///////////////////
 
-  //////////////// INTRO VIDEO ///////////////////
+  var menuView = new MenuView();
 
-
-  demoView._eventOutput.on('is2d', function (boolean) {
+  menuView.views.demoView._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
       mainContext.setPerspective(1000);
     }
   });
-  mainContext.add(modifier).add(demoView);
+
+  menuView.views.game._eventOutput.on('is2d', function (boolean) {
+    if (boolean) {
+      mainContext.setPerspective(1000000);
+    } else {
+      mainContext.setPerspective(1000);
+    }
+  });
+
+  mainContext.add(modifier).add(menuView);
+
+
+  //////////////// INTRO VIDEO ///////////////////
+
+  // var demoView = new DemoView();
+  // demoView._eventOutput.on('is2d', function (boolean) {
+  //   if (boolean) {
+  //     mainContext.setPerspective(1000000);
+  //   } else {
+  //     mainContext.setPerspective(1000);
+  //   }
+  // });
+  // mainContext.add(modifier).add(demoView);
 
 
   /////////////////// NORMAL //////////////////////
+
+  // var gameLogic = new GameLogic();
+
   // gameLogic._eventOutput.on('is2d', function (boolean) {
   //   if (boolean) {
   //     mainContext.setPerspective(1000000);

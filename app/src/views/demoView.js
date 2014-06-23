@@ -10,7 +10,6 @@ define(function(require, exports, module) {
     
     var GameLogic       = require('views/GameLogic');
     var RotatingLogic   = require('views/RotatingLogic');
-    // var MenuView    = require('views/MenuView');
     var Levels          = require('../../content/levels');
 
     function DemoView() {
@@ -25,13 +24,15 @@ define(function(require, exports, module) {
 
 
       // takes 4.5 seconds
+      _createSkipButton.call(this);
       _startWordCrash.call(this); 
+
+      console.log(this);
 
       // takes 21.5 seconds
       Timer.setTimeout(function () {
         _startDemoPlay.call(this);
         _startDemoText.call(this);
-        _createSkipButton.call(this);
       }.bind(this), 5000);
     }
 
@@ -55,7 +56,6 @@ define(function(require, exports, module) {
         align: [1, 1],
         origin: [1, 1],
       });
-
 
       skip.on('touchstart', function (data) {
         this._eventOutput.emit('demoToMainMenu');

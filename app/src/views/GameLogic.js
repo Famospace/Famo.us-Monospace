@@ -23,12 +23,12 @@ define(function(require, exports, module) {
 
     this.twoDDataStructure = {};
     this.is2d = false;
-    // this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
-    // this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
+    this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
+    this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
 
         //hardcoded!
-    this.board = Levels.introVideo.smallCube;
-    this.destroyerCubeLocation = Levels.introVideo.destroyer;
+    // this.board = Levels.introVideo.smallCube;
+    // this.destroyerCubeLocation = Levels.introVideo.destroyer;
 
     _createRotatingLogic.call(this);
     _createPerspectiveButton.call(this);
@@ -78,7 +78,8 @@ define(function(require, exports, module) {
             color: 'red',
             backgroundColor: 'black',
             borderRadius: '20px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            zIndex: 5
           }
         });
 
@@ -156,10 +157,10 @@ define(function(require, exports, module) {
     function _createRotatingLogic () {
       this.rotatingLogic = new RotatingLogic({
         mainCubeSize: this.options.mainCubeSize,
-        destroyer: this.destroyerCubeLocation,
-        // destroyer: Levels.demoLevel.destroyer,
-        smallCube: this.board
-        // smallCube: Levels.demoLevel.smallCube
+        // destroyer: this.destroyerCubeLocation,
+        destroyer: Levels.demoLevel.destroyer,
+        // smallCube: this.board
+        smallCube: Levels.demoLevel.smallCube
       });
       this.node.add(this.rotatingLogic);
     }

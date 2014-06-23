@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
     this.node = this.add(rootModifier);
 
-    console.log(Levels);
+    // console.log(Levels);
 
     _checkBoxSize.call(this);
     _createMenu.call(this);
@@ -114,8 +114,6 @@ define(function(require, exports, module) {
 
   function _setListeners(){
     this._eventInput.on('startGameToL', function(data){
-      console.log('transfer data', data);
-
       this._eventOutput.emit('startGame', data);
     }.bind(this));
   }

@@ -5,8 +5,17 @@ define(function(require, exports, module) {
   var FpsMeter        = require('views/FpsMeterView');
   var GameLogic       = require('views/GameLogic');
   var DemoView        = require('views/DemoView');
+  //will have to move
+  var LevelSelection  = require('views/LevelSelectionView');
+  var Levels          = require('../content/levels');
+  var Surface         = require('famous/core/Surface');
+
 
   var gameLogic = new GameLogic();
+
+  var levelSelection = new LevelSelection();
+
+  gameLogic.subscribe(levelSelection._eventOutput);
 
   var demoView = new DemoView();
 
@@ -39,6 +48,7 @@ define(function(require, exports, module) {
   /////////////////// NORMAL //////////////////////
 
   //logic to transform 3d into 2d and vice versa
+
   gameLogic._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
       mainContext.setPerspective(1000000);
@@ -47,6 +57,8 @@ define(function(require, exports, module) {
     }
   });
   mainContext.add(modifier).add(gameLogic);
+  mainContext.add(modifier).add(levelSelection);
+
   mainContext.add(fpsMeter);
 
 

@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
 
     _createAuthors.call(this);
-    // _createBackButton.call(this);
+    _createMenu.call(this);
   }
 
   AboutView.prototype = Object.create(View.prototype);
@@ -59,31 +59,30 @@ define(function(require, exports, module) {
     this.add(grid);
   }
 
-  function _createBackButton () {
-    var back = new Surface({
+  function _createMenu () {
+    var menuButton = new Surface({
       content: 'Back',
       properties: {
-        border: '5px solid black',
-        borderRadius: '10px'
+        textAlign: 'center',
+        fontWeight: 'bold',
+        backgroundColor: 'black',
+        color: 'white',
+        zIndex: 4,
+        lineHeight: '47px'
       }
     });
 
-    var backMod = new Modifier({
+    var menuButtonMod = new Modifier({
       size: [50, 50],
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5]
+      align: [1, 0],
+      origin: [1, 0]
     });
 
-    back.on('touchstart', function (data) {
+    this.add(menuButtonMod).add(menuButton);
+
+    menuButton.on('click', function () {
       this._eventOutput.emit('mainMenu');
     }.bind(this));
-
-    back.on('click', function (data) {
-      this._eventOutput.emit('mainMenu');
-    }.bind(this));
-
-    // this.add(backMod).add(back);
-
   }
 
   module.exports = AboutView;

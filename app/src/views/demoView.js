@@ -22,15 +22,16 @@ define(function(require, exports, module) {
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
 
-      // _startWordCrash.call(this); // takes 4.5 seconds
+      _startWordCrash.call(this); // takes 4.5 seconds
 
-      // Timer.setTimeout(function () {
+      Timer.setTimeout(function () {
         _startDemoPlay.call(this);
-      // }.bind(this), 5000);
+        _startDemoText.call(this);
+      }.bind(this), 5000);
 
       // show menu
       Timer.setTimeout(function () {
-        // _startDemoPlay.call(this);
+        // show menu fn
       }.bind(this), 22500);
     }
 
@@ -111,34 +112,12 @@ define(function(require, exports, module) {
       }.bind(this), 3500);
     }
 
-    function _startDemoPlay () {
-
+    function _startDemoText () {
+      var demoTextTimer = 2000;
       var swipeTransitionable = new Transitionable(0);
       var perspecTransitionable = new Transitionable(0);
       var destroyerTellTrans = new Transitionable(0);
       var objectiveTellTrans = new Transitionable(0);
-
-      var demoTimer = 5000;
-      var demoTextTimer = 2000;
-
-      // How do i pass in the board!???
-        // and destroyer cube???!
-
-      this.gameLogic = new GameLogic();
-          // this.gameLogic.rotatingLogic.mainCubeSize = 250;
-
-          // this.gameLogic.rotatingLogic.destroyer = Levels.introVideo.destroyer; 
-
-          // this.gameLogic.rotatingLogic.smallCube = Levels.introVideo.smallCube;
-      var demoBoardModifier = new Modifier({
-        align: [0.5, 0.5],
-        origin: [0.5, 0.5],
-        transform: Transform.multiply(
-            Transform.rotate(Math.PI/2, Math.PI/2, Math.PI/2),
-            Transform.translate(1500, 0, 0)
-        )
-      });
-
 
       // create swipe instructional text
       var swipeTell = new Surface({
@@ -250,67 +229,55 @@ define(function(require, exports, module) {
         objectiveTellTrans.set(1, { duration: 1000, curve: Easing.inBack });
         objectiveTellTrans.set(0, { duration: 1000, curve: Easing.inBack });
       }, demoTextTimer);
+    }
+
+    function _startDemoPlay () {
+      var demoTimer = 5000;
+
+      // How do i pass in the board!???
+        // and destroyer cube???!
+
+      this.gameLogic = new GameLogic();
+          // this.gameLogic.rotatingLogic.mainCubeSize = 250;
+
+          // this.gameLogic.rotatingLogic.destroyer = Levels.introVideo.destroyer; 
+
+          // this.gameLogic.rotatingLogic.smallCube = Levels.introVideo.smallCube;
+
+      var rootMod = new Modifier();
+
+
+      var demoBoardModifier = new Modifier({
+        align: [0.5, 0.5],
+        origin: [0.5, 0.5],
+        transform: Transform.multiply(
+            Transform.rotate(Math.PI/2, Math.PI/2, Math.PI/2),
+            Transform.translate(1500, 0, 0)
+        )
+      });
+
+      this.node = this.add(rootMod);
 
       this.node.add(demoBoardModifier).add(this.gameLogic.rotatingLogic);
-
-      var perspectiveButton = new Surface({
-        size: [undefined, undefined],
-        content: '<div>2D</div>',
-        properties: {
-          fontSize: '3rem',
-          textAlign: 'center',
-          lineHeight: '75px',
-          verticalAlign: 'middle',
-          color: 'red',
-          backgroundColor: 'black',
-          borderRadius: '20px',
-          cursor: 'pointer'
-        }
-      });
-
-      var perspecModifier = new Modifier ({
-          transform: Transform.translate(0, 2000, 0),
-          size: function () {
-            if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-              return [100, 75];
-            } else {
-              return [75, 75];
-            }
-          }.bind(this),
-          align: function () {
-            if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-              return [0.5, 0.5];
-            } else {
-              return [0.5, 0.5];
-            }
-          }.bind(this),
-          origin: function () {
-            if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-              return [0.5, 0.95];
-            } else {
-              return [0.05, 0.5];
-            }
-          }.bind(this),
-      });
-
-      this.node.add(perspecModifier).add(perspectiveButton);
+      this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(0, 2000, 0),{duration: 0, curve: 'easeInOut'});
+      this.node.add(this.gameLogic.perspectiveButtonMod).add(this.gameLogic.perspectiveButton);
 
       // perspectiveButton slides in
-      perspecModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
+      this.gameLogic.perspectiveButtonMod.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
     
       // board slides in
       demoBoardModifier.setTransform(Transform.translate(0,0,0),{duration: 2500, curve: 'easeInOut'});
-      
 
       // rotate right
       demoBoardModifier.setTransform(Transform.rotate(0, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
 
+
       // switch to 2D
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', true);
-        perspectiveButton.setContent('3D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButton.setContent('3D');
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
       
       // crush
@@ -324,9 +291,9 @@ define(function(require, exports, module) {
       demoTimer += 2000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', false);
-        perspectiveButton.setContent('2D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButton.setContent('2D');
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
       // rotate up
@@ -340,9 +307,9 @@ define(function(require, exports, module) {
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', true);
-        perspectiveButton.setContent('3D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButton.setContent('3D');
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
       // crush
@@ -363,9 +330,9 @@ define(function(require, exports, module) {
       demoTimer += 1000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', false);
-        perspectiveButton.setContent('2D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButton.setContent('2D');
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
       // // rotate up
@@ -378,9 +345,9 @@ define(function(require, exports, module) {
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', true);
-        perspectiveButton.setContent('3D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButton.setContent('3D');
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
       // crush
@@ -409,9 +376,9 @@ define(function(require, exports, module) {
       demoTimer += 1000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', false);
-        perspectiveButton.setContent('2D');
-        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButton.setContent('2D');
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
       // board slides out
@@ -419,7 +386,7 @@ define(function(require, exports, module) {
       demoTimer += 1000;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
-        perspecModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
     }

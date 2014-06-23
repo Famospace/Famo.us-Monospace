@@ -75,7 +75,8 @@ define(function(require, exports, module) {
         });
 
 
-        var modifier = new Modifier ({
+        this.perspectiveButtonMod = new Modifier ({
+        // var modifier = new Modifier ({
             size: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
                 return [100, 75];
@@ -114,7 +115,8 @@ define(function(require, exports, module) {
             }
         }.bind(this));
 
-        this.node.add(modifier).add(this.perspectiveButton);
+        this.node.add(this.perspectiveButtonMod).add(this.perspectiveButton);
+        // this.node.add(modifier).add(this.perspectiveButton);
     }
 
     function _deny3D () {

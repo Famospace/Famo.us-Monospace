@@ -38,7 +38,15 @@ define(function(require, exports, module) {
 
     RotatingLogic.prototype.setDestroyerPosition = function(pos){
       this.gameBoard.setDestroyerPosition(pos);
-    }
+    };
+
+    RotatingLogic.prototype.startNewGame = function(starter){
+      this.state = [0,0,1];
+      this.nVec = [0,-1,0];
+      this.rVec = [1,0,0];
+      this.index = [0,0,0];
+      this.gameBoard.startNewGame(starter);
+    };
 
     RotatingLogic.DEFAULT_OPTIONS = {
       mainCubeSize: 400,
@@ -95,7 +103,7 @@ define(function(require, exports, module) {
         this.node = this.add(rotateModifier);
     }
 
-    function _setBackgroundListeners () {
+function _setBackgroundListeners () {
 
         this.parentCubeMouseSync = new MouseSync();
         this.parentCubeTouchSync = new TouchSync();

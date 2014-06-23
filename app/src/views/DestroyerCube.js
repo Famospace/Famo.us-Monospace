@@ -75,6 +75,23 @@ define(function(require, exports, module) {
         movement = _calculateMovement(this.downData, this.upData);
         this._eventOutput.emit('movingCubeToGB', movement);
       }.bind(this));
+
+      this.destroyerCube.surfaces[i].on('touchstart', function (data) {
+        this.downData = {
+          x: data.changedTouches[0].clientX,
+          y: data.changedTouches[0].clientY
+        };
+      }.bind(this));
+
+      this.destroyerCube.surfaces[i].on('touchend', function (data) {
+        this.upData = {
+          x: data.changedTouches[0].clientX,
+          y: data.changedTouches[0].clientY
+        };
+        movement = _calculateMovement(this.downData, this.upData);
+        this._eventOutput.emit('movingCubeToGB', movement);
+        this.downData = undefined;
+      }.bind(this));
     }
   }
   

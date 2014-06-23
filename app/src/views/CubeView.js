@@ -45,11 +45,11 @@ define(function(require, exports, module) {
 
     var surfaceRotations = [
       [0, 0, 0],// front
-      [0, 0, 0], // back
-      [0, Math.PI/2, 0],// right
-      [0, -Math.PI/2, 0], // left
-      [Math.PI/2, 0, 0],// bottom
-      [-Math.PI/2, 0, 0]// top
+      [0, Math.PI, 0], // back
+      [0, -Math.PI/2, 0],// right
+      [0, Math.PI/2, 0], // left
+      [-Math.PI/2, 0, 0],// bottom
+      [Math.PI/2, 0, 0]// top
     ];
 
     for (var i=0;i<6;i++) {
@@ -58,6 +58,7 @@ define(function(require, exports, module) {
       var surface = new Surface({
         size: [this.options.size, this.options.size],
         properties: {
+          // content: '<p>K</p>',
           webkitBackfaceVisibility: 'visible',
           border: '1px solid black',
           pointerEvents: 'none'

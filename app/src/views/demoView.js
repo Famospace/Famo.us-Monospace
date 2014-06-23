@@ -46,18 +46,20 @@ define(function(require, exports, module) {
 
     function _createSkipButton () {
       var skip = new Surface({
-        size: [175, 100],
+        size: [25, 25],
         content: 'Skip',
         properties: {
-          fontWeight: 'bold',
-          fontFamily: 'Helvetica',
-          textAlign: 'center'
+          // fontWeight: 'bold',
+          fontFamily: 'HelveticaNeue-Light',
+          textAlign: 'center',
+          fontSize: '1.5rem'
         }
       });
 
       var skipMod = new StateModifier({
-        align: [1, 1],
-        origin: [1, 1],
+        align: [1, 0],
+        origin: [1, 0],
+        transform: Transform.translate(-22, 0, 0)
       });
 
       skip.on('touchstart', function (data) {
@@ -70,7 +72,7 @@ define(function(require, exports, module) {
         this._eventOutput.emit('demoToMainMenu');
       }.bind(this));
 
-      this.node.add(skip);
+      this.node.add(skipMod).add(skip);
 
     }
 
@@ -94,12 +96,13 @@ define(function(require, exports, module) {
       for (var i=0;i<words.length;i++) {
 
         var surface = new Surface({
-          size: [175, 100],
+          size: [200, 100],
           content: words[i],
           properties: {
-            fontWeight: 'bold',
-            fontFamily: 'Helvetica',
-            textAlign: 'center'
+            // fontWeight: 'bold',
+            fontFamily: 'HelveticaNeue-Light',
+            textAlign: 'center',
+            fontSize: '1.2rem'
           }
         });
 
@@ -158,7 +161,8 @@ define(function(require, exports, module) {
         opacity: 0,
         properties: {
           textAlign: 'center',
-          fontSize: '2rem'
+          fontSize: '2rem',
+          fontFamily: "HelveticaNeue-Light"
         }
       });
 
@@ -186,7 +190,8 @@ define(function(require, exports, module) {
         opacity: 0,
         properties: {
           textAlign: 'center',
-          fontSize: '2rem'
+          fontSize: '2rem',
+          fontFamily: "HelveticaNeue-Light"
         }
       });
 
@@ -214,7 +219,8 @@ define(function(require, exports, module) {
         opacity: 0,
         properties: {
           textAlign: 'center',
-          fontSize: '2rem'
+          fontSize: '2rem',
+          fontFamily: "HelveticaNeue-Light"
         }
       });
 
@@ -242,7 +248,8 @@ define(function(require, exports, module) {
         opacity: 0,
         properties: {
           textAlign: 'center',
-          fontSize: '2rem'
+          fontSize: '2rem',
+          fontFamily: "HelveticaNeue-Light"
         }
       });
 
@@ -304,7 +311,7 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
         this.gameLogic.perspectiveButton.setContent('3D');
-        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
       
@@ -320,7 +327,7 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
         this.gameLogic.perspectiveButton.setContent('2D');
-        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
@@ -335,7 +342,7 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
         this.gameLogic.perspectiveButton.setContent('3D');
-        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
@@ -358,7 +365,7 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
         this.gameLogic.perspectiveButton.setContent('2D');
-        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
@@ -373,7 +380,7 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
         this.gameLogic.perspectiveButton.setContent('3D');
-        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
@@ -404,7 +411,7 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
         this.gameLogic.perspectiveButton.setContent('2D');
-        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 

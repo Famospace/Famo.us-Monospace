@@ -58,7 +58,6 @@ define(function(require, exports, module) {
   function _createLightbox() {
     this.lightbox = new Lightbox(this.options.lightboxOpts);
     this.add(this.lightbox);
-    // this.lightbox.show(this.views.mainMenu);
     this.lightbox.show(this.views.demoView);
   }
 

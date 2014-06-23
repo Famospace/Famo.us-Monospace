@@ -46,6 +46,10 @@ define(function(require, exports, module) {
       this.rVec = [1,0,0];
       this.index = [0,0,0];
       this.gameBoard.startNewGame(starter);
+
+      this.transitionable.set(1, {
+          duration: 0
+      });      
     };
 
     RotatingLogic.DEFAULT_OPTIONS = {

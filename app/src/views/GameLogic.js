@@ -70,6 +70,9 @@ define(function(require, exports, module) {
       this.board = _forceSlice(starter.smallCube);
       this.destroyerCubeLocation = starter.destroyer;
       this.rotatingLogic.startNewGame(starter);
+      this._eventOutput.trigger('is2d', false);
+      this.perspectiveButton.setContent('2D');
+      this.is2d = false;
     }
     
     GameLogic.prototype.startNewGame = _startNewGame;

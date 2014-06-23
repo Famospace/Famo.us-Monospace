@@ -80,11 +80,11 @@ define(function(require, exports, module) {
     });
 
     play.on('touchstart', function (data) {
-      this._eventOutput.emit('play');
+      this._eventOutput.emit('levels');
     }.bind(this));
 
     play.on('click', function (data) {
-      this._eventOutput.emit('play');
+      this._eventOutput.emit('levels');
     }.bind(this));
     
     this.add(playMod).add(play);

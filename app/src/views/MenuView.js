@@ -12,6 +12,7 @@ define(function(require, exports, module) {
   var MainMenuView  = require('views/MainMenuView');
   var demoView      = require('views/demoView');
   var GameLogic     = require('views/GameLogic');
+  var LevelSelection = require('views/LevelSelectionView');
 
   function MenuView() {
     View.apply(this, arguments);
@@ -24,6 +25,7 @@ define(function(require, exports, module) {
     _createGameboard.call(this);
     _createAbout.call(this);
     _createMainMenu.call(this);
+    _createLevelSelection.call(this);
     _createLightbox.call(this);
     _setLightboxListeners.call(this);
   }
@@ -65,7 +67,8 @@ define(function(require, exports, module) {
     this.views.about.pipe(this);
     this.views.demoView.pipe(this);
     this.game.pipe(this);
-    // this.views.game.pipe(this);
+    this.views.levelSelection.pipe(this);
+    this.views.levelSelection.pipe(this.game);
 
     // manage perspective listeners
     this._eventInput.on('is2dDemo', function (data) {
@@ -80,6 +83,9 @@ define(function(require, exports, module) {
 
     this._eventInput.on('demoToMainMenu', function () {
       if (this.playingDemo) {
+        if (this.views.demoView.gameLogic){
+          this.views.demoView.gameLogic.setSoundOff(true);
+        }
         this.lightbox.show(this.views.mainMenu);
         this.playingDemo = false;
       }
@@ -87,7 +93,7 @@ define(function(require, exports, module) {
 
 
     // menu listeners
-    this._eventInput.on('play', function () {
+    this._eventInput.on('startGame', function () {
       this.lightbox.show(this.views.game);
     }.bind(this));
 
@@ -96,7 +102,7 @@ define(function(require, exports, module) {
     }.bind(this));
 
     this._eventInput.on('levels', function () {
-      // do something
+      this.lightbox.show(this.views.levelSelection);
     }.bind(this));
 
     this._eventInput.on('mainMenu', function () {
@@ -107,6 +113,11 @@ define(function(require, exports, module) {
   function _createIntro () {
     var intro = new demoView();
     this.views.demoView = intro;
+  }
+
+  function _createLevelSelection () {
+    var levelSelection = new LevelSelection();
+    this.views.levelSelection = levelSelection;
   }
 
   function _createGameboard () {

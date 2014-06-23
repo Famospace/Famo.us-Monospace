@@ -112,7 +112,7 @@ define(function(require, exports, module) {
     this._eventInput.on('startGameToL', function(data){
       console.log('transfer data', data);
 
-      this._eventOutput.emit('startGameToMV', data);
+      this._eventOutput.emit('startGame', data);
     }.bind(this));
   }
 

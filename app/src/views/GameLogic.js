@@ -15,6 +15,7 @@ define(function(require, exports, module) {
     this.node = this.add(rootModifier);
 
     // Create sound objects
+    this.terminate = false;
     this.mySound = new Buzz.sound("content/sounds/die.wav");
     this.mySound.load();
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
@@ -70,6 +71,12 @@ define(function(require, exports, module) {
       this.destroyerCubeLocation = starter.destroyer;
       this.rotatingLogic.startNewGame(starter);
     }
+    
+    GameLogic.prototype.startNewGame = _startNewGame;
+
+    GameLogic.prototype.setSoundOff = function(bool){
+      this.terminate = bool;
+    };
 
     function _createPerspectiveButton () {
         this.perspectiveButton = new Surface({
@@ -164,7 +171,7 @@ define(function(require, exports, module) {
     function _setListeners (){
       this.rotatingLogic.pipe(this._eventInput);
       this.rotatingLogic.subscribe(this._eventOutput);
-      this._eventInput.on('startGameToMV', function(data){
+      this._eventInput.on('startGame', function(data){
         console.log('start Game', data);
         _startNewGame.call(this,data);
       }.bind(this));
@@ -201,7 +208,9 @@ define(function(require, exports, module) {
         var newPos = _DCcanMove.call(this, requestedPos);           
 
         if (newPos){
-          this.mySound.play();
+          if (!this.terminate){
+            this.mySound.play()
+          };
           this.destroyerCubeLocation = newPos;
           _removeSmallCube.call(this, newPos);
           this.rotatingLogic.setDestroyerPosition(newPos);
@@ -242,7 +251,12 @@ define(function(require, exports, module) {
                 console.log('array', this.board.length);
                 if(this.board.length < 1){
                   console.log('complete');
-                  this.completeSound.play();
+                  if (!this.terminate){
+                    this.completeSound.play();
+                  };
+                  Timer.setTimeout(function(){
+                    this._eventOutput.emit('levels');
+                  }.bind(this), 500);
                 }
                 return;
             }

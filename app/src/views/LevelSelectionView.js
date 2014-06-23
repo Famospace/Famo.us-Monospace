@@ -87,7 +87,7 @@ define(function(require, exports, module) {
           // align: [(1/this.options.width)*(i+1), (1/this.options.height)*(j+1)]
         });
 
-        surface = new Surface({
+        var surface = new Surface({
           content: index,
           properties: {
             border: '3px solid black',
@@ -95,10 +95,9 @@ define(function(require, exports, module) {
           }
         });
 
-        surface.on('click', function(){
-          index = this.getContent();
+        surface.on('click', function(index){
           this.emit('startGameToL', Levels.levels[index-1]);
-        });
+        }.bind(surface, index));
 
         surface.pipe(this);
 

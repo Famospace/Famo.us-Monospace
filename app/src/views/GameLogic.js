@@ -2,6 +2,7 @@
 define(function(require, exports, module) {
   var View          = require('famous/core/View');
   var Surface       = require('famous/core/Surface');
+  var Transform     = require('famous/core/Transform');
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
@@ -16,6 +17,7 @@ define(function(require, exports, module) {
 
     // Create sound objects
     this.terminate = false;
+    this.showMenu = false;
     this.mySound = new Buzz.sound("content/sounds/die.wav");
     this.mySound.load();
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
@@ -34,6 +36,7 @@ define(function(require, exports, module) {
     _createPerspectiveButton.call(this);
     _destroyerMovement.call(this);
     _setListeners.call(this);
+    _createMenu.call(this);
   }
 
     GameLogic.prototype = Object.create(View.prototype);
@@ -66,6 +69,134 @@ define(function(require, exports, module) {
       ]
     };
 
+    function _createMenu () {
+      var menuButton = new Surface({
+        content: 'Menu',
+        properties: {
+          textAlign: 'center',
+          fontWeight: 'bold',
+          backgroundColor: 'black',
+          color: 'white',
+          zIndex: 4,
+          lineHeight: '47px'
+        }
+      });
+
+      var menuButtonMod = new Modifier({
+        size: [50, 50],
+        align: [1, 0],
+        origin: [1, 0]
+      });
+
+
+      var restartButton = new Surface({
+        content:'Restart',
+        properties: {
+          textAlign: 'center',
+          fontWeight: 'bold',
+          backgroundColor: 'black',
+          color: 'white',
+          zIndex: 3,
+          lineHeight: '47px'
+        },
+      });
+
+      var restartButtonMod = new Modifier({
+        size: [50, 50],
+        align: [1, 0],
+        origin: [1, 0]
+      });
+
+
+      var levelSelectButton = new Surface({
+        content:'Level Select',
+        properties: {
+          textAlign: 'center',
+          fontWeight: 'bold',
+          backgroundColor: 'black',
+          color: 'white',
+          zIndex: 2,
+          lineHeight: '24px'
+        }
+      });
+
+      var levelSelectButtonMod = new Modifier({
+        size: [50, 50],
+        align: [1, 0],
+        origin: [1, 0]
+      });
+
+
+      var exitButton = new Surface({
+        content:'Exit',
+        properties: {
+          textAlign: 'center',
+          fontWeight: 'bold',
+          backgroundColor: 'black',
+          color: 'white',
+          zIndex: 1,
+          lineHeight: '47px'
+        }
+      });
+
+      var exitButtonMod = new Modifier({
+        size: [50, 50],
+        align: [1, 0],
+        origin: [1, 0]
+      });
+
+      this.node.add(menuButtonMod).add(menuButton);
+      this.node.add(levelSelectButtonMod).add(levelSelectButton);
+      this.node.add(restartButtonMod).add(restartButton);
+      this.node.add(exitButtonMod).add(exitButton);
+
+      menuButton.on('click', function () {
+        if (this.showMenu) {
+          _hideMenu();
+          this.showMenu = !this.showMenu;
+        } else {
+          _showMenu();
+          this.showMenu = !this.showMenu;
+        }
+      }.bind(this));
+
+      restartButton.on('click', function () {
+        if (!this.showMenu) return false;
+        //restart level somehow
+        this.showMenu = false;
+        Timer.setTimeout(_hideMenu, 500);
+      });
+
+      exitButton.on('click', function () {
+        if (!this.showMenu) return false;
+        this._eventOutput.emit('mainMenu');
+        this.showMenu = false;
+        Timer.setTimeout(_hideMenu, 500);
+      }.bind(this));
+
+      levelSelectButton.on('click', function () {
+        if (!this.showMenu) return false;
+        this._eventOutput.emit('levels');
+        this.showMenu = false;
+        Timer.setTimeout(_hideMenu, 500);
+      }.bind(this));
+
+
+      function _hideMenu () {
+        restartButtonMod.setTransform(Transform.translate(0, 0, 0), {duration: 500, curve: 'easeInOut'});
+        levelSelectButtonMod.setTransform(Transform.translate(0, 0, 0), {duration: 500, curve: 'easeInOut'});
+        exitButtonMod.setTransform(Transform.translate(0, 0, 0), {duration: 500, curve: 'easeInOut'});
+      }
+
+      function _showMenu () {
+        restartButtonMod.setTransform(Transform.translate(-50, 0, 0), {duration: 500, curve: 'easeInOut'});
+        levelSelectButtonMod.setTransform(Transform.translate(-100, 0, 0), {duration: 500, curve: 'easeInOut'});
+        exitButtonMod.setTransform(Transform.translate(-150, 0, 0), {duration: 500, curve: 'easeInOut'});
+      }
+
+
+    }
+ 
     function _startNewGame (starter){
       this.board = _forceSlice(starter.smallCube);
       this.destroyerCubeLocation = starter.destroyer;

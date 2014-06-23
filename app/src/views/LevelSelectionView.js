@@ -20,6 +20,7 @@ define(function(require, exports, module) {
     // console.log(Levels);
 
     _checkBoxSize.call(this);
+    _createMenu.call(this);
     _createHeaderBlock.call(this);
     _createLevelBlock.call(this);
     _setListeners.call(this);
@@ -65,10 +66,13 @@ define(function(require, exports, module) {
     });
 
     var surface = new Surface({
-      content: this.options.headerFront+'Level Selection'+this.options.headerBack,
+      content: 'Level Selection',
+      // content: this.options.headerFront+'Level Selection'+this.options.headerBack,
       properties: {
         textAlign: 'center',
         verticalAlign: 'middle',
+        fontFamily: 'HelveticaNeue-Light',
+        fontSize: '1.8rem'
       }
     });
 
@@ -82,16 +86,17 @@ define(function(require, exports, module) {
         var modifier = new Modifier({
           size: [this.options.boxSize, this.options.boxSize],
           origin: [(1/(this.options.width+1))*(i+1), (1/(this.options.height+2))*(j+2)],
-          // origin: [0.2, 0.2],
           align: [ 0.5, 0.5]
-          // align: [(1/this.options.width)*(i+1), (1/this.options.height)*(j+1)]
         });
 
         var surface = new Surface({
           content: index,
           properties: {
             border: '3px solid black',
+            borderRadius: '7px',
             textAlign: 'center',
+            lineHeight: '40px',
+            fontFamily: 'HelveticaNeue-Light'
           }
         });
 
@@ -110,6 +115,32 @@ define(function(require, exports, module) {
   function _setListeners(){
     this._eventInput.on('startGameToL', function(data){
       this._eventOutput.emit('startGame', data);
+    }.bind(this));
+  }
+
+  function _createMenu () {
+    var menuButton = new Surface({
+      content: 'Back',
+      properties: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        backgroundColor: 'black',
+        color: 'white',
+        zIndex: 4,
+        lineHeight: '47px'
+      }
+    });
+
+    var menuButtonMod = new Modifier({
+      size: [50, 50],
+      align: [1, 0],
+      origin: [1, 0]
+    });
+
+    this.node.add(menuButtonMod).add(menuButton);
+
+    menuButton.on('click', function () {
+      this._eventOutput.emit('mainMenu');
     }.bind(this));
   }
 

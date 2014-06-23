@@ -49,8 +49,8 @@ define(function(require, exports, module) {
     var back = new Surface({
       content: 'Back',
       properties: {
-        border: '2px solid black',
-        borderRadius: '2px'
+        border: '5px solid black',
+        borderRadius: '10px'
       }
     });
 
@@ -61,12 +61,10 @@ define(function(require, exports, module) {
     });
 
     back.on('touchstart', function (data) {
-        console.log('yup');
       this._eventOutput.emit('mainMenu');
     }.bind(this));
 
     back.on('click', function (data) {
-        console.log('yup');
       this._eventOutput.emit('mainMenu');
     }.bind(this));
 

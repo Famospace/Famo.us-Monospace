@@ -128,15 +128,15 @@ define(function(require, exports, module) {
       Timer.setTimeout(function () {
         this.reusableModifiers[0].setTransform(
           Transform.translate(0, 2000, 0),
-              {duration: 1000, curve: Easing.inBack}
+              {duration: 1000, curve: Easing.inCubic}
         );
         this.reusableModifiers[1].setTransform(
           Transform.translate(0, 2000, 0),
-              {duration: 1000, curve: Easing.inBack}
+              {duration: 1000, curve: Easing.inCubic}
         );
         this.reusableModifiers[2].setTransform(
           Transform.translate(0, 2000, 0),
-              {duration: 1000, curve: Easing.inBack}
+              {duration: 1000, curve: Easing.inCubic}
         );
       }.bind(this), 3500);
     }

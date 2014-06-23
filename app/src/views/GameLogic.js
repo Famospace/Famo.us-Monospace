@@ -28,10 +28,6 @@ define(function(require, exports, module) {
     this.board = undefined;
     this.destroyerCubeLocation = undefined;
 
-        //hardcoded!
-    // this.board = Levels.introVideo.smallCube;
-    // this.destroyerCubeLocation = Levels.introVideo.destroyer;
-
     _createRotatingLogic.call(this);
     _createPerspectiveButton.call(this);
     _destroyerMovement.call(this);
@@ -162,10 +158,11 @@ define(function(require, exports, module) {
 
       restartButton.on('click', function () {
         if (!this.showMenu) return false;
-        //restart level somehow
+        console.log('clicked restart');
+        _restartGame.call(this);
         this.showMenu = false;
         Timer.setTimeout(_hideMenu, 500);
-      });
+      }.bind(this));
 
       exitButton.on('click', function () {
         if (!this.showMenu) return false;
@@ -198,12 +195,18 @@ define(function(require, exports, module) {
     }
  
     function _startNewGame (starter){
+      this.starter = starter;
       this.board = _forceSlice(starter.smallCube);
       this.destroyerCubeLocation = starter.destroyer;
       this.rotatingLogic.startNewGame(starter);
       this._eventOutput.trigger('is2d', false);
       this.perspectiveButton.setContent('2D');
       this.is2d = false;
+    }
+
+    function _restartGame(){
+      console.log('restart game');
+      _startNewGame.call(this,this.starter);
     }
     
     GameLogic.prototype.startNewGame = _startNewGame;
@@ -256,7 +259,7 @@ define(function(require, exports, module) {
         });
 
         this.perspectiveButton.on('click', function () {
-          console.log('2d click from gamelogic');
+          // console.log('2d click from gamelogic');
             if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.perspectiveButton.setContent('3D');
@@ -290,7 +293,6 @@ define(function(require, exports, module) {
       this.rotatingLogic.pipe(this._eventInput);
       this.rotatingLogic.subscribe(this._eventOutput);
       this._eventInput.on('startGame', function(data){
-        console.log('start Game', data);
         _startNewGame.call(this,data);
       }.bind(this));
     }
@@ -341,16 +343,16 @@ define(function(require, exports, module) {
 
       var newPos2D = [newPos[currentAxis.x], newPos[currentAxis.y]].join('');
 
-      console.log('2d pos:', newPos2D);
-      console.log('2d structure:', this.twoDDataStructure);
-      console.log('2d array:', this.twoDDataStructure[newPos2D]);
+      // console.log('2d pos:', newPos2D);
+      // console.log('2d structure:', this.twoDDataStructure);
+      // console.log('2d array:', this.twoDDataStructure[newPos2D]);
 
 
       if (this.twoDDataStructure[newPos2D]) {
         if(this.twoDDataStructure[newPos2D].length > 0){
-          console.log('in pop');
+          // console.log('in pop');
           var output = this.twoDDataStructure[newPos2D].pop();
-          console.log('2d structure after:', this.twoDDataStructure);
+          // console.log('2d structure after:', this.twoDDataStructure);
           return output;
         }
       }
@@ -363,12 +365,12 @@ define(function(require, exports, module) {
             if (this.board[i][0] === pos[0]
                 && this.board[i][1] === pos[1]
                 && this.board[i][2] === pos[2]){
-                console.log('array', this.board);
-                console.log('remove', pos);
+                // console.log('array', this.board);
+                // console.log('remove', pos);
                 this.board.splice(i,1);
-                console.log('array', this.board.length);
+                // console.log('array', this.board.length);
                 if(this.board.length < 1){
-                  console.log('complete');
+                  // console.log('complete');
                   if (!this.terminate){
                     this.completeSound.play();
                   };
@@ -397,6 +399,8 @@ define(function(require, exports, module) {
       // find current twoDDataStructure
       var currentSmallCubePos = this.twoDDataStructure;
       var match = currentSmallCubePos[key];
+
+      console.log('dc loc, cur axis:',dcLocation, currentAxis);
 
       return ( match &&
           (
@@ -459,7 +463,7 @@ define(function(require, exports, module) {
           this.twoDDataStructure[key] = [smallCube];
         } else {
           this.twoDDataStructure[key].push(smallCube);
-          if (currentAxis.zPosNeg > 0) {
+          if (currentAxis.zPosNeg < 0) {
             this.twoDDataStructure[key].sort(function (a, b) { return b[currentAxis.z] - a[currentAxis.z]; });
           } else {
             this.twoDDataStructure[key].sort(function (a, b) { return a[currentAxis.z] - b[currentAxis.z]; });

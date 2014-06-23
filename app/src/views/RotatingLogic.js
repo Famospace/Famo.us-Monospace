@@ -177,24 +177,12 @@ function _setBackgroundListeners () {
         }.bind(this));
 
         this._eventInput.on('is2d', function(data){
-          console.log('RL is2d', data);
+          // console.log('RL is2d', data);
           if (data){
             this.backgroundSurface.unpipe(this.parentCubeMouseSync);
             this.backgroundSurface.setProperties({pointerEvents: 'none'});
           } else{
             this.backgroundSurface.pipe(this.parentCubeMouseSync);
-            this.backgroundSurface.setProperties({pointerEvents: 'auto'});
-          }
-          this._eventOutput.emit('is2d', data);
-        }.bind(this));
-
-        this._eventInput.on('is2d', function(data){
-          console.log('RL is2d', data);
-          if (data){
-            this.backgroundSurface.unpipe(this.parentCubeTouchSync);
-            this.backgroundSurface.setProperties({pointerEvents: 'none'});
-          } else{
-            this.backgroundSurface.pipe(this.parentCubeTouchSync);
             this.backgroundSurface.setProperties({pointerEvents: 'auto'});
           }
           this._eventOutput.emit('is2d', data);

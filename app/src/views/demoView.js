@@ -12,12 +12,6 @@ define(function(require, exports, module) {
     var RotatingLogic   = require('views/RotatingLogic');
     var Levels          = require('../../content/levels');
 
-
-
-    var SpringTransition = require('famous/transitions/SpringTransition');
-
-    Transitionable.registerMethod('spring', SpringTransition);
-
     function DemoView() {
       View.apply(this, arguments);
 
@@ -28,12 +22,16 @@ define(function(require, exports, module) {
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
 
-      // Timer.setTimeout(function () {_createDemoBoard.call(this);}.bind(this), 20500);
-      // _startWordCrash.call(this); // takes 3.5 seconds
+      // _startWordCrash.call(this); // takes 4.5 seconds
 
       // Timer.setTimeout(function () {
         _startDemoPlay.call(this);
-      // }.bind(this), 4000);
+      // }.bind(this), 5000);
+
+      // show menu
+      Timer.setTimeout(function () {
+        // _startDemoPlay.call(this);
+      }.bind(this), 22500);
     }
 
     DemoView.prototype = Object.create(View.prototype);
@@ -55,8 +53,6 @@ define(function(require, exports, module) {
     }
 
     function _startWordCrash () {
-      var transitionable = new Transitionable(0);
-
       var words = ['Crush the Red Cubes', 'Munipulate in 3D', 'Destroy in 2D'];
 
       // words crash down
@@ -112,12 +108,18 @@ define(function(require, exports, module) {
           Transform.translate(0, 2000, 0),
               {duration: 1000, curve: Easing.inBack}
         );
-      }.bind(this), 2500);
+      }.bind(this), 3500);
     }
 
     function _startDemoPlay () {
 
-      var demoTimer = 4000;
+      var swipeTransitionable = new Transitionable(0);
+      var perspecTransitionable = new Transitionable(0);
+      var destroyerTellTrans = new Transitionable(0);
+      var objectiveTellTrans = new Transitionable(0);
+
+      var demoTimer = 5000;
+      var demoTextTimer = 2000;
 
       // How do i pass in the board!???
         // and destroyer cube???!
@@ -133,82 +135,177 @@ define(function(require, exports, module) {
         origin: [0.5, 0.5],
         transform: Transform.multiply(
             Transform.rotate(Math.PI/2, Math.PI/2, Math.PI/2),
-            Transform.translate(1000, 0, 0)
+            Transform.translate(1500, 0, 0)
         )
       });
 
-    // board slides in
-      // var demoBoard = new RotatingLogic({
-      //     mainCubeSize: 250,
-      //     destroyer: Levels.introVideo.destroyer, 
-      //     smallCube: Levels.introVideo.smallCube
-      // });
-      // this.node.add(this.rotatingLogic);
 
-      // var demoBoardModifier = new StateModifier({
-      //   align: [0.5, 0.5],
-      //   origin: [0.5, 0.5],
-      //   transform: Transform.multiply(
-      //       Transform.rotate(Math.PI/2, Math.PI/2, Math.PI/2),
-      //       Transform.translate(1000, 0, 0)
-      //   )
-      // });
+      // create swipe instructional text
+      var swipeTell = new Surface({
+        opacity: 0,
+        properties: {
+          textAlign: 'center',
+          fontSize: '2rem'
+        }
+      });
+
+      var swipeTellMod = new Modifier({
+        size: [500, 50],
+        align: [0.5, 0.5],
+        origin: [0.5, 0.5],
+        transform: Transform.translate(1000, 0, 0),
+        opacity: function () {
+          return swipeTransitionable.get();
+        }
+      });
+
+      this.node.add(swipeTellMod).add(swipeTell);
+
+      Timer.setTimeout(function () {
+        swipeTell.setContent('Swipe to Rotate');
+        swipeTransitionable.set(1, { duration: 1000, curve: Easing.inBack });
+        swipeTellMod.setTransform(Transform.translate(0, 0, 0), {duration: 1500, curve: 'easeInOut'});
+        swipeTransitionable.set(0, { duration: 1000, curve: Easing.inBack });
+      }, demoTextTimer);
+
+      // create perspective change instructional text
+      var perspecChange = new Surface({
+        opacity: 0,
+        properties: {
+          textAlign: 'center',
+          fontSize: '2rem'
+        }
+      });
+
+      var perspecChangeMod = new Modifier({
+        size: [500, 50],
+        align: [0.5, 0.5],
+        origin: [0.5, 0.5],
+        transform: Transform.translate(0, 0, 0),
+        opacity: function () {
+          return perspecTransitionable.get();
+        }
+      });
+
+      this.node.add(perspecChangeMod).add(perspecChange);
+      
+      demoTextTimer += 2300;
+      Timer.setTimeout(function () {
+        perspecChange.setContent('Toggle 2D and 3D');
+        perspecTransitionable.set(1, { duration: 1000, curve: Easing.inBack });
+        perspecTransitionable.set(0, { duration: 1000, curve: Easing.inBack });
+      }, demoTextTimer);
+
+      // create destroyer instructional text
+      var destroyerTell = new Surface({
+        opacity: 0,
+        properties: {
+          textAlign: 'center',
+          fontSize: '2rem'
+        }
+      });
+
+      var destroyerTellMod = new Modifier({
+        size: [500, 50],
+        align: [0.5, 0.5],
+        origin: [0.5, 0.5],
+        transform: Transform.translate(0, -25, 0),
+        opacity: function () {
+          return destroyerTellTrans.get();
+        }
+      });
+
+      this.node.add(destroyerTellMod).add(destroyerTell);
+      
+      demoTextTimer += 2000;
+      Timer.setTimeout(function () {
+        destroyerTell.setContent('Crush<br/>adjacent<br/>cubes');
+        destroyerTellTrans.set(1, { duration: 1000, curve: Easing.inBack });
+        destroyerTellTrans.set(0, { duration: 1000, curve: Easing.inBack });
+      }, demoTextTimer);
+
+      // create game objective instructional text
+      var objectiveTell = new Surface({
+        opacity: 0,
+        properties: {
+          textAlign: 'center',
+          fontSize: '2rem'
+        }
+      });
+
+      var objectiveTellMod = new Modifier({
+        size: [500, 50],
+        align: [0.5, 0.5],
+        origin: [0.5, 0.5],
+        opacity: function () {
+          return objectiveTellTrans.get();
+        }
+      });
+
+      this.node.add(objectiveTellMod).add(objectiveTell);
+      
+      demoTextTimer += 3000;
+      Timer.setTimeout(function () {
+        objectiveTell.setContent('Clear the Cube');
+        objectiveTellTrans.set(1, { duration: 1000, curve: Easing.inBack });
+        objectiveTellTrans.set(0, { duration: 1000, curve: Easing.inBack });
+      }, demoTextTimer);
 
       this.node.add(demoBoardModifier).add(this.gameLogic.rotatingLogic);
 
-        var perspectiveButton = new Surface({
-          size: [undefined, undefined],
-          content: '<div>2D</div>',
-          properties: {
-            fontSize: '3rem',
-            textAlign: 'center',
-            lineHeight: '75px',
-            verticalAlign: 'middle',
-            color: 'red',
-            backgroundColor: 'black',
-            borderRadius: '20px',
-            cursor: 'pointer'
-          }
-        });
+      var perspectiveButton = new Surface({
+        size: [undefined, undefined],
+        content: '<div>2D</div>',
+        properties: {
+          fontSize: '3rem',
+          textAlign: 'center',
+          lineHeight: '75px',
+          verticalAlign: 'middle',
+          color: 'red',
+          backgroundColor: 'black',
+          borderRadius: '20px',
+          cursor: 'pointer'
+        }
+      });
 
-        var perspecModifier = new Modifier ({
-            transform: Transform.translate(0, 2000, 0),
-            size: function () {
-              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [100, 75];
-              } else {
-                return [75, 75];
-              }
-            }.bind(this),
-            align: function () {
-              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [0.5, 0.5];
-              } else {
-                return [0.5, 0.5];
-              }
-            }.bind(this),
-            origin: function () {
-              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [0.5, 0.95];
-              } else {
-                return [0.05, 0.5];
-              }
-            }.bind(this),
-        });
+      var perspecModifier = new Modifier ({
+          transform: Transform.translate(0, 2000, 0),
+          size: function () {
+            if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+              return [100, 75];
+            } else {
+              return [75, 75];
+            }
+          }.bind(this),
+          align: function () {
+            if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+              return [0.5, 0.5];
+            } else {
+              return [0.5, 0.5];
+            }
+          }.bind(this),
+          origin: function () {
+            if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+              return [0.5, 0.95];
+            } else {
+              return [0.05, 0.5];
+            }
+          }.bind(this),
+      });
 
-        this.node.add(perspecModifier).add(perspectiveButton);
+      this.node.add(perspecModifier).add(perspectiveButton);
 
-        // perspectiveButton slides in
+      // perspectiveButton slides in
       perspecModifier.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
     
-    //     board slides in
-      demoBoardModifier.setTransform(Transform.translate(0,0,0),{duration: 2000, curve: 'easeInOut'});
+      // board slides in
+      demoBoardModifier.setTransform(Transform.translate(0,0,0),{duration: 2500, curve: 'easeInOut'});
       
 
-    //     rotate right
+      // rotate right
       demoBoardModifier.setTransform(Transform.rotate(0, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
 
-    //     switch to 2D
+      // switch to 2D
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', true);
         perspectiveButton.setContent('3D');
@@ -216,15 +313,15 @@ define(function(require, exports, module) {
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
       
-      //       crush
-      demoTimer += 1000;
+      // crush
+      demoTimer += 2500;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 3, 1]);
         this.gameLogic._removeSmallCube([0, 3, 1]);
       }.bind(this), demoTimer);
 
-      //     switch to 3D
-      demoTimer += 1000;
+      // switch to 3D
+      demoTimer += 2000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', false);
         perspectiveButton.setContent('2D');
@@ -235,10 +332,11 @@ define(function(require, exports, module) {
       // rotate up
       demoTimer += 1000;
       Timer.setTimeout(function () {
-        demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
+        demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 3 * Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
+        // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-      //     switch to 2D
+      // switch to 2D
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', true);
@@ -247,21 +345,21 @@ define(function(require, exports, module) {
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-      //   crush
+      // crush
       demoTimer += 1000;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 2, 2]);
         this.gameLogic._removeSmallCube([0, 2, 2]);
       }.bind(this), demoTimer);
 
-      //   crush
+      // crush
       demoTimer += 500;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 1, 3]);
         this.gameLogic._removeSmallCube([0, 1, 3]);
       }.bind(this), demoTimer);
 
-    //     switch to 3D
+      // switch to 3D
       demoTimer += 1000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', false);
@@ -270,14 +368,13 @@ define(function(require, exports, module) {
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-
-      // rotate up
+      // // rotate up
       demoTimer += 1000;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.rotate(Math.PI, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-      //     switch to 2D
+      // switch to 2D
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2d', true);
@@ -286,35 +383,45 @@ define(function(require, exports, module) {
         perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-      //   crush
+      // crush
       demoTimer += 1000;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([3, 0, 3]);
         this.gameLogic._removeSmallCube([3, 0, 3]);
       }.bind(this), demoTimer);
 
+      // crush
       demoTimer += 500;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([2, 0, 2]);
         this.gameLogic._removeSmallCube([2, 0, 2]);
       }.bind(this), demoTimer);
 
+      // crush
       demoTimer += 500;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([1, 0, 1]);
         this.gameLogic._removeSmallCube([1, 0, 1]);
       }.bind(this), demoTimer);
 
+      // win
+      // switch to 3D
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        this._eventOutput.emit('is2d', false);
+        perspectiveButton.setContent('2D');
+        perspecModifier.setTransform(Transform.scale(1.1,1.1,1), {duration: 200, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
 
-      //     win
-      // Timer.setTimeout(function () {
-      //   demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
-      // }.bind(this), 16000);
+      // board slides out
+      // perspectiveButton slides out
+      demoTimer += 1000;
+      Timer.setTimeout(function () {
+        demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
+        perspecModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
+      }.bind(this), demoTimer);
 
-    }
-
-    function _removeBoard () {
-    // board slides out
     }
 
     function _showMenu () {

@@ -23,8 +23,12 @@ define(function(require, exports, module) {
 
     this.twoDDataStructure = {};
     this.is2d = false;
-    this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
-    this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
+    // this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
+    // this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
+
+        //hardcoded!
+    this.board = Levels.introVideo.smallCube;
+    this.destroyerCubeLocation = Levels.introVideo.destroyer;
 
     _createRotatingLogic.call(this);
     _createPerspectiveButton.call(this);
@@ -79,7 +83,8 @@ define(function(require, exports, module) {
         });
 
 
-        var modifier = new Modifier ({
+        this.perspectiveButtonMod = new Modifier ({
+        // var modifier = new Modifier ({
             size: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
                 return [75, 75];
@@ -104,6 +109,7 @@ define(function(require, exports, module) {
         });
 
         this.perspectiveButton.on('click', function () {
+          console.log('2d click from gamelogic');
             if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
                 this._eventOutput.trigger('is2d', true);
                 this.perspectiveButton.setContent('3D');
@@ -118,7 +124,24 @@ define(function(require, exports, module) {
             }
         }.bind(this));
 
-        this.node.add(modifier).add(this.perspectiveButton);
+        this.perspectiveButton.on('touchstart', function () {
+          console.log('2d click from gamelogic');
+            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
+                this._eventOutput.trigger('is2d', true);
+                this.perspectiveButton.setContent('3D');
+                this.is2d = !this.is2d;
+            } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
+                _deny3D.call(this);
+            } else {
+                this._eventOutput.trigger('is2d', false);
+                this.perspectiveButton.setContent('2D');
+                this.is2d = !this.is2d;
+                _convertTo3d.call(this);
+            }
+        }.bind(this));
+
+        this.node.add(this.perspectiveButtonMod).add(this.perspectiveButton);
+        // this.node.add(modifier).add(this.perspectiveButton);
     }
 
     // A visual effect created for an illegal 3D to 2D transition
@@ -133,8 +156,10 @@ define(function(require, exports, module) {
     function _createRotatingLogic () {
       this.rotatingLogic = new RotatingLogic({
         mainCubeSize: this.options.mainCubeSize,
-        destroyer: Levels.demoLevel.destroyer,
-        smallCube: Levels.demoLevel.smallCube
+        destroyer: this.destroyerCubeLocation,
+        // destroyer: Levels.demoLevel.destroyer,
+        smallCube: this.board
+        // smallCube: Levels.demoLevel.smallCube
       });
       this.node.add(this.rotatingLogic);
     }
@@ -216,6 +241,8 @@ define(function(require, exports, module) {
         }
         console.log('no cube removed', pos);
     }
+
+    GameLogic.prototype._removeSmallCube = _removeSmallCube;
 
     function _ableToConvertTo2d () {
       _create2dDataStructure.call(this);

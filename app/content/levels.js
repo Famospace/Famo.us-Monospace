@@ -28,20 +28,21 @@ define(function(require, exports, module) {
       introVideo: {
         smallCube: [
                     // back face
-                    [0, 0, 0],
 
                     // md back
-                    [0, 0, 1],
+                    [0, 3, 1],
+                    [1, 0, 1],
 
                     // md front
-                    [ 2, 1, 2],
-                    [ 2, 1, 2],
+                    [ 2, 0, 2],
+                    [ 0, 2, 2],
 
                     // front
-                    [ 2, 1, 3]
+                    [ 3, 0, 3],
+                    [ 0, 1, 3]
         ],
 
-        destroyer: [0, 3, 0]
+        destroyer: [3, 3, 0]
       },
     };
 

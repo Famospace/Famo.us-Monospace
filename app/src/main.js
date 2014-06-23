@@ -2,10 +2,16 @@ define(function(require, exports, module) {
 
   var Engine          = require('famous/core/Engine');
   var Modifier        = require('famous/core/Modifier');
+  var FpsMeter        = require('views/FpsMeterView');
   var GameLogic       = require('views/GameLogic');
   var DemoView        = require('views/DemoView');
   var MenuView        = require('views/MenuView');
 
+  var gameLogic = new GameLogic();
+
+  var demoView = new DemoView();
+
+  var fpsMeter = new FpsMeter();
 
 
   var modifier = new Modifier({
@@ -82,5 +88,6 @@ define(function(require, exports, module) {
   //   }
   // });
   // mainContext.add(modifier).add(gameLogic);
+  // mainContext.add(fpsMeter);
 
 });

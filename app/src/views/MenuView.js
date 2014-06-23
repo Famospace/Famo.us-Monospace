@@ -9,12 +9,13 @@ define(function(require, exports, module) {
   var AboutView     = require('views/AboutView');
   var MainMenuView  = require('views/MainMenuView');
   var demoView      = require('views/demoView');
-  var GameLogic       = require('views/GameLogic');
+  var GameLogic     = require('views/GameLogic');
 
   function MenuView() {
     View.apply(this, arguments);
 
     this.views = {};
+    this.playingDemo = true;
 
 
     _createIntro.call(this);    
@@ -53,6 +54,7 @@ define(function(require, exports, module) {
   function _createLightbox() {
     this.lightbox = new Lightbox(this.options.lightboxOpts);
     this.add(this.lightbox);
+    // this.lightbox.show(this.views.mainMenu);
     this.lightbox.show(this.views.demoView);
   }
 
@@ -62,6 +64,28 @@ define(function(require, exports, module) {
     this.views.demoView.pipe(this);
     this.views.game.pipe(this);
 
+    // manage perspective listeners
+    this._eventInput.on('is2dDemo', function (data) {
+      console.log('get here in 2dDemo event listener');
+      if (this.playingDemo) {
+        this._eventOutput.emit('is2dDemo', data);
+      }
+    }.bind(this));
+
+    this._eventInput.on('is2d', function (data) {
+      console.log('heard 2d');
+      this._eventOutput.emit('is2d', data);
+    }.bind(this));
+
+    this._eventInput.on('demoToMainMenu', function () {
+      if (this.playingDemo) {
+        this.lightbox.show(this.views.mainMenu);
+        this.playingDemo = false;
+      }
+    }.bind(this));
+
+
+    // menu listeners
     this._eventInput.on('play', function () {
       this.lightbox.show(this.views.game);
     }.bind(this));

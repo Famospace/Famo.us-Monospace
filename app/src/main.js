@@ -21,7 +21,24 @@ define(function(require, exports, module) {
 
   var menuView = new MenuView();
 
-  menuView.views.demoView._eventOutput.on('is2d', function (boolean) {
+  // menuView.views.demoView._eventOutput.on('is2d', function (boolean) {
+  //   if (boolean) {
+  //     mainContext.setPerspective(1000000);
+  //   } else {
+  //     mainContext.setPerspective(1000);
+  //   }
+  // });
+
+  // menuView.views.game._eventOutput.on('is2d', function (boolean) {
+  //   if (boolean) {
+  //     mainContext.setPerspective(1000000);
+  //   } else {
+  //     mainContext.setPerspective(1000);
+  //   }
+  // });
+
+
+  menuView._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
@@ -29,7 +46,7 @@ define(function(require, exports, module) {
     }
   });
 
-  menuView.views.game._eventOutput.on('is2d', function (boolean) {
+  menuView._eventOutput.on('is2dDemo', function (boolean) {
     if (boolean) {
       mainContext.setPerspective(1000000);
     } else {

@@ -25,8 +25,7 @@ define(function(require, exports, module) {
       size: [undefined, 50],
       content: 'Famonospace',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',
         fontSize: '2.5rem'
       }
@@ -45,8 +44,7 @@ define(function(require, exports, module) {
       size: [undefined, 10],
       content: 'Inspired by Daniel Lutz',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',
         fontSize: '.75rem'
       }
@@ -65,8 +63,7 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'Play',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',
         fontSize: '3rem',
         border: '2px solid black',
@@ -95,12 +92,9 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'About',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',
-        fontSize: '1rem',
-        border: '5px solid black',
-        borderRadius: '10px'
+        fontSize: '1rem'
       }
     });
     var aboutMod = new StateModifier({

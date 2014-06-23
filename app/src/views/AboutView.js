@@ -4,12 +4,13 @@ define(function(require, exports, module) {
   var Modifier     = require('famous/core/Modifier');
   var Transform   = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
+  var GridLayout = require("famous/views/GridLayout");
 
   function AboutView() {
     View.apply(this, arguments);
 
     _createAuthors.call(this);
-    _createBackButton.call(this);
+    // _createBackButton.call(this);
   }
 
   AboutView.prototype = Object.create(View.prototype);
@@ -18,31 +19,44 @@ define(function(require, exports, module) {
   AboutView.DEFAULT_OPTIONS = {};
 
   function _createAuthors () {
+
+    var grid = new GridLayout({
+      dimensions: [2, 1]
+    });
+
+    var surfaces = [];
+    grid.sequenceFrom(surfaces);
+
     var amar = new Surface({
-      content: 'Amar Patel'
+        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.github.com/theamarpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">www.AmarPatel.io</a>',
+        size: [undefined, undefined],
+        properties: {
+          backgroundColor: 'white',
+          borderRight: '1px solid lightgrey',
+          color: "#404040",
+          lineHeight: '50px',
+          textAlign: 'center',
+          fontFamily: "HelveticaNeue-Light"
+        }
     });
-
-    var amarMod = new Modifier({
-      size: [200, 200],
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5],
-      transform: Transform.translate(0, -50, 0)
-    });
-
 
     var joe = new Surface({
-      content: 'Joe Dou'
+        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.github.com/theamarpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">www.AmarPatel.io</a>',
+        size: [undefined, undefined],
+        properties: {
+          backgroundColor: 'white',
+          color: "#404040",
+          lineHeight: '50px',
+          textAlign: 'center',
+          fontFamily: "HelveticaNeue-Light"
+        }
     });
 
-    var joeMod = new Modifier({
-      size: [200, 200],
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5],
-      transform: Transform.translate(0, 50, 0)
-    });
+    surfaces.push(amar);
+    surfaces.push(joe);
 
-    this.add(amarMod).add(amar);
-    this.add(joeMod).add(joe);
+
+    this.add(grid);
   }
 
   function _createBackButton () {
@@ -68,7 +82,7 @@ define(function(require, exports, module) {
       this._eventOutput.emit('mainMenu');
     }.bind(this));
 
-    this.add(backMod).add(back);
+    // this.add(backMod).add(back);
 
   }
 

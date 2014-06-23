@@ -10,6 +10,7 @@ define(function(require, exports, module) {
     
     var GameLogic       = require('views/GameLogic');
     var RotatingLogic   = require('views/RotatingLogic');
+    var MenuView        = require('views/MenuView');
     var Levels          = require('../../content/levels');
 
     function DemoView() {
@@ -22,17 +23,19 @@ define(function(require, exports, module) {
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
 
-      _startWordCrash.call(this); // takes 4.5 seconds
+      // // takes 4.5 seconds
+      // _startWordCrash.call(this); 
 
-      Timer.setTimeout(function () {
-        _startDemoPlay.call(this);
-        _startDemoText.call(this);
-      }.bind(this), 5000);
+      // // takes 21.5 seconds
+      // Timer.setTimeout(function () {
+      //   _startDemoPlay.call(this);
+      //   _startDemoText.call(this);
+      // }.bind(this), 5000);
 
       // show menu
-      Timer.setTimeout(function () {
-        // show menu fn
-      }.bind(this), 22500);
+      // Timer.setTimeout(function () {
+        _showMenu.call(this);
+      // }.bind(this), 22500);
     }
 
     DemoView.prototype = Object.create(View.prototype);
@@ -300,7 +303,6 @@ define(function(require, exports, module) {
       demoTimer += 1000;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 3 * Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
-        // demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
       // switch to 2D
@@ -392,7 +394,40 @@ define(function(require, exports, module) {
     }
 
     function _showMenu () {
-    // menu slides in
+      // menu slides in
+
+    var titleSurface = new Surface({
+      content: 'Famonospace',
+      size: [undefined, undefined],
+      properties: {
+        backgroundColor: 'black'
+      }
+    });
+
+    var titleSurfaceMod = new StateModifier({
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5]
+    });
+
+    this.node.add(titleSurfaceMod).add(titleSurfaceMod);
+
+            var surface = new Surface({
+          size: [175, 100],
+          content: 'words[i]',
+          properties: {
+            fontWeight: 'bold',
+            fontFamily: 'Helvetica',
+            textAlign: 'center'
+          }
+        });
+
+        var surfaceMod = new StateModifier({
+          align: [0.5, 0],
+          origin: [0.5, 0]
+        });
+        
+        this.node.add(surfaceMod).add(surface);
+
     }
 
     module.exports = DemoView;

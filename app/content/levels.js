@@ -25,6 +25,7 @@ define(function(require, exports, module) {
         
         destroyer: [0, 3, 0]
       },
+
       introVideo: {
         smallCube: [
                     // back face
@@ -44,6 +45,49 @@ define(function(require, exports, module) {
 
         destroyer: [3, 3, 0]
       },
+
+      levels: [
+        {// level 1
+            smallCube: [
+                        [1, 3, 3],
+                        [2, 3, 3],
+                        [3, 3, 3]
+                        ],
+            
+            destroyer: [0, 3, 3]
+        },
+
+        {// level 2
+            smallCube: [
+                        [1, 0, 3],
+                        [2, 0, 3],
+                        [3, 0, 3]
+                        ],
+            
+            destroyer: [0, 3, 3]
+        },
+
+        {// level 3
+            smallCube: [
+                        [0, 2, 0],
+                        [3, 1, 0],
+                        [3, 0, 3]
+                        ],
+            
+            destroyer: [0, 3, 3]
+        },
+
+        {// level 4
+            smallCube: [
+                        [0, 2, 0],
+                        [3, 1, 0],
+                        [3, 0, 3]
+                        ],
+            
+            destroyer: [0, 3, 3]
+        },
+
+      ],
     };
 
     module.exports = levels;

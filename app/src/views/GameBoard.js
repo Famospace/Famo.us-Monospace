@@ -28,6 +28,14 @@ define(function(require, exports, module) {
   GameBoard.prototype = Object.create(View.prototype);
   GameBoard.prototype.constructor = GameBoard;
 
+  GameBoard.DEFAULT_OPTIONS = {
+    mainCubeSize: 400,
+    destroyer: undefined,
+    destroyerColor: '#66CCFF',
+    smallCube: undefined,
+    smallCubeColor: '#FF6600'
+  };
+
   // set the 2D-3D transition flag
   GameBoard.prototype.setIs2D = function(bool){
     this.is2D = bool;
@@ -50,12 +58,9 @@ define(function(require, exports, module) {
     }
   };
 
-  GameBoard.DEFAULT_OPTIONS = {
-    mainCubeSize: 400,
-    destroyer: undefined,
-    destroyerColor: '#66CCFF',
-    smallCube: undefined,
-    smallCubeColor: '#FF6600'
+  GameBoard.prototype.startNewGame = function(starter){
+    this.destroyerCube.setPosition(_convertToPixels.call(this,starter.destroyer));
+    _restSmallCubes.call(this, starter.smallCube);
   };
 
   // Create the destroyer cube
@@ -91,6 +96,16 @@ define(function(require, exports, module) {
     }
   }
 
+  function _restSmallCubes(posMatrix){
+    for (var i=0; i< this.smallCubes.length; i++){
+      if (posMatrix[i] !== undefined){
+        this.smallCubes[i].setPosition(_convertToPixels.call(this,posMatrix[i]));
+      }else{
+        this.smallCubes[i].setPosition(_convertToPixels.call(this,this.options.smallCube[i]));
+      }
+    }
+  }
+
   // Set event listeners for this view
   function _setListeners() {
     // Listen for 2D-3D transition if 2D pipe event listener to listen for
@@ -118,7 +133,7 @@ define(function(require, exports, module) {
       (array[2]-1.5)*this.options.mainCubeSize/4
     ];
     return output;
-  };
+  }
 
   module.exports = GameBoard;
 

@@ -7,11 +7,7 @@ define(function(require, exports, module) {
   var DemoView        = require('views/DemoView');
   var MenuView        = require('views/MenuView');
 
-  var gameLogic = new GameLogic();
-
-  var demoView = new DemoView();
-
-  var fpsMeter = new FpsMeter();
+  var fpsMeter        = new FpsMeter();
 
 
   var modifier = new Modifier({
@@ -23,63 +19,20 @@ define(function(require, exports, module) {
 
   mainContext.setPerspective(1000);
 
-   //////////////// Main Menu ///////////////////
-
   var menuView = new MenuView();
 
-  // menuView.views.demoView._eventOutput.on('is2d', function (boolean) {
-  //   if (boolean) {
-  //     mainContext.setPerspective(1000000);
-  //   } else {
-  //     mainContext.setPerspective(1000);
-  //   }
-  // });
-
-  // menuView.views.game._eventOutput.on('is2d', function (boolean) {
-  //   if (boolean) {
-  //     mainContext.setPerspective(1000000);
-  //   } else {
-  //     mainContext.setPerspective(1000);
-  //   }
-  // });
-
-
   menuView._eventOutput.on('is2d', function (boolean) {
-    if (boolean) {
+  if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
       mainContext.setPerspective(1000);
     }
   });
 
+  mainContext.add(fpsMeter);
+
+
   mainContext.add(modifier).add(menuView);
 
-
-  //////////////// INTRO VIDEO ///////////////////
-
-  // var demoView = new DemoView();
-  // demoView._eventOutput.on('is2d', function (boolean) {
-  //   if (boolean) {
-  //     mainContext.setPerspective(1000000);
-  //   } else {
-  //     mainContext.setPerspective(1000);
-  //   }
-  // });
-  // mainContext.add(modifier).add(demoView);
-
-
-  /////////////////// NORMAL //////////////////////
-
-  // var gameLogic = new GameLogic();
-
-  // gameLogic._eventOutput.on('is2d', function (boolean) {
-  //   if (boolean) {
-  //     mainContext.setPerspective(1000000);
-  //   } else {
-  //     mainContext.setPerspective(1000);
-  //   }
-  // });
-  // mainContext.add(modifier).add(gameLogic);
-  // mainContext.add(fpsMeter);
 
 });

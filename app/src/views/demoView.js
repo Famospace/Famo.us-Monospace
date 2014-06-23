@@ -21,6 +21,7 @@ define(function(require, exports, module) {
 
       this.reusableSurfaces = [];
       this.reusableModifiers = [];
+      this.skip = false;
 
 
       // takes 4.5 seconds
@@ -31,9 +32,11 @@ define(function(require, exports, module) {
 
       // takes 21.5 seconds
       Timer.setTimeout(function () {
-        _startDemoPlay.call(this);
-        _startDemoText.call(this);
-      }.bind(this), 5000);
+        if(!this.skip){
+          _startDemoPlay.call(this);
+          _startDemoText.call(this);
+        }
+      }.bind(this), 5000);  
     }
 
     DemoView.prototype = Object.create(View.prototype);
@@ -58,10 +61,12 @@ define(function(require, exports, module) {
       });
 
       skip.on('touchstart', function (data) {
+        this.skip = true;
         this._eventOutput.emit('demoToMainMenu');
       }.bind(this));
 
       skip.on('click', function (data) {
+        this.skip = true;
         this._eventOutput.emit('demoToMainMenu');
       }.bind(this));
 
@@ -263,15 +268,9 @@ define(function(require, exports, module) {
     function _startDemoPlay () {
       var demoTimer = 5000;
 
-      // How do i pass in the board!???
-        // and destroyer cube???!
-
       this.gameLogic = new GameLogic();
-          // this.gameLogic.rotatingLogic.mainCubeSize = 250;
 
-          // this.gameLogic.rotatingLogic.destroyer = Levels.introVideo.destroyer; 
-
-          // this.gameLogic.rotatingLogic.smallCube = Levels.introVideo.smallCube;
+      this.gameLogic.startNewGame(Levels.introVideo);
 
       var rootMod = new Modifier();
 

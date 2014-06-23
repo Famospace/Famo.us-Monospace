@@ -6,7 +6,6 @@ define(function(require, exports, module) {
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
   var Buzz          = require('buzz');
-  var Levels        = require('../../content/levels');
 
   function GameLogic() {
     View.apply(this, arguments);
@@ -16,6 +15,7 @@ define(function(require, exports, module) {
     this.node = this.add(rootModifier);
 
     // Create sound objects
+    this.terminate = false;
     this.mySound = new Buzz.sound("content/sounds/die.wav");
     this.mySound.load();
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
@@ -23,8 +23,8 @@ define(function(require, exports, module) {
 
     this.twoDDataStructure = {};
     this.is2d = false;
-    this.board = Levels.demoLevel.smallCube || _forceSlice(this.options.smallCube);
-    this.destroyerCubeLocation = Levels.demoLevel.destroyer || this.options.destroyer;
+    this.board = undefined;
+    this.destroyerCubeLocation = undefined;
 
         //hardcoded!
     // this.board = Levels.introVideo.smallCube;
@@ -42,28 +42,40 @@ define(function(require, exports, module) {
     // Set Game logic default options with default game board
     GameLogic.DEFAULT_OPTIONS = {
       mainCubeSize: 250,
-      destroyer: [ 3,  0,  3 ],
+      destroyer: [-50,  -50,  -50],
       smallCube: [
-        [0, 0, 0 ],
-        [1, 0, 0 ],
-        [2, 0, 0 ],
-        [3, 0, 0 ],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
  
-        [0, 1, 0 ],
-        [1, 1, 0 ],
-        [2, 1, 0 ],
-        [3, 1, 0 ],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
        
-        [0, 2, 0 ],
-        [1, 2, 0 ],
-        [2, 2, 0 ],
-        [3, 2, 0 ],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
        
-        [0, 3, 0 ],
-        [1, 3, 0 ],
-        [2, 3, 0 ],
-        [3, 3, 0 ]
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
+        [-50, -50, -50],
       ]
+    };
+
+    function _startNewGame (starter){
+      this.board = _forceSlice(starter.smallCube);
+      this.destroyerCubeLocation = starter.destroyer;
+      this.rotatingLogic.startNewGame(starter);
+    }
+    
+    GameLogic.prototype.startNewGame = _startNewGame;
+
+    GameLogic.prototype.setSoundOff = function(bool){
+      this.terminate = bool;
     };
 
     function _createPerspectiveButton () {
@@ -145,22 +157,12 @@ define(function(require, exports, module) {
         // this.node.add(modifier).add(this.perspectiveButton);
     }
 
-    // A visual effect created for an illegal 3D to 2D transition
-    function _deny3D () {
-      this._eventOutput.trigger('is2d', true);
-      Timer.setTimeout(function () {
-        this._eventOutput.trigger('is2d', false);
-      }.bind(this), 600);
-    }
-
     // Create the rotating logic which controls the orientation of the game board
     function _createRotatingLogic () {
       this.rotatingLogic = new RotatingLogic({
         mainCubeSize: this.options.mainCubeSize,
-        // destroyer: this.destroyerCubeLocation,
-        destroyer: Levels.demoLevel.destroyer,
-        // smallCube: this.board
-        smallCube: Levels.demoLevel.smallCube
+        destroyer: this.options.destroyer,
+        smallCube: this.options.smallCube
       });
       this.node.add(this.rotatingLogic);
     }
@@ -169,6 +171,18 @@ define(function(require, exports, module) {
     function _setListeners (){
       this.rotatingLogic.pipe(this._eventInput);
       this.rotatingLogic.subscribe(this._eventOutput);
+      this._eventInput.on('startGame', function(data){
+        console.log('start Game', data);
+        _startNewGame.call(this,data);
+      }.bind(this));
+    }
+
+    // A visual effect created for an illegal 3D to 2D transition
+    function _deny3D () {
+      this._eventOutput.trigger('is2d', true);
+      Timer.setTimeout(function () {
+        this._eventOutput.trigger('is2d', false);
+      }.bind(this), 600);
     }
 
     // Determine the destroyers movement when reciving a moving cube event
@@ -194,7 +208,9 @@ define(function(require, exports, module) {
         var newPos = _DCcanMove.call(this, requestedPos);           
 
         if (newPos){
-          this.mySound.play();
+          if (!this.terminate){
+            this.mySound.play()
+          };
           this.destroyerCubeLocation = newPos;
           _removeSmallCube.call(this, newPos);
           this.rotatingLogic.setDestroyerPosition(newPos);
@@ -235,7 +251,12 @@ define(function(require, exports, module) {
                 console.log('array', this.board.length);
                 if(this.board.length < 1){
                   console.log('complete');
-                  this.completeSound.play();
+                  if (!this.terminate){
+                    this.completeSound.play();
+                  };
+                  Timer.setTimeout(function(){
+                    this._eventOutput.emit('levels');
+                  }.bind(this), 500);
                 }
                 return;
             }
@@ -326,10 +347,8 @@ define(function(require, exports, module) {
             this.twoDDataStructure[key].sort(function (a, b) { return a[currentAxis.z] - b[currentAxis.z]; });
           }
         }
-
       }
-
-      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
+      // console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
     function _convertTo3d () {

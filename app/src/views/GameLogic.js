@@ -137,22 +137,6 @@ define(function(require, exports, module) {
             }
         }.bind(this));
 
-        this.perspectiveButton.on('touchstart', function () {
-          console.log('2d click from gamelogic');
-            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-                this._eventOutput.trigger('is2d', true);
-                this.perspectiveButton.setContent('3D');
-                this.is2d = !this.is2d;
-            } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
-                _deny3D.call(this);
-            } else {
-                this._eventOutput.trigger('is2d', false);
-                this.perspectiveButton.setContent('2D');
-                this.is2d = !this.is2d;
-                _convertTo3d.call(this);
-            }
-        }.bind(this));
-
         this.node.add(this.perspectiveButtonMod).add(this.perspectiveButton);
         // this.node.add(modifier).add(this.perspectiveButton);
     }

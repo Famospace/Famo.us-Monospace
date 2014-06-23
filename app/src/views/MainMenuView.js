@@ -43,7 +43,7 @@ define(function(require, exports, module) {
   function _createInspiredBy () {
     var inspired = new Surface({
       size: [undefined, 10],
-      content: 'Inspired by Monospace by Daniel Lutz',
+      content: 'Inspired by Daniel Lutz',
       properties: {
         fontWeight: 'bold',
         fontFamily: 'Helvetica',

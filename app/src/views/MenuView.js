@@ -2,6 +2,8 @@ define(function(require, exports, module) {
   var View          = require('famous/core/View');
   var Surface       = require('famous/core/Surface');
   var Transform     = require('famous/core/Transform');
+  var Modifier     = require('famous/core/Modifier');
+  var RenderNode     = require('famous/core/RenderNode');
   var StateModifier = require('famous/modifiers/StateModifier');
   var Lightbox      = require('famous/views/Lightbox');
   var Easing        = require('famous/transitions/Easing');
@@ -62,18 +64,17 @@ define(function(require, exports, module) {
     this.views.mainMenu.pipe(this);
     this.views.about.pipe(this);
     this.views.demoView.pipe(this);
-    this.views.game.pipe(this);
+    this.game.pipe(this);
+    // this.views.game.pipe(this);
 
     // manage perspective listeners
     this._eventInput.on('is2dDemo', function (data) {
-      console.log('get here in 2dDemo event listener');
       if (this.playingDemo) {
-        this._eventOutput.emit('is2dDemo', data);
+        this._eventOutput.emit('is2d', data);
       }
     }.bind(this));
 
     this._eventInput.on('is2d', function (data) {
-      console.log('heard 2d');
       this._eventOutput.emit('is2d', data);
     }.bind(this));
 
@@ -109,8 +110,18 @@ define(function(require, exports, module) {
   }
 
   function _createGameboard () {
-    var game = new GameLogic();
-    this.views.game = game;
+    this.game = new GameLogic();
+
+    var mod = new Modifier({
+      align: [0.5, 0.5],
+      origin: [0.5, 0.5]
+    });
+
+    var gameNode = new RenderNode();
+
+    gameNode.add(mod).add(this.game);
+
+    this.views.game = gameNode;
   }
 
   module.exports = MenuView;

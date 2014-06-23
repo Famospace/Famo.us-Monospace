@@ -52,14 +52,6 @@ define(function(require, exports, module) {
     }
   });
 
-  menuView._eventOutput.on('is2dDemo', function (boolean) {
-    if (boolean) {
-      mainContext.setPerspective(1000000);
-    } else {
-      mainContext.setPerspective(1000);
-    }
-  });
-
   mainContext.add(modifier).add(menuView);
 
 

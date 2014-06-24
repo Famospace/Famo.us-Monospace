@@ -10,6 +10,7 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
 
     _createTitle.call(this);
+    _createCreatedBy.call(this);
     _createInspiredBy.call(this);
     _createPlayButton.call(this);
     _createAbout.call(this);
@@ -39,10 +40,29 @@ define(function(require, exports, module) {
     this.add(menuMod).add(menu);
   }
 
+  function _createCreatedBy () {
+    var created = new Surface({
+      size: [undefined, 10],
+      content: 'By Amar and Joe',
+      properties: {
+        fontFamily: 'HelveticaNeue-Light',
+        textAlign: 'center',
+        fontSize: '.75rem'
+      }
+    });
+    var createdMod = new StateModifier({
+      align: [0.5, 0],
+      origin: [0.5, 0],
+      transform: Transform.translate(0, 130, 0)
+    });
+    
+    this.add(createdMod).add(created);
+  }
+
   function _createInspiredBy () {
     var inspired = new Surface({
       size: [undefined, 10],
-      content: 'Inspired by Daniel Lutz',
+      content: 'Inspired by Monospace <br/> Daniel Lutz',
       properties: {
         fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',
@@ -50,9 +70,8 @@ define(function(require, exports, module) {
       }
     });
     var inspiredMod = new StateModifier({
-      align: [0.5, 0],
-      origin: [0.5, 0],
-      transform: Transform.translate(0, 130, 0)
+      align: [0.5, 0.9],
+      origin: [0.5, 0.9]
     });
     
     this.add(inspiredMod).add(inspired);
@@ -103,7 +122,7 @@ define(function(require, exports, module) {
     var aboutMod = new StateModifier({
       align: [0.5, 0],
       origin: [0.5, 0],
-      transform: Transform.translate(0, 400, 0)
+      transform: Transform.translate(0, 350, 0)
     });
 
     about.on('touchstart', function (data) {

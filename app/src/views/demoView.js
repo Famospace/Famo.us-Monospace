@@ -24,7 +24,7 @@ define(function(require, exports, module) {
       // allows sounds to be muted if demo is skipped
       this.skip = false;
 
-      // takes 5.6 seconds
+      // takes 5.1 seconds
       // start demo after 5 seconds
       _createSkipButton.call(this);
       _startWordCrash.call(this); 
@@ -181,7 +181,7 @@ define(function(require, exports, module) {
           0,
               {duration: 500, curve: Easing.inCubic}
         );
-      }.bind(this), 5650);
+      }.bind(this), 5150);
     }
 
     function _startDemoText () {

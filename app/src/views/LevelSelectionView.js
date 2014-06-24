@@ -30,10 +30,10 @@ define(function(require, exports, module) {
     width: 3,
     height: 4,
     boxSize: 75,
-    headerFront: '<h1>',
-    headerBack: '</h1>',
-    boxFront: '</h2>',
-    boxBack: '</h2>',
+    headerFontSize: '3rem',
+    lineHeight: '65px',
+    boxFontSize: '1.8rem'
+
   };
 
   LevelSelection.prototype = Object.create(View.prototype);
@@ -43,18 +43,15 @@ define(function(require, exports, module) {
     var tempWidth = this.options.boxSize * (this.options.width+3);
     var tempHeight = this.options.boxSize * (this.options.height+5);
 
-    // console.log('temp: ', tempWidth, tempHeight);
-    // console.log('actual:', window.innerWidth, window.innerHeight);
+    console.log('temp: ', tempWidth, tempHeight);
+    console.log('actual:', window.innerWidth, window.innerHeight);
 
     if (window.innerWidth < tempWidth || window.innerHeight < tempHeight){
       this.options.boxSize = 50;
-      this.options.headerFront = '<h2>';
-      this.options.headerBack = '</h2>';
-    } else {
-      this.options.boxSize = 75;
-      this.options.headerFront = '<h1>';
-      this.options.headerBack = '</h1>';
-    }
+      this.options.headerFontSize = '1.8rem';
+      this.options.lineHeight = '40px';
+      this.options.boxFontSize = '1rem';
+    } 
   }
 
   function _createHeaderBlock(){
@@ -67,12 +64,11 @@ define(function(require, exports, module) {
 
     var surface = new Surface({
       content: 'Level Selection',
-      // content: this.options.headerFront+'Level Selection'+this.options.headerBack,
       properties: {
         textAlign: 'center',
         verticalAlign: 'middle',
         fontFamily: 'HelveticaNeue-Light',
-        fontSize: '1.8rem'
+        fontSize: this.options.headerFontSize
       }
     });
 
@@ -92,11 +88,15 @@ define(function(require, exports, module) {
         var surface = new Surface({
           content: index,
           properties: {
-            border: '3px solid black',
+            border: '3px solid #738F99',
             borderRadius: '7px',
             textAlign: 'center',
-            lineHeight: '40px',
-            fontFamily: 'HelveticaNeue-Light'
+            lineHeight: this.options.lineHeight,
+            fontFamily: 'HelveticaNeue-Light',
+            fontSize: this.options.boxFontSize,
+            backgroundColor: '#34A4CC',
+            color: 'white',
+            // fontWeight: 'bold'
           }
         });
 

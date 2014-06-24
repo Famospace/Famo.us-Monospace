@@ -30,6 +30,7 @@ define(function(require, exports, module) {
     _createLevelSelection.call(this);
     _createLightbox.call(this);
     _setLightboxListeners.call(this);
+    _createLocalStoragePipe.call(this);
   }
 
   MenuView.prototype = Object.create(View.prototype);
@@ -61,6 +62,10 @@ define(function(require, exports, module) {
     this.lightbox = new Lightbox(this.options.lightboxOpts);
     this.add(this.lightbox);
     this.lightbox.show(this.views.demoView);
+  }
+
+  function _createLocalStoragePipe () {
+    this.game.pipe(this.views.levelSelection);
   }
 
   function _setLightboxListeners() {

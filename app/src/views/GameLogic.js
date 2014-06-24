@@ -200,6 +200,22 @@ define(function(require, exports, module) {
       }
     }
 
+    function _saveToLocalStorage (levelIndex) {
+      // checks to see if localstorage is enabled
+      if (!window.localStorage || window.localStorage === null) {
+        return;
+      }
+
+      var localStorage = window.localStorage.getItem('famospace').split(',');
+
+      //send event to LevelSelectionView to change level color and update localStorage
+      if (localStorage[levelIndex] === '0') {
+      console.log('save to local called!', levelIndex, localStorage);
+        this._eventOutput.emit('levelCompleted', levelIndex);
+      }
+
+    }
+
     function _determineCubeSize(){
       console.log('windowwidth:', window.innerWidth);
       if (window.innerWidth < 800){
@@ -208,10 +224,12 @@ define(function(require, exports, module) {
     }
  
     function _startNewGame (starter){
-      this.starter = starter;
-      this.board = _forceSlice(starter.smallCube);
-      this.destroyerCubeLocation = starter.destroyer;
-      this.rotatingLogic.startNewGame(starter);
+      console.log(starter);
+      this.levelIndex = starter.levelNum;
+      this.starter = starter.level;
+      this.board = _forceSlice(starter.level.smallCube);
+      this.destroyerCubeLocation = starter.level.destroyer;
+      this.rotatingLogic.startNewGame(starter.level);
       this._eventOutput.trigger('is2d', false);
       this.perspectiveButton.setContent('2D');
       this.is2d = false;
@@ -386,6 +404,7 @@ define(function(require, exports, module) {
                 if(this.board.length < 1){
                   // console.log('complete');
                   if (!this.terminate){
+                    _saveToLocalStorage.call(this, this.levelIndex);
                     this.completeSound.play();
                   };
                   Timer.setTimeout(function(){

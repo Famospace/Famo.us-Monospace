@@ -316,7 +316,7 @@ define(function(require, exports, module) {
 
       this.gameLogic = new GameLogic();
 
-      this.gameLogic.startNewGame(Levels.introVideo);
+      this.gameLogic.startNewGame({level: Levels.introVideo});
 
       var rootMod = new Modifier();
 

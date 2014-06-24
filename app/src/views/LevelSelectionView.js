@@ -75,7 +75,6 @@ define(function(require, exports, module) {
   }
 
   function _setLevelCompletedListener () {
-    console.log("level completed listener called!");
     this._eventInput.on('levelCompleted', function (levelIndex) {
       // update localStorage
       this.localStorage[levelIndex] = 1;

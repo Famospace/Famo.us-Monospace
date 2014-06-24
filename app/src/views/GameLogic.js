@@ -210,7 +210,6 @@ define(function(require, exports, module) {
 
       //send event to LevelSelectionView to change level color and update localStorage
       if (localStorage[levelIndex] === '0') {
-      console.log('save to local called!', levelIndex, localStorage);
         this._eventOutput.emit('levelCompleted', levelIndex);
       }
 

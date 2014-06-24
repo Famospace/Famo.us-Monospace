@@ -28,7 +28,7 @@ define(function(require, exports, module) {
     grid.sequenceFrom(surfaces);
 
     var amar = new Surface({
-        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.github.com/theamarpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">www.AmarPatel.io</a>',
+        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/amarmpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">amarpatel.io</a>',
         size: [undefined, undefined],
         properties: {
           backgroundColor: 'white',
@@ -41,7 +41,7 @@ define(function(require, exports, module) {
     });
 
     var joe = new Surface({
-        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.github.com/theamarpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">www.AmarPatel.io</a>',
+        content: '<br/><h2>Joe Dou</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/joedou"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/joedou"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.whatwouldjoedou.com/">whatwouldjoedou.com</a>',
         size: [undefined, undefined],
         properties: {
           backgroundColor: 'white',

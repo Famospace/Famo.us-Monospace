@@ -23,7 +23,7 @@ define(function(require, exports, module) {
   function _createTitle () {
     var menu = new Surface({
       size: [undefined, 50],
-      content: 'Famonospace',
+      content: 'Famospace',
       properties: {
         fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',

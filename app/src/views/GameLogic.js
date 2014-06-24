@@ -234,12 +234,14 @@ define(function(require, exports, module) {
           content: '<div>2D</div>',
           properties: {
             fontSize: '3rem',
+            fontFamily: 'HelveticaNeue-Light',
             textAlign: 'center',
-            lineHeight: '75px',
+            lineHeight: '65px',
             verticalAlign: 'middle',
-            color: 'red',
-            backgroundColor: 'black',
+            color: 'white',
+            backgroundColor: '#34A4CC',
             borderRadius: '20px',
+            border: '3px solid #738F99',
             cursor: 'pointer',
             zIndex: 5
           }

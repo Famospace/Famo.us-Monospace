@@ -10,7 +10,7 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
 
     _createAuthors.call(this);
-    // _createBackButton.call(this);
+    _createMenu.call(this);
   }
 
   AboutView.prototype = Object.create(View.prototype);
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
     grid.sequenceFrom(surfaces);
 
     var amar = new Surface({
-        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.github.com/theamarpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">www.AmarPatel.io</a>',
+        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/amarmpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">amarpatel.io</a>',
         size: [undefined, undefined],
         properties: {
           backgroundColor: 'white',
@@ -41,7 +41,7 @@ define(function(require, exports, module) {
     });
 
     var joe = new Surface({
-        content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.github.com/theamarpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">www.AmarPatel.io</a>',
+        content: '<br/><h2>Joe Dou</h2><center><img width="85%" src="http://www.amarpatel.io/content/images/2014/Jun/Amar-2.png"/></center><span display="inline-block"><a href="http://www.github.com/joedou"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/joedou"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.whatwouldjoedou.com/">whatwouldjoedou.com</a>',
         size: [undefined, undefined],
         properties: {
           backgroundColor: 'white',
@@ -59,31 +59,31 @@ define(function(require, exports, module) {
     this.add(grid);
   }
 
-  function _createBackButton () {
-    var back = new Surface({
+  function _createMenu () {
+    var menuButton = new Surface({
       content: 'Back',
       properties: {
-        border: '5px solid black',
-        borderRadius: '10px'
+        textAlign: 'center',
+        border: '1px solid black',
+        borderRadius: '5px',
+        fontSize: '.8rem',
+        fontFamily: 'HelveticaNeue-Light',
+        zIndex: 4,
+        lineHeight: '37px'
       }
     });
 
-    var backMod = new Modifier({
-      size: [50, 50],
-      align: [0.5, 0.5],
-      origin: [0.5, 0.5]
+    var menuButtonMod = new Modifier({
+      size: [50, 40],
+      align: [1, 0],
+      origin: [1, 0]
     });
 
-    back.on('touchstart', function (data) {
+    this.add(menuButtonMod).add(menuButton);
+
+    menuButton.on('click', function () {
       this._eventOutput.emit('mainMenu');
     }.bind(this));
-
-    back.on('click', function (data) {
-      this._eventOutput.emit('mainMenu');
-    }.bind(this));
-
-    // this.add(backMod).add(back);
-
   }
 
   module.exports = AboutView;

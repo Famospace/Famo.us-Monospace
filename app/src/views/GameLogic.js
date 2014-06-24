@@ -19,16 +19,19 @@ define(function(require, exports, module) {
     this.terminate = false;
     this.showMenu = false;
     this.ready = true;
-    this.mySound = new Buzz.sound("app/content/sounds/die.wav");
-    this.mySound.load();
-    this.completeSound = new Buzz.sound("app/content/sounds/level-up.wav");
-    this.completeSound.load();
+    this.mySound = new Buzz.sound("content/sounds/die.wav",{
+      preload: true,
+    });
+    this.completeSound = new Buzz.sound("content/sounds/level-up.wav",{
+      preload: true,
+    });
 
     this.twoDDataStructure = {};
     this.is2d = false;
     this.board = undefined;
     this.destroyerCubeLocation = undefined;
 
+    _determineCubeSize.call(this);
     _createRotatingLogic.call(this);
     _createPerspectiveButton.call(this);
     _destroyerMovement.call(this);
@@ -41,7 +44,7 @@ define(function(require, exports, module) {
     
     // Set Game logic default options with default game board
     GameLogic.DEFAULT_OPTIONS = {
-      mainCubeSize: 250,
+      mainCubeSize: 400,
       destroyer: [-1000,  -1000,  -1000],
       smallCube: [
         [-1000, -1000, -1000],
@@ -203,8 +206,13 @@ define(function(require, exports, module) {
         exitButtonMod.setTransform(Transform.translate(-140, 0, 0), {duration: 500, curve: 'easeInOut'});
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
+    }
 
-
+    function _determineCubeSize(){
+      console.log('windowwidth:', window.innerWidth);
+      if (window.innerWidth < 800){
+        this.options.mainCubeSize = 250;
+      }
     }
  
     function _startNewGame (starter){
@@ -215,6 +223,7 @@ define(function(require, exports, module) {
       this._eventOutput.trigger('is2d', false);
       this.perspectiveButton.setContent('2D');
       this.is2d = false;
+      this.twoDDataStructure = {};
     }
 
     function _restartGame(){
@@ -343,9 +352,6 @@ define(function(require, exports, module) {
         var newPos = _DCcanMove.call(this, requestedPos);           
 
         if (newPos){
-          if (!this.terminate){
-            this.mySound.play()
-          };
           this.destroyerCubeLocation = newPos;
           _removeSmallCube.call(this, newPos);
           this.rotatingLogic.setDestroyerPosition(newPos);
@@ -384,6 +390,9 @@ define(function(require, exports, module) {
                 // console.log('remove', pos);
                 this.board.splice(i,1);
                 // console.log('array', this.board.length);
+                if (!this.terminate){
+                  this.mySound.play();
+                };
                 if(this.board.length < 1){
                   // console.log('complete');
                   if (!this.terminate){
@@ -416,8 +425,10 @@ define(function(require, exports, module) {
       var match = currentSmallCubePos[key];
 
       console.log('dc loc, cur axis:',dcLocation, currentAxis);
+      console.log('match, key, currentSmallCubePos:',match, key, currentSmallCubePos);
 
-      return ( match &&
+
+      return ( match && match.length > 0 &&
           (
             ( currentAxis.zPosNeg > 0 && (dcLocation[currentAxis.z] < match[0][currentAxis.z])) ||
             ( currentAxis.zPosNeg < 0 && (dcLocation[currentAxis.z] > match[0][currentAxis.z]))
@@ -485,7 +496,7 @@ define(function(require, exports, module) {
           }
         }
       }
-      // console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
+      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
     function _convertTo3d () {

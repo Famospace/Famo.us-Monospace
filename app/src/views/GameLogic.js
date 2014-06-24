@@ -19,11 +19,15 @@ define(function(require, exports, module) {
     this.terminate = false;
     this.showMenu = false;
     this.ready = true;
-    this.mySound = new Buzz.sound("content/sounds/die.wav",{
-      preload: true,
+
+    this.mySound = new Buzz.sound("content/sounds/Smack.wav",{
+      preload: true
     });
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav",{
-      preload: true,
+      preload: true
+    });
+    this.transitionSound = new Buzz.sound("content/sounds/swooshing-punch.wav",{
+      preload: true
     });
 
     this.twoDDataStructure = {};
@@ -276,12 +280,14 @@ define(function(require, exports, module) {
         this.perspectiveButton.on('click', function () {
           // console.log('2d click from gamelogic');
             if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
+                this.transitionSound.play();
                 this._eventOutput.trigger('is2d', true);
                 this.perspectiveButton.setContent('3D');
                 this.is2d = !this.is2d;
             } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
                 _deny3D.call(this);
             } else {
+                this.transitionSound.play();
                 this._eventOutput.trigger('is2d', false);
                 this.perspectiveButton.setContent('2D');
                 this.is2d = !this.is2d;

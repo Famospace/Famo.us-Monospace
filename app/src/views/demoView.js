@@ -19,6 +19,8 @@ define(function(require, exports, module) {
 
       this.node = this.add(this.rootModifier);
 
+      this.crashTextMods = [];
+
       // allows sounds to be muted if demo is skipped
       this.skip = false;
 

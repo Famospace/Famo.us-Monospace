@@ -74,8 +74,6 @@ define(function(require, exports, module) {
         content: 'Menu',
         properties: {
           textAlign: 'center',
-          // border: '1px solid black',
-          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -94,8 +92,6 @@ define(function(require, exports, module) {
         content:'Restart',
         properties: {
           textAlign: 'center',
-          // border: '1px solid black',
-          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -115,8 +111,6 @@ define(function(require, exports, module) {
         content:'Levels',
         properties: {
           textAlign: 'center',
-          // border: '1px solid black',
-          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -136,8 +130,6 @@ define(function(require, exports, module) {
         content:'Exit',
         properties: {
           textAlign: 'center',
-          // border: '1px solid black',
-          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -258,7 +250,6 @@ define(function(require, exports, module) {
 
 
         this.perspectiveButtonMod = new Modifier ({
-        // var modifier = new Modifier ({
             size: function () {
               if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
                 return [75, 75];
@@ -299,7 +290,6 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this.node.add(this.perspectiveButtonMod).add(this.perspectiveButton);
-        // this.node.add(modifier).add(this.perspectiveButton);
     }
 
     // Create the rotating logic which controls the orientation of the game board

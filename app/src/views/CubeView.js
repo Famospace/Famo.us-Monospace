@@ -58,7 +58,6 @@ define(function(require, exports, module) {
       var surface = new Surface({
         size: [this.options.size, this.options.size],
         properties: {
-          // content: '<p>K</p>',
           webkitBackfaceVisibility: 'visible',
           border: '1px solid black',
           pointerEvents: 'none'

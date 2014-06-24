@@ -66,8 +66,11 @@ define(function(require, exports, module) {
         fontFamily: 'HelveticaNeue-Light',
         textAlign: 'center',
         fontSize: '3rem',
-        border: '2px solid black',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        backgroundColor: '#34A4CC',
+        border: '2px solid #738F99',
+        cursor: 'pointer',
+        color: 'white'
       }
     });
     var playMod = new StateModifier({

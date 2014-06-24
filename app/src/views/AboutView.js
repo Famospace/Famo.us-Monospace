@@ -69,12 +69,12 @@ define(function(require, exports, module) {
         fontSize: '.8rem',
         fontFamily: 'HelveticaNeue-Light',
         zIndex: 4,
-        lineHeight: '37px'
+        lineHeight: '45px'
       }
     });
 
     var menuButtonMod = new Modifier({
-      size: [50, 40],
+      size: [50, 50],
       align: [1, 0],
       origin: [1, 0]
     });

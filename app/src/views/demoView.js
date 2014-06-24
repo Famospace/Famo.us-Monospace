@@ -163,7 +163,7 @@ define(function(require, exports, module) {
           textAlign: 'center',
           fontSize: '2rem',
           fontFamily: "HelveticaNeue-Light",
-          zIndex: 3
+          zIndex: 10
         }
       });
 
@@ -193,7 +193,7 @@ define(function(require, exports, module) {
           textAlign: 'center',
           fontSize: '2rem',
           fontFamily: "HelveticaNeue-Light",
-          zIndex: 3
+          zIndex: 10
         }
       });
 
@@ -223,7 +223,7 @@ define(function(require, exports, module) {
           textAlign: 'center',
           fontSize: '2rem',
           fontFamily: "HelveticaNeue-Light",
-          zIndex: 3
+          zIndex: 10
         }
       });
 
@@ -253,7 +253,7 @@ define(function(require, exports, module) {
           textAlign: 'center',
           fontSize: '2rem',
           fontFamily: "HelveticaNeue-Light",
-          zIndex: 3
+          zIndex: 10
         }
       });
 

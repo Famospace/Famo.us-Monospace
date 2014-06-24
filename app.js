@@ -2,33 +2,8 @@ var express = require('express');
 var app = express();
 var port = process.env.Port || 9000;
 
-
 app.listen(port);
 
-
-
-app.use('/', express.static(__dirname + '/'));
-
-
-
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/app/index.html');
-});
-
-app.get('/lib/*', function (req, res) {
-  res.sendfile(__dirname + req.url);
-});
-
-app.get('/src/*', function (req, res) {
-  res.sendfile(__dirname + req.url);
-});
-
-app.get('/styles/*', function (req, res) {
-  res.sendfile(__dirname + req.url);
-});
-
-app.get('/content/*', function (req, res) {
-  res.sendfile(__dirname + req.url);
-});
+app.use(express.static(__dirname + '/app'));
 
 console.log('Live on port 9000');

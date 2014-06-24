@@ -41,5 +41,8 @@
   },
   "scripts": {
     "test": "grunt test"
+  },
+  "dependencies": {
+    "express": "^4.4.4"
   }
 }

@@ -19,12 +19,11 @@ define(function(require, exports, module) {
 
       this.node = this.add(this.rootModifier);
 
-      this.reusableSurfaces = [];
-      this.reusableModifiers = [];
+      // allows sounds to be muted if demo is skipped
       this.skip = false;
 
-
-      // takes 4.5 seconds
+      // takes 5.6 seconds
+      // start demo after 5 seconds
       _createSkipButton.call(this);
       _startWordCrash.call(this); 
 
@@ -42,14 +41,19 @@ define(function(require, exports, module) {
     DemoView.prototype = Object.create(View.prototype);
     DemoView.prototype.constructor = DemoView;
 
-    DemoView.DEFAULT_OPTIONS = {};
+    DemoView.DEFAULT_OPTIONS = {
+      crashTextProps: {
+        fontFamily: 'HelveticaNeue-Light',
+        textAlign: 'center',
+        fontSize: '1.2rem'
+      }
+    };
 
     function _createSkipButton () {
       var skip = new Surface({
         size: [25, 25],
         content: 'Skip',
         properties: {
-          // fontWeight: 'bold',
           fontFamily: 'HelveticaNeue-Light',
           textAlign: 'center',
           fontSize: '1.5rem'
@@ -76,77 +80,106 @@ define(function(require, exports, module) {
 
     }
 
-    function _createDemoBoard () {
-
-      this.gameLogic = new GameLogic();
-      var modifier = new Modifier({
-        align: [0.5, 0.5],
-        origin: [0.5, 0.5],
-        transform: Transform.translate(0, 0, 0)
-      });
-
-      this.node.add(modifier).add(this.gameLogic);
-
-    }
-
     function _startWordCrash () {
-      var words = ['Crush the Red Cubes', 'Munipulate in 3D', 'Destroy in 2D'];
 
       // words crash down
-      for (var i=0;i<words.length;i++) {
+      var crush = new Surface({
+        size: [200, 100],
+        content: 'Crush the Grey Cubes',
+        properties: this.options.crashTextProps
+      });
 
-        var surface = new Surface({
-          size: [200, 100],
-          content: words[i],
-          properties: {
-            // fontWeight: 'bold',
-            fontFamily: 'HelveticaNeue-Light',
-            textAlign: 'center',
-            fontSize: '1.2rem'
-          }
-        });
+      var crushMod = new StateModifier({
+        align: [0.5, 0],
+        origin: [0.5, 0],
+        transform: Transform.multiply(
+          Transform.rotateY(Math.PI/2),
+          Transform.translate(100, window.innerHeight/2 - 50, 400)
+        )
+      });
 
-        var surfaceMod = new StateModifier({
-          align: [0.5, 0],
-          origin: [0.5, 0],
-        });
+      var manipulate = new Surface({
+        size: [200, 100],
+        content: 'Manipulate in 3D',
+        properties: this.options.crashTextProps
+      });
 
-        this.reusableSurfaces.push(surface);
-        this.reusableModifiers.push(surfaceMod);
-        
-        this.node.add(this.reusableModifiers[i]).add(this.reusableSurfaces[i]);
-      }
+      var manipulateMod = new StateModifier({
+        align: [0.5, 0],
+        origin: [0.5, 0],
+        transform: Transform.multiply(
+          Transform.rotateX(-Math.PI/2),
+          Transform.translate(0, window.innerHeight/2 + 1000, 1000)
+        )
+      });
 
-      this.reusableModifiers[0].setTransform(
-        Transform.translate(0, window.innerHeight/2 - 150, 0),
-            {duration: 1000, curve: Easing.outBack}
-      );
+      var destroy = new Surface({
+        size: [200, 100],
+        content: 'Destroy in 2D',
+        properties: this.options.crashTextProps
+      });
 
-      this.reusableModifiers[1].setTransform(
-        Transform.translate(0, window.innerHeight/2 - 100, 0),
-            {duration: 1000, curve: Easing.outBack}
-      );
+      var destroyMod = new StateModifier({
+        align: [0.5, 0],
+        origin: [0.5, 0],
+        transform: Transform.multiply(
+          Transform.rotateY(-Math.PI/2),
+          Transform.translate(100, window.innerHeight/2 + 50, 400)
+        )
+      });
 
-      this.reusableModifiers[2].setTransform(
-        Transform.translate(0, window.innerHeight/2 - 50, 0),
-            {duration: 1000, curve: Easing.outBack}
-      );
+      this.crashTextMods.push(crushMod);
+      this.crashTextMods.push(manipulateMod);
+      this.crashTextMods.push(destroyMod);
+      this.node.add(this.crashTextMods[0]).add(crush);
+      this.node.add(this.crashTextMods[1]).add(manipulate);
+      this.node.add(this.crashTextMods[2]).add(destroy);     
+
+      Timer.setTimeout(function () {
+        this.crashTextMods[0].setTransform(
+          Transform.multiply(
+            Transform.translate(0, window.innerHeight/2 - 50, 0),
+            Transform.rotateY(0)
+          ),
+          {duration: 1000, curve: 'easeInOut'}
+        );
+      }.bind(this), 650);
+
+      Timer.setTimeout(function () {
+        this.crashTextMods[1].setTransform(
+          Transform.multiply(
+            Transform.translate(0, window.innerHeight/2, 0),
+            Transform.rotateX(0)
+          ),
+          {duration: 1000, curve: 'easeInOut'}
+        );
+      }.bind(this), 2150);
+
+      Timer.setTimeout(function () {
+        this.crashTextMods[2].setTransform(
+          Transform.multiply(
+            Transform.translate(0, window.innerHeight/2 + 50, 0),
+            Transform.rotateY(0)
+          ),
+          {duration: 1000, curve: 'easeInOut'}
+        );
+      }.bind(this), 3650);
 
       // words slide out
       Timer.setTimeout(function () {
-        this.reusableModifiers[0].setTransform(
-          Transform.translate(0, 2000, 0),
-              {duration: 1000, curve: Easing.inCubic}
+        this.crashTextMods[0].setOpacity(
+          0,
+              {duration: 500, curve: Easing.inCubic}
         );
-        this.reusableModifiers[1].setTransform(
-          Transform.translate(0, 2000, 0),
-              {duration: 1000, curve: Easing.inCubic}
+        this.crashTextMods[1].setOpacity(
+          0,
+              {duration: 500, curve: Easing.inCubic}
         );
-        this.reusableModifiers[2].setTransform(
-          Transform.translate(0, 2000, 0),
-              {duration: 1000, curve: Easing.inCubic}
+        this.crashTextMods[2].setOpacity(
+          0,
+              {duration: 500, curve: Easing.inCubic}
         );
-      }.bind(this), 3500);
+      }.bind(this), 5650);
     }
 
     function _startDemoText () {

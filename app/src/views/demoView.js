@@ -358,7 +358,7 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
 
       // crush
-      demoTimer += 500;
+      demoTimer += 600;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 1, 3]);
         this.gameLogic._removeSmallCube([0, 1, 3]);
@@ -396,14 +396,14 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
 
       // crush
-      demoTimer += 500;
+      demoTimer += 600;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([2, 0, 2]);
         this.gameLogic._removeSmallCube([2, 0, 2]);
       }.bind(this), demoTimer);
 
       // crush
-      demoTimer += 500;
+      demoTimer += 600;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([1, 0, 1]);
         this.gameLogic._removeSmallCube([1, 0, 1]);

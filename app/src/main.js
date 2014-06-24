@@ -15,9 +15,15 @@ define(function(require, exports, module) {
     origin: [0.5, 0.5]
   });
 
+  var perspective = 1000;
+
+  if (window.innerWidth < 800){
+    perspective = 600;
+  }
+
   var mainContext = Engine.createContext();
 
-  mainContext.setPerspective(1000);
+  mainContext.setPerspective(perspective);
 
   var menuView = new MenuView();
 
@@ -25,7 +31,7 @@ define(function(require, exports, module) {
   if (boolean) {
       mainContext.setPerspective(1000000);
     } else {
-      mainContext.setPerspective(1000);
+      mainContext.setPerspective(perspective);
     }
   });
 

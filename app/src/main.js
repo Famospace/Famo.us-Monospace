@@ -18,7 +18,7 @@ define(function(require, exports, module) {
   var perspective = 1000;
 
   if (window.innerWidth < 800){
-    perspective = 700;
+    perspective = 500;
   }
 
   var mainContext = Engine.createContext();

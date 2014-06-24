@@ -7,12 +7,12 @@ app.listen(port);
 
 
 
-app.use('/app', express.static(__dirname + '/app'));
+app.use('/', express.static(__dirname + '/'));
 
 
 
 app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
+  res.sendfile(__dirname + '/app/index.html');
 });
 
 app.get('/lib/*', function (req, res) {

@@ -19,9 +19,9 @@ define(function(require, exports, module) {
     this.terminate = false;
     this.showMenu = false;
     this.ready = true;
-    this.mySound = new Buzz.sound("content/sounds/die.wav");
+    this.mySound = new Buzz.sound("app/content/sounds/die.wav");
     this.mySound.load();
-    this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
+    this.completeSound = new Buzz.sound("app/content/sounds/level-up.wav");
     this.completeSound.load();
 
     this.twoDDataStructure = {};

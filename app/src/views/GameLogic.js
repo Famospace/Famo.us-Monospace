@@ -19,9 +19,9 @@ define(function(require, exports, module) {
     this.terminate = false;
     this.showMenu = false;
     this.ready = true;
-    this.mySound = new Buzz.sound("content/sounds/die.wav");
+    this.mySound = new Buzz.sound("app/content/sounds/die.wav");
     this.mySound.load();
-    this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
+    this.completeSound = new Buzz.sound("app/content/sounds/level-up.wav");
     this.completeSound.load();
 
     this.twoDDataStructure = {};
@@ -42,27 +42,27 @@ define(function(require, exports, module) {
     // Set Game logic default options with default game board
     GameLogic.DEFAULT_OPTIONS = {
       mainCubeSize: 250,
-      destroyer: [-50,  -50,  -50],
+      destroyer: [-1000,  -1000,  -1000],
       smallCube: [
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
  
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
        
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
        
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
-        [-50, -50, -50],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
+        [-1000, -1000, -1000],
       ]
     };
 
@@ -71,8 +71,8 @@ define(function(require, exports, module) {
         content: 'Menu',
         properties: {
           textAlign: 'center',
-          border: '1px solid black',
-          borderRadius: '5px',
+          // border: '1px solid black',
+          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -91,8 +91,8 @@ define(function(require, exports, module) {
         content:'Restart',
         properties: {
           textAlign: 'center',
-          border: '1px solid black',
-          borderRadius: '5px',
+          // border: '1px solid black',
+          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -109,15 +109,15 @@ define(function(require, exports, module) {
 
 
       var levelSelectButton = new Surface({
-        content:'Level Select',
+        content:'Levels',
         properties: {
           textAlign: 'center',
-          border: '1px solid black',
-          borderRadius: '5px',
+          // border: '1px solid black',
+          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
-          lineHeight: '22px'
+          lineHeight: '45px'
         }
       });
 
@@ -133,8 +133,8 @@ define(function(require, exports, module) {
         content:'Exit',
         properties: {
           textAlign: 'center',
-          border: '1px solid black',
-          borderRadius: '5px',
+          // border: '1px solid black',
+          // borderRadius: '5px',
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
@@ -146,7 +146,7 @@ define(function(require, exports, module) {
         size: [50, 50],
         align: [1, 0],
         origin: [1, 0],
-        transform: Transform.translate(-150, -50, 0)
+        transform: Transform.translate(-140, -50, 0)
 
       });
 
@@ -193,14 +193,14 @@ define(function(require, exports, module) {
       function _hideMenu () {
         restartButtonMod.setTransform(Transform.translate(-50, -50, 0), {duration: 500, curve: 'easeInOut'});
         levelSelectButtonMod.setTransform(Transform.translate(-100, -50, 0), {duration: 400, curve: 'easeInOut'});
-        exitButtonMod.setTransform(Transform.translate(-150, -50, 0), {duration: 300, curve: 'easeInOut'});
+        exitButtonMod.setTransform(Transform.translate(-140, -50, 0), {duration: 300, curve: 'easeInOut'});
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
 
       function _showMenu () {
         restartButtonMod.setTransform(Transform.translate(-50, 0, 0), {duration: 300, curve: 'easeInOut'});
         levelSelectButtonMod.setTransform(Transform.translate(-100, 0, 0), {duration: 400, curve: 'easeInOut'});
-        exitButtonMod.setTransform(Transform.translate(-150, 0, 0), {duration: 500, curve: 'easeInOut'});
+        exitButtonMod.setTransform(Transform.translate(-140, 0, 0), {duration: 500, curve: 'easeInOut'});
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
 

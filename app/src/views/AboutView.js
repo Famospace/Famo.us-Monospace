@@ -64,16 +64,17 @@ define(function(require, exports, module) {
       content: 'Back',
       properties: {
         textAlign: 'center',
-        fontWeight: 'bold',
-        backgroundColor: 'black',
-        color: 'white',
+        border: '1px solid black',
+        borderRadius: '5px',
+        fontSize: '.8rem',
+        fontFamily: 'HelveticaNeue-Light',
         zIndex: 4,
-        lineHeight: '47px'
+        lineHeight: '37px'
       }
     });
 
     var menuButtonMod = new Modifier({
-      size: [50, 50],
+      size: [50, 40],
       align: [1, 0],
       origin: [1, 0]
     });

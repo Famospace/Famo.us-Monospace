@@ -18,6 +18,7 @@ define(function(require, exports, module) {
     // Create sound objects
     this.terminate = false;
     this.showMenu = false;
+    this.ready = true;
     this.mySound = new Buzz.sound("content/sounds/die.wav");
     this.mySound.load();
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav");
@@ -70,11 +71,12 @@ define(function(require, exports, module) {
         content: 'Menu',
         properties: {
           textAlign: 'center',
-          fontWeight: 'bold',
-          backgroundColor: 'black',
-          color: 'white',
+          border: '1px solid black',
+          borderRadius: '5px',
+          fontSize: '.8rem',
+          fontFamily: 'HelveticaNeue-Light',
           zIndex: 4,
-          lineHeight: '47px'
+          lineHeight: '45px'
         }
       });
 
@@ -89,18 +91,20 @@ define(function(require, exports, module) {
         content:'Restart',
         properties: {
           textAlign: 'center',
-          fontWeight: 'bold',
-          backgroundColor: 'black',
-          color: 'white',
-          zIndex: 3,
-          lineHeight: '47px'
-        },
+          border: '1px solid black',
+          borderRadius: '5px',
+          fontSize: '.8rem',
+          fontFamily: 'HelveticaNeue-Light',
+          zIndex: 4,
+          lineHeight: '45px'
+        }
       });
 
       var restartButtonMod = new Modifier({
         size: [50, 50],
         align: [1, 0],
-        origin: [1, 0]
+        origin: [1, 0],
+        transform: Transform.translate(-50, -50, 0)
       });
 
 
@@ -108,18 +112,20 @@ define(function(require, exports, module) {
         content:'Level Select',
         properties: {
           textAlign: 'center',
-          fontWeight: 'bold',
-          backgroundColor: 'black',
-          color: 'white',
-          zIndex: 2,
-          lineHeight: '24px'
+          border: '1px solid black',
+          borderRadius: '5px',
+          fontSize: '.8rem',
+          fontFamily: 'HelveticaNeue-Light',
+          zIndex: 4,
+          lineHeight: '22px'
         }
       });
 
       var levelSelectButtonMod = new Modifier({
         size: [50, 50],
         align: [1, 0],
-        origin: [1, 0]
+        origin: [1, 0],
+        transform: Transform.translate(-100, -50, 0)
       });
 
 
@@ -127,18 +133,21 @@ define(function(require, exports, module) {
         content:'Exit',
         properties: {
           textAlign: 'center',
-          fontWeight: 'bold',
-          backgroundColor: 'black',
-          color: 'white',
-          zIndex: 1,
-          lineHeight: '47px'
+          border: '1px solid black',
+          borderRadius: '5px',
+          fontSize: '.8rem',
+          fontFamily: 'HelveticaNeue-Light',
+          zIndex: 4,
+          lineHeight: '45px'
         }
       });
 
       var exitButtonMod = new Modifier({
         size: [50, 50],
         align: [1, 0],
-        origin: [1, 0]
+        origin: [1, 0],
+        transform: Transform.translate(-150, -50, 0)
+
       });
 
       this.node.add(menuButtonMod).add(menuButton);
@@ -147,11 +156,14 @@ define(function(require, exports, module) {
       this.node.add(exitButtonMod).add(exitButton);
 
       menuButton.on('click', function () {
+        if (!this.ready) return;
         if (this.showMenu) {
-          _hideMenu();
+          this.ready = false;
+          _hideMenu.call(this);
           this.showMenu = !this.showMenu;
         } else {
-          _showMenu();
+          this.ready = false;
+          _showMenu.call(this);
           this.showMenu = !this.showMenu;
         }
       }.bind(this));
@@ -178,17 +190,18 @@ define(function(require, exports, module) {
         Timer.setTimeout(_hideMenu, 500);
       }.bind(this));
 
-
       function _hideMenu () {
-        restartButtonMod.setTransform(Transform.translate(0, 0, 0), {duration: 500, curve: 'easeInOut'});
-        levelSelectButtonMod.setTransform(Transform.translate(0, 0, 0), {duration: 500, curve: 'easeInOut'});
-        exitButtonMod.setTransform(Transform.translate(0, 0, 0), {duration: 500, curve: 'easeInOut'});
+        restartButtonMod.setTransform(Transform.translate(-50, -50, 0), {duration: 500, curve: 'easeInOut'});
+        levelSelectButtonMod.setTransform(Transform.translate(-100, -50, 0), {duration: 400, curve: 'easeInOut'});
+        exitButtonMod.setTransform(Transform.translate(-150, -50, 0), {duration: 300, curve: 'easeInOut'});
+        Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
 
       function _showMenu () {
-        restartButtonMod.setTransform(Transform.translate(-50, 0, 0), {duration: 500, curve: 'easeInOut'});
-        levelSelectButtonMod.setTransform(Transform.translate(-100, 0, 0), {duration: 500, curve: 'easeInOut'});
+        restartButtonMod.setTransform(Transform.translate(-50, 0, 0), {duration: 300, curve: 'easeInOut'});
+        levelSelectButtonMod.setTransform(Transform.translate(-100, 0, 0), {duration: 400, curve: 'easeInOut'});
         exitButtonMod.setTransform(Transform.translate(-150, 0, 0), {duration: 500, curve: 'easeInOut'});
+        Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
 
 

@@ -31,9 +31,9 @@ define(function(require, exports, module) {
   GameBoard.DEFAULT_OPTIONS = {
     mainCubeSize: 400,
     destroyer: undefined,
-    destroyerColor: '#66CCFF',
+    destroyerColor: '#34A4CC',
     smallCube: undefined,
-    smallCubeColor: '#FF6600'
+    smallCubeColor: '#738F99'
   };
 
   // set the 2D-3D transition flag
@@ -76,7 +76,7 @@ define(function(require, exports, module) {
   // Create the the game board/parent cube
   function _createParentCube () {
     this.cube = new CubeView({
-      size: this.options.mainCubeSize
+      size: this.options.mainCubeSize,
     });
 
     this.node.add(this.cube);

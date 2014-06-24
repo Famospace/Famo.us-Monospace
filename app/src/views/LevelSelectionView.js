@@ -123,11 +123,12 @@ define(function(require, exports, module) {
       content: 'Back',
       properties: {
         textAlign: 'center',
-        fontWeight: 'bold',
-        backgroundColor: 'black',
-        color: 'white',
+        border: '1px solid black',
+        borderRadius: '5px',
+        fontSize: '.8rem',
+        fontFamily: 'HelveticaNeue-Light',
         zIndex: 4,
-        lineHeight: '47px'
+        lineHeight: '37px'
       }
     });
 

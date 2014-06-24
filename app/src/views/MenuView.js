@@ -3,6 +3,7 @@ define(function(require, exports, module) {
   var Surface       = require('famous/core/Surface');
   var Transform     = require('famous/core/Transform');
   var Modifier     = require('famous/core/Modifier');
+  var Timer         = require('famous/utilities/Timer');
   var RenderNode     = require('famous/core/RenderNode');
   var StateModifier = require('famous/modifiers/StateModifier');
   var Lightbox      = require('famous/views/Lightbox');
@@ -19,6 +20,7 @@ define(function(require, exports, module) {
 
     this.views = {};
     this.playingDemo = true;
+    this.ready = true;
 
 
     _createIntro.call(this);    
@@ -93,19 +95,35 @@ define(function(require, exports, module) {
 
     // menu listeners
     this._eventInput.on('startGame', function () {
-      this.lightbox.show(this.views.game);
+      if (this.ready) {
+        this.lightbox.show(this.views.game);
+        this.ready = false;
+      }
+      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
     }.bind(this));
 
     this._eventInput.on('about', function () {
-      this.lightbox.show(this.views.about);
+      if (this.ready) {
+        this.lightbox.show(this.views.about);
+        this.ready = false;
+      }
+      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
     }.bind(this));
 
     this._eventInput.on('levels', function () {
-      this.lightbox.show(this.views.levelSelection);
+      if (this.ready) {
+        this.lightbox.show(this.views.levelSelection);
+        this.ready = false;
+      }
+      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
     }.bind(this));
 
     this._eventInput.on('mainMenu', function () {
-      this.lightbox.show(this.views.mainMenu);
+      if (this.ready) {
+        this.lightbox.show(this.views.mainMenu);
+        this.ready = false;
+      }
+      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
     }.bind(this));
   }
 

@@ -162,7 +162,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light"
+          fontFamily: "HelveticaNeue-Light",
+          zIndex: 3
         }
       });
 
@@ -191,7 +192,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light"
+          fontFamily: "HelveticaNeue-Light",
+          zIndex: 3
         }
       });
 
@@ -220,7 +222,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light"
+          fontFamily: "HelveticaNeue-Light",
+          zIndex: 3
         }
       });
 
@@ -249,7 +252,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light"
+          fontFamily: "HelveticaNeue-Light",
+          zIndex: 3
         }
       });
 

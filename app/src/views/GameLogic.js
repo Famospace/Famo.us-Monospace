@@ -289,13 +289,7 @@ define(function(require, exports, module) {
       // create a modifier that will dynamically relocate the button base on the 
       // size of the window with respect to cubesize
       this.perspectiveButtonMod = new Modifier ({
-        size: function () {
-          if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-            return [75, 75];
-          } else {
-            return [75, 75];
-          }
-        }.bind(this),
+        size: [75, 75],
         align: function () {
           if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
             return [0.5, 0.5];
@@ -304,12 +298,8 @@ define(function(require, exports, module) {
           }
         }.bind(this),
         origin: function () {
-          if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-            return [0.5, 0.98];
-          } else {
-            return [0.05, 0.5];
-          }
-        }.bind(this),
+          return (window.innerWidth < 800) ? [0.5, 0.985] : [0.5, 0.9];
+        }
       });
       
       // Create event listeners for 2D/3D transition

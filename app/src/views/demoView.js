@@ -1,3 +1,6 @@
+/* This view is created for a play by play demo to teach user how to play the game.  Game play
+   is manually injected and used timer to breakout each moves
+*/
 define(function(require, exports, module) {
     var View            = require('famous/core/View');
     var Surface         = require('famous/core/Surface');
@@ -23,7 +26,8 @@ define(function(require, exports, module) {
 
       // allows sounds to be muted if demo is skipped
       this.skip = false;
-
+      
+      //inject sound for 2/3d transition
       this.transitionSound = new Buzz.sound("content/sounds/swooshing-punch.wav",{
         preload: true
       });
@@ -54,7 +58,8 @@ define(function(require, exports, module) {
         fontSize: '1.2rem'
       }
     };
-
+    
+    // skip button for user to skip the demo and move to menu page
     function _createSkipButton () {
       var skip = new Surface({
         size: [25, 25],
@@ -62,7 +67,8 @@ define(function(require, exports, module) {
         properties: {
           fontFamily: 'HelveticaNeue-Light',
           textAlign: 'center',
-          fontSize: '1.5rem'
+          fontSize: '1.5rem',
+          cursor: 'pointer'
         }
       });
 

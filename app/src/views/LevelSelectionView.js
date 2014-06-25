@@ -96,6 +96,7 @@ define(function(require, exports, module) {
             fontSize: this.options.boxFontSize,
             backgroundColor: '#34A4CC',
             color: 'white',
+            cursor: 'pointer'
             // fontWeight: 'bold'
           }
         });
@@ -128,7 +129,9 @@ define(function(require, exports, module) {
         fontSize: '.8rem',
         fontFamily: 'HelveticaNeue-Light',
         zIndex: 4,
-        lineHeight: '45px'
+        lineHeight: '45px',
+        cursor: 'pointer'
+
       }
     });
 

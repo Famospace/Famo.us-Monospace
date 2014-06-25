@@ -5,7 +5,6 @@ define(function(require, exports, module) {
   var Transform      = require('famous/core/Transform');
   var Modifier       = require('famous/core/Modifier');
 
-
   function CubeView() {
     View.apply(this, arguments);
 
@@ -81,7 +80,6 @@ define(function(require, exports, module) {
           Transform.translate(currentSurface[0],currentSurface[1],currentSurface[2]),
           Transform.rotate(currentRotation[0],currentRotation[1],currentRotation[2])
         );
-
       surfaceModifier.setTransform( matrixData, {duration: 0});
 
       // add to view's context for presentation

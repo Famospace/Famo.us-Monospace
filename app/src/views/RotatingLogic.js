@@ -4,10 +4,8 @@ define(function(require, exports, module) {
     var Surface        = require('famous/core/Surface');
     var Transform      = require('famous/core/Transform');
     var Modifier       = require('famous/core/Modifier');
-    var StateModifier  = require('famous/modifiers/StateModifier');
     var Transitionable = require('famous/transitions/Transitionable');
     var Easing         = require('famous/transitions/Easing');
-    var Timer          = require('famous/utilities/Timer');
     var GameBoard      = require('views/GameBoard');
 
     var MouseSync      = require('famous/inputs/MouseSync');
@@ -139,7 +137,7 @@ define(function(require, exports, module) {
           return false;
         }
         // determine left/right/up/down
-        if (Math.abs(this.position[0]) > Math.abs(this.position[1])){
+        if (Math.abs(this.position[0]) > Math.abs(this.position[1])) {
           this.left = this.position[0] > 0 ? -1 : 1;
         } else{
           this.down = this.position[1] > 0 ? 1 : -1;
@@ -206,8 +204,9 @@ define(function(require, exports, module) {
     // this function takes the current state and orientation and determines the next state
     // give rotation of right or left or up or down.
     function updateStateTransition(left, down){
+      var tempState;
       if(this.state[2] === 1){ //[0,0,1]
-        var tempState = this.state;
+        tempState = this.state;
         if (this.nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
           if (down !== 0){
             this.index = [down*this.nVec[1], 0, 0];
@@ -230,7 +229,7 @@ define(function(require, exports, module) {
           }
         }
       }else if(this.state[2] === -1){ //[0,0,-1]
-        var tempState = this.state;
+        tempState = this.state;
         if (this.nVec[1] !== 0){ //[0,1,0] or [0,-1,0]
           if (down !== 0){
             this.index = [-down*this.nVec[1], 0, 0];
@@ -253,7 +252,7 @@ define(function(require, exports, module) {
           }
         }
       }else if(this.state[1] === 1){//[0,1,0]
-        var tempState = this.state;
+        tempState = this.state;
         if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
           if (down !== 0){
             this.index = [-down*this.nVec[2], 0, 0];
@@ -276,7 +275,7 @@ define(function(require, exports, module) {
           }
         }
       }else if(this.state[1] === -1){ //[0,-1,0]
-        var tempState = this.state;
+        tempState = this.state;
         if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
           if (down !== 0){
             this.index = [down*this.nVec[2], 0, 0];
@@ -299,7 +298,7 @@ define(function(require, exports, module) {
           }
         }
       }else if(this.state[0] === 1){ //[1,0,0]
-        var tempState = this.state;
+        tempState = this.state;
         if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
           if (down !== 0){
             this.index = [0, down*this.nVec[2], 0];
@@ -322,7 +321,7 @@ define(function(require, exports, module) {
           }
         }
       }else{ //[-1,0,0]
-        var tempState = this.state;
+        tempState = this.state;
         if (this.nVec[2] !== 0){ //[0,0,1] or [0,0,-1]
           if (down !== 0){
             this.index = [0, -down*this.nVec[2], 0];
@@ -383,7 +382,7 @@ define(function(require, exports, module) {
       };
 
 
-      var first = rotationMap[state]['rotate'];
+      var first = rotationMap[state].rotate;
       var second =  rotationMap[state][nVec];
 
       var trans = Transform.multiply(Transform.rotate(first[0]*Math.PI/2,first[1]*Math.PI/2,first[2]*Math.PI/2),

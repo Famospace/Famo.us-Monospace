@@ -118,23 +118,15 @@ define(function(require, exports, module) {
       // vertical
       if (yDelta > xDelta) { //more y movement than x
         // move up
-        if (posData.y < 0) {
-          output = [0,1];
-        }
+        if (posData.y < 0) output = [0,1];
         // move down
-        if (posData.y > 0) {
-          output = [0,-1];
-        }
+        if (posData.y > 0) output = [0,-1];
       // horizontal
       } else { //more x movement than y
         // move left
-        if (posData.x < 0) {
-          output = [-1,0];
-        }
+        if (posData.x < 0) output = [-1,0];
         // move right
-        if (posData.x > 0) {
-          output = [1,0];
-        }
+        if (posData.x > 0) output = [1,0];
       }
     }
     return output;

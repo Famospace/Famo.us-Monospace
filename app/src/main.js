@@ -1,3 +1,7 @@
+/*
+ *This file instantiates the entire game.
+ *This file also receives events to adjust perspective to 3D/2D
+ */
 define(function(require, exports, module) {
 
   var Engine          = require('famous/core/Engine');
@@ -15,49 +19,42 @@ define(function(require, exports, module) {
     origin: [0.5, 0.5]
   });
 
-  var perspective = 1000;
-
-  if (window.innerWidth < 800){
-    perspective = 500;
-  }
-
   var mainContext = Engine.createContext();
+  // default perspective is 1000; 500 for smaller devices
+  var perspective = (window.innerWidth < 800) ? 500 : 1000;
 
   mainContext.setPerspective(perspective);
 
+  // instantiates game
   var menuView = new MenuView();
 
-  var perspectiveTrans = new Transitionable(500000);
-
-  perspectiveTrans.set(perspective,{ curve: Easing.outQuint, duration: 200});
+  // transitionable for the 2D/3D change
+  var perspectiveTrans = new Transitionable(perspective);
 
   mainContext.add(fpsMeter);
   mainContext.add(modifier).add(menuView);
 
+  // upon receiving event, perspective is changed over 200ms
   menuView._eventOutput.on('is2d', function (boolean) {
     if (boolean) {
-      Engine.on('prerender', changePerspective);
-      perspectiveTrans.set(500000,{
-          curve: Easing.inQuint,
-          duration: 200
-      }, function() {
-          Engine.removeListener('prerender', changePerspective);
-      });
+      // invokes function on prerender
+      Engine.on('prerender', _changePerspective);
+      perspectiveTrans.set(500000, {
+        curve: Easing.inQuint,
+        duration: 200
+          // after perspective has changed, event is removed to improve performance
+      }, function() { Engine.removeListener('prerender', _changePerspective); });
     } else {
-      Engine.on('prerender', changePerspective);
-      perspectiveTrans.set(perspective,{
-          curve: Easing.outQuint,
-          duration: 200
-      }, function() {
-          Engine.removeListener('prerender', changePerspective);
-      });
+      Engine.on('prerender', _changePerspective);
+      perspectiveTrans.set(perspective, {
+        curve: Easing.outQuint,
+        duration: 200
+      }, function() { Engine.removeListener('prerender', _changePerspective); });
     }
   });
 
+  function _changePerspective() {
+      mainContext.setPerspective(perspectiveTrans.get());
+  }
 
-
-
-    function changePerspective() {
-        mainContext.setPerspective(perspectiveTrans.get());
-    }
 });

@@ -1,6 +1,7 @@
-/* This view is created for a play by play demo to teach user how to play the game.  Game play
-   is manually injected and used timer to breakout each moves
-*/
+/* 
+ *This view is created for a play by play demo to teach users how to play the game.
+ *Game play is manually injected and used timer to manipulate board and simulate user interaction.
+ */
 define(function(require, exports, module) {
     var View            = require('famous/core/View');
     var Surface         = require('famous/core/Surface');
@@ -11,35 +12,30 @@ define(function(require, exports, module) {
     var Modifier        = require('famous/core/Modifier');
     var Easing          = require('famous/transitions/Easing');
     var Buzz            = require('buzz');
+
     var GameLogic       = require('views/GameLogic');
     var RotatingLogic   = require('views/RotatingLogic');
     var Levels          = require('../../content/levels');
 
     function DemoView() {
       View.apply(this, arguments);
-
       this.rootModifier = new Modifier();
-
       this.node = this.add(this.rootModifier);
-
-      this.crashTextMods = [];
 
       // allows sounds to be muted if demo is skipped
       this.skip = false;
       
-      //inject sound for 2/3d transition
-      this.transitionSound = new Buzz.sound("content/sounds/swoosh.wav",{
-        preload: true
-      });
+      //inject sound for 2d/3d transition
+      this.transitionSound = new Buzz.sound("content/sounds/swoosh.wav", {preload: true});
 
-      // takes 5.1 seconds
-      // start demo after 5 seconds
+      // creates skip button to bybass intro animation
+        // takes 5.1 seconds
       _createSkipButton.call(this);
+      // instantiates first three blurbs explaining game premise
       _startWordCrash.call(this);
 
-      console.log(this);
-
-      // takes 21.5 seconds
+      // after _startWordCrash has finished, cube animation begins
+        // takes 21.5 seconds
       Timer.setTimeout(function () {
         if(!this.skip){
           _startDemoPlay.call(this);
@@ -53,9 +49,16 @@ define(function(require, exports, module) {
 
     DemoView.DEFAULT_OPTIONS = {
       crashTextProps: {
+        // backup fonts for browsers that don't support HelveticaNeue-Light
         fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '1.2rem'
+      },
+      instrucTextProps: {
+        textAlign: 'center',
+        fontSize: '2rem',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+        zIndex: 30
       }
     };
     
@@ -88,6 +91,8 @@ define(function(require, exports, module) {
         this._eventOutput.emit('demoToMainMenu');
       }.bind(this));
 
+      // skip button fades out before cube slides out so it doesn't transition out in the middle of the screen
+        // lightbox is only translating 500px
       Timer.setTimeout(function () {
         skipMod.setOpacity(0, {curve: 'easeInOut', duration: 250});
       }.bind(this), 25000);
@@ -144,78 +149,62 @@ define(function(require, exports, module) {
         )
       });
 
-      this.crashTextMods.push(crushMod);
-      this.crashTextMods.push(manipulateMod);
-      this.crashTextMods.push(destroyMod);
-      this.node.add(this.crashTextMods[0]).add(crush);
-      this.node.add(this.crashTextMods[1]).add(manipulate);
-      this.node.add(this.crashTextMods[2]).add(destroy);     
+      this.node.add(crushMod).add(crush);
+      this.node.add(manipulateMod).add(manipulate);
+      this.node.add(destroyMod).add(destroy);     
 
+      // Timer used for fading blurbs in
       Timer.setTimeout(function () {
-        this.crashTextMods[0].setTransform(
+        crushMod.setTransform(
           Transform.multiply(
             Transform.translate(0, window.innerHeight/2 - 50, 0),
             Transform.rotateY(0)
           ),
           {duration: 1000, curve: 'easeInOut'}
         );
-      }.bind(this), 650);
+      }, 650);
 
       Timer.setTimeout(function () {
-        this.crashTextMods[1].setTransform(
+        manipulateMod.setTransform(
           Transform.multiply(
             Transform.translate(0, window.innerHeight/2, 0),
             Transform.rotateX(0)
           ),
           {duration: 1000, curve: 'easeInOut'}
         );
-      }.bind(this), 2150);
+      }, 2150);
 
       Timer.setTimeout(function () {
-        this.crashTextMods[2].setTransform(
+        destroyMod.setTransform(
           Transform.multiply(
             Transform.translate(0, window.innerHeight/2 + 50, 0),
             Transform.rotateY(0)
           ),
           {duration: 1000, curve: 'easeInOut'}
         );
-      }.bind(this), 3650);
+      }, 3650);
 
       // words slide out
       Timer.setTimeout(function () {
-        this.crashTextMods[0].setOpacity(
-          0,
-              {duration: 500, curve: Easing.inCubic}
-        );
-        this.crashTextMods[1].setOpacity(
-          0,
-              {duration: 500, curve: Easing.inCubic}
-        );
-        this.crashTextMods[2].setOpacity(
-          0,
-              {duration: 500, curve: Easing.inCubic}
-        );
+        crushMod.setOpacity(0, {duration: 500, curve: Easing.inCubic});
+        manipulateMod.setOpacity(0, {duration: 500, curve: Easing.inCubic});
+        destroyMod.setOpacity(0, {duration: 500, curve: Easing.inCubic});
       }.bind(this), 5500);
     }
 
     function _startDemoText () {
+      // acts as master timer for demo text
+        // allows for incremental additions without subsequent changes
       var demoTextTimer = 2000;
       var swipeTransitionable = new Transitionable(0);
       var perspecTransitionable = new Transitionable(0);
       var destroyerTellTrans = new Transitionable(0);
       var objectiveTellTrans = new Transitionable(0);
 
-
-
       // create swipe instructional text
       var swipeTell = new Surface({
         opacity: 0,
-        properties: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
-          zIndex: 30
-        }
+        properties: this.options.instrucTextProps
       });
 
       var swipeTellMod = new Modifier({
@@ -240,12 +229,7 @@ define(function(require, exports, module) {
       // create perspective change instructional text
       var perspecChange = new Surface({
         opacity: 0,
-        properties: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
-          zIndex: 30
-        }
+        properties: this.options.instrucTextProps
       });
 
       var perspecChangeMod = new Modifier({
@@ -270,12 +254,7 @@ define(function(require, exports, module) {
       // create destroyer instructional text
       var destroyerTell = new Surface({
         opacity: 0,
-        properties: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
-          zIndex: 30
-        }
+        properties: this.options.instrucTextProps
       });
 
       var destroyerTellMod = new Modifier({
@@ -300,12 +279,7 @@ define(function(require, exports, module) {
       // create game objective instructional text
       var objectiveTell = new Surface({
         opacity: 0,
-        properties: {
-          textAlign: 'center',
-          fontSize: '2rem',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
-          zIndex: 30
-        }
+        properties: this.options.instrucTextProps
       });
 
       var objectiveTellMod = new Modifier({
@@ -328,14 +302,13 @@ define(function(require, exports, module) {
     }
 
     function _startDemoPlay () {
+      // acts as master timer for demo text
+        // allows for incremental additions without subsequent changes
       var demoTimer = 5000;
-
-      this.gameLogic = new GameLogic();
-
-      this.gameLogic.startNewGame({level: Levels.introVideo});
-
+      // centers cube
       var rootMod = new Modifier();
-
+      this.gameLogic = new GameLogic();
+      this.gameLogic.startNewGame({level: Levels.introVideo});
 
       var demoBoardModifier = new Modifier({
         align: [0.5, 0.5],
@@ -347,13 +320,12 @@ define(function(require, exports, module) {
       });
 
       this.node = this.add(rootMod);
-
       this.node.add(demoBoardModifier).add(this.gameLogic.rotatingLogic);
-      this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(0, 2000, 0),{duration: 0, curve: 'easeInOut'});
       this.node.add(this.gameLogic.perspectiveButtonMod).add(this.gameLogic.perspectiveButton);
 
       // perspectiveButton slides in
-      this.gameLogic.perspectiveButtonMod.setTransform(Transform.rotate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
+      this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(0, 2000, 0),{duration: 0, curve: 'easeInOut'});
+      this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});
     
       // board slides in
       demoBoardModifier.setTransform(Transform.translate(0,0,0),{duration: 2500, curve: 'easeInOut'});
@@ -361,11 +333,10 @@ define(function(require, exports, module) {
       // rotate right
       demoBoardModifier.setTransform(Transform.rotate(0, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
 
-
       // switch to 2D
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
-        if(!this.skip){this.transitionSound.play()};
+        if(!this.skip){this.transitionSound.play();}
         this.gameLogic.perspectiveButton.setContent('3D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -375,7 +346,7 @@ define(function(require, exports, module) {
       demoTimer += 2700;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 3, 1]);
-        this.gameLogic._removeSmallCube([0, 3, 1]);
+        this.gameLogic.removeSmallCube([0, 3, 1]);
       }.bind(this), demoTimer);
 
       // switch to 3D
@@ -408,14 +379,14 @@ define(function(require, exports, module) {
       demoTimer += 1200;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 2, 2]);
-        this.gameLogic._removeSmallCube([0, 2, 2]);
+        this.gameLogic.removeSmallCube([0, 2, 2]);
       }.bind(this), demoTimer);
 
       // crush
       demoTimer += 600;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 1, 3]);
-        this.gameLogic._removeSmallCube([0, 1, 3]);
+        this.gameLogic.removeSmallCube([0, 1, 3]);
       }.bind(this), demoTimer);
 
       // switch to 3D
@@ -428,7 +399,7 @@ define(function(require, exports, module) {
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-      // // rotate up
+      // rotate up
       demoTimer += 1200;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.rotate(Math.PI, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
@@ -438,7 +409,7 @@ define(function(require, exports, module) {
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
-        if(!this.skip){this.transitionSound.play()};
+        if(!this.skip){this.transitionSound.play();}
         this.gameLogic.perspectiveButton.setContent('3D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -448,21 +419,21 @@ define(function(require, exports, module) {
       demoTimer += 1200;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([3, 0, 3]);
-        this.gameLogic._removeSmallCube([3, 0, 3]);
+        this.gameLogic.removeSmallCube([3, 0, 3]);
       }.bind(this), demoTimer);
 
       // crush
       demoTimer += 600;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([2, 0, 2]);
-        this.gameLogic._removeSmallCube([2, 0, 2]);
+        this.gameLogic.removeSmallCube([2, 0, 2]);
       }.bind(this), demoTimer);
 
       // crush
       demoTimer += 600;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([1, 0, 1]);
-        this.gameLogic._removeSmallCube([1, 0, 1]);
+        this.gameLogic.removeSmallCube([1, 0, 1]);
       }.bind(this), demoTimer);
 
       // win
@@ -470,20 +441,20 @@ define(function(require, exports, module) {
       demoTimer += 1200;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
-        if(!this.skip){this.transitionSound.play()};
+        if(!this.skip){this.transitionSound.play();}
         this.gameLogic.perspectiveButton.setContent('2D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
-      // board slides out
-      // perspectiveButton slides out
+      // board and perspectiveButton slide out
       demoTimer += 1000;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(-1000, 0, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
 
+      // lightbox shows mainMenu
       demoTimer += 500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('demoToMainMenu');

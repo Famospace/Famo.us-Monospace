@@ -440,7 +440,7 @@ define(function(require, exports, module) {
         console.log('no cube removed', pos);
     }
 
-    GameLogic.prototype._removeSmallCube = _removeSmallCube;
+    GameLogic.prototype.removeSmallCube = _removeSmallCube;
 
     function _ableToConvertTo2d () {
       _create2dDataStructure.call(this);

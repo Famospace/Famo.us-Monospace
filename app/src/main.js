@@ -1,6 +1,6 @@
 /*
- *This file instantiates the entire game.
- *This file also receives events to adjust perspective to 3D/2D
+ *This file instantiates the entire game and 
+ *receives events to adjust perspective to 3D/2D
  */
 define(function(require, exports, module) {
 

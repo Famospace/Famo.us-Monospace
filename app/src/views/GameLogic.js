@@ -293,7 +293,26 @@ define(function(require, exports, module) {
           }
         }.bind(this),
         origin: function () {
-          return (window.innerWidth < 800) ? [0.5, 0.985] : [0.5, 0.9];
+
+          if (window.innerWidth >= 1150) {
+            if (window.innerHeight >= 800) {
+             return [0.5, 0.97];
+             } else {
+             return [0.83, 0.5];
+            }
+          } else if (window.innerWidth >= 800) {
+            if (window.innerHeight >= 800) {
+              return [0.5, 0.97];
+             } else {
+              return [0.97, 0.5];
+            }
+          } else {
+            if (window.innerHeight < 475) {
+              return [0.97, 0.5];
+             } else {
+              return [0.5, 0.97];
+            }
+          }
         }
       });
       

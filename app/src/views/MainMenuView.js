@@ -1,10 +1,13 @@
+/*
+ *Creates the main menu view
+ */
 define(function(require, exports, module) {
-  var View      = require('famous/core/View');
-  var Surface     = require('famous/core/Surface');
-  var Modifier     = require('famous/core/Modifier');
-  var Transform   = require('famous/core/Transform');
+  var View          = require('famous/core/View');
+  var Surface       = require('famous/core/Surface');
+  var Modifier      = require('famous/core/Modifier');
+  var Transform     = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
-  var GridLayout = require("famous/views/GridLayout");
+  var GridLayout    = require("famous/views/GridLayout");
 
   function MainMenuView() {
     View.apply(this, arguments);
@@ -19,14 +22,16 @@ define(function(require, exports, module) {
   MainMenuView.prototype = Object.create(View.prototype);
   MainMenuView.prototype.constructor = MainMenuView;
 
-  MainMenuView.DEFAULT_OPTIONS = {};
+  MainMenuView.DEFAULT_OPTIONS = {
+    fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+  };
 
   function _createTitle () {
     var menu = new Surface({
       size: [undefined, 50],
       content: 'Famospace',
       properties: {
-        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '2.5rem'
       }
@@ -45,7 +50,7 @@ define(function(require, exports, module) {
       size: [undefined, 10],
       content: 'By Amar and Joe',
       properties: {
-        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '.75rem'
       }
@@ -64,7 +69,7 @@ define(function(require, exports, module) {
       size: [undefined, 10],
       content: 'Inspired by Monospace <br/> Daniel Lutz',
       properties: {
-        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '.75rem'
       }
@@ -82,7 +87,7 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'Play',
       properties: {
-        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '3rem',
         borderRadius: '10px',
@@ -98,11 +103,11 @@ define(function(require, exports, module) {
       transform: Transform.translate(0, 230, 0)
     });
 
-    play.on('touchstart', function (data) {
+    play.on('touchstart', function () {
       this._eventOutput.emit('levels');
     }.bind(this));
 
-    play.on('click', function (data) {
+    play.on('click', function () {
       this._eventOutput.emit('levels');
     }.bind(this));
     
@@ -114,7 +119,7 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'About',
       properties: {
-        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '1rem',
         cursor: 'pointer'
@@ -126,11 +131,11 @@ define(function(require, exports, module) {
       transform: Transform.translate(0, 350, 0)
     });
 
-    about.on('touchstart', function (data) {
+    about.on('touchstart', function () {
       this._eventOutput.emit('about');
     }.bind(this));
 
-    about.on('click', function (data) {
+    about.on('click', function () {
       this._eventOutput.emit('about');
     }.bind(this));
     

@@ -20,13 +20,13 @@ define(function(require, exports, module) {
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects
-    this.mySound = new Buzz.sound("content/sounds/Smack.wav",{
+    this.mySound = new Buzz.sound("content/sounds/smack.wav",{
       preload: true
     });
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav",{
       preload: true
     });
-    this.transitionSound = new Buzz.sound("content/sounds/swooshing-punch.wav",{
+    this.transitionSound = new Buzz.sound("content/sounds/swoosh.wav",{
       preload: true
     });
     

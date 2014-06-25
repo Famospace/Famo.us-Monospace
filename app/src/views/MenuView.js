@@ -1,36 +1,31 @@
 define(function(require, exports, module) {
-  var View          = require('famous/core/View');
-  var Surface       = require('famous/core/Surface');
-  var Transform     = require('famous/core/Transform');
-  var Modifier     = require('famous/core/Modifier');
-  var Timer         = require('famous/utilities/Timer');
+  var View           = require('famous/core/View');
+  var Surface        = require('famous/core/Surface');
+  var Transform      = require('famous/core/Transform');
+  var Modifier       = require('famous/core/Modifier');
+  var Timer          = require('famous/utilities/Timer');
   var RenderNode     = require('famous/core/RenderNode');
-  var StateModifier = require('famous/modifiers/StateModifier');
-  var Lightbox      = require('famous/views/Lightbox');
-  var Easing        = require('famous/transitions/Easing');
+  var Lightbox       = require('famous/views/Lightbox');
 
-  var AboutView     = require('views/AboutView');
-  var MainMenuView  = require('views/MainMenuView');
-  var demoView      = require('views/demoView');
-  var GameLogic     = require('views/GameLogic');
+  var AboutView      = require('views/AboutView');
+  var MainMenuView   = require('views/MainMenuView');
+  var DemoView       = require('views/DemoView');
+  var GameLogic      = require('views/GameLogic');
   var LevelSelection = require('views/LevelSelectionView');
 
   function MenuView() {
     View.apply(this, arguments);
 
     this.views = {};
+    // updating boolean to indicate demo is playing
     this.playingDemo = true;
+    // ensures that menu transitions don't overlap
     this.ready = true;
 
-
-    _createIntro.call(this);    
+    _createViews.call(this);
     _createGameboard.call(this);
-    _createAbout.call(this);
-    _createMainMenu.call(this);
-    _createLevelSelection.call(this);
     _createLightbox.call(this);
     _setLightboxListeners.call(this);
-    _createLocalStoragePipe.call(this);
   }
 
   MenuView.prototype = Object.create(View.prototype);
@@ -48,14 +43,11 @@ define(function(require, exports, module) {
     }
   };
 
-  function _createAbout () {
-    var about = new AboutView();
-    this.views.about = about;
-  }
-  
-  function _createMainMenu () {
-    var mainMenu = new MainMenuView();
-    this.views.mainMenu = mainMenu;
+  function _createViews () {
+    this.views.about = new AboutView();
+    this.views.mainMenu = new MainMenuView();
+    this.views.demoView = new DemoView();
+    this.views.levelSelection = new LevelSelection();
   }
 
   function _createLightbox() {
@@ -64,17 +56,14 @@ define(function(require, exports, module) {
     this.lightbox.show(this.views.demoView);
   }
 
-  function _createLocalStoragePipe () {
-    this.game.pipe(this.views.levelSelection);
-  }
-
   function _setLightboxListeners() {
-    this.views.mainMenu.pipe(this);
     this.views.about.pipe(this);
     this.views.demoView.pipe(this);
-    this.game.pipe(this);
+    this.views.mainMenu.pipe(this);
     this.views.levelSelection.pipe(this);
     this.views.levelSelection.pipe(this.game);
+    this.game.pipe(this.views.levelSelection);
+    this.game.pipe(this);
 
     // manage perspective listeners
     this._eventInput.on('is2dDemo', function (data) {
@@ -87,9 +76,10 @@ define(function(require, exports, module) {
       this._eventOutput.emit('is2d', data);
     }.bind(this));
 
+    // ensures that demo's game board doesn't interfere with real game board
     this._eventInput.on('demoToMainMenu', function () {
       if (this.playingDemo) {
-        if (this.views.demoView.gameLogic){
+        if (this.views.demoView.gameLogic) {
           this.views.demoView.gameLogic.setSoundOff(true);
         }
         this.lightbox.show(this.views.mainMenu);
@@ -97,63 +87,51 @@ define(function(require, exports, module) {
       }
     }.bind(this));
 
-
     // menu listeners
     this._eventInput.on('startGame', function () {
+      // ensures menu events don't overlap
       if (this.ready) {
-        this.lightbox.show(this.views.game);
         this.ready = false;
+        this.lightbox.show(this.views.game);
       }
-      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
+      // resets this.ready after 650ms (time of menu transition)
+      Timer.setTimeout(function () { this.ready = true; }.bind(this), 650);
     }.bind(this));
 
     this._eventInput.on('about', function () {
       if (this.ready) {
-        this.lightbox.show(this.views.about);
         this.ready = false;
+        this.lightbox.show(this.views.about);
       }
-      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
+      Timer.setTimeout(function () { this.ready = true; }.bind(this), 650);
     }.bind(this));
 
     this._eventInput.on('levels', function () {
       if (this.ready) {
-        this.lightbox.show(this.views.levelSelection);
         this.ready = false;
+        this.lightbox.show(this.views.levelSelection);
       }
-      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
+      Timer.setTimeout(function () { this.ready = true; }.bind(this), 650);
     }.bind(this));
 
     this._eventInput.on('mainMenu', function () {
       if (this.ready) {
-        this.lightbox.show(this.views.mainMenu);
         this.ready = false;
+        this.lightbox.show(this.views.mainMenu);
       }
-      Timer.setTimeout(function () {this.ready = true;}.bind(this), 650);
+      Timer.setTimeout(function () { this.ready = true; }.bind(this), 650);
     }.bind(this));
   }
 
-  function _createIntro () {
-    var intro = new demoView();
-    this.views.demoView = intro;
-  }
-
-  function _createLevelSelection () {
-    var levelSelection = new LevelSelection();
-    this.views.levelSelection = levelSelection;
-  }
-
   function _createGameboard () {
+    var gameNode = new RenderNode();
     this.game = new GameLogic();
-
     var mod = new Modifier({
       align: [0.5, 0.5],
       origin: [0.5, 0.5]
     });
 
-    var gameNode = new RenderNode();
-
     gameNode.add(mod).add(this.game);
-
     this.views.game = gameNode;
   }
 

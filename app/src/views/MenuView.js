@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
   var View           = require('famous/core/View');
-  var Surface        = require('famous/core/Surface');
   var Transform      = require('famous/core/Transform');
   var Modifier       = require('famous/core/Modifier');
   var Timer          = require('famous/utilities/Timer');
@@ -67,9 +66,7 @@ define(function(require, exports, module) {
 
     // manage perspective listeners
     this._eventInput.on('is2dDemo', function (data) {
-      if (this.playingDemo) {
-        this._eventOutput.emit('is2d', data);
-      }
+      if (this.playingDemo) this._eventOutput.emit('is2d', data);
     }.bind(this));
 
     this._eventInput.on('is2d', function (data) {
@@ -79,9 +76,7 @@ define(function(require, exports, module) {
     // ensures that demo's game board doesn't interfere with real game board
     this._eventInput.on('demoToMainMenu', function () {
       if (this.playingDemo) {
-        if (this.views.demoView.gameLogic) {
-          this.views.demoView.gameLogic.setSoundOff(true);
-        }
+        if (this.views.demoView.gameLogic) this.views.demoView.gameLogic.setSoundOff(true);
         this.lightbox.show(this.views.mainMenu);
         this.playingDemo = false;
       }

@@ -1,7 +1,6 @@
 /* This view is to create small cubes that gets destroyed by the destroyer cube*/
 define(function(require, exports, module) {
   var View          = require('famous/core/View');
-  var Surface       = require('famous/core/Surface');
   var Transform     = require('famous/core/Transform');
   var Modifier      = require('famous/core/Modifier');
   var CubeView      = require('views/CubeView');

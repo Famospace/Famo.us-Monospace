@@ -2,9 +2,7 @@
 define(function(require, exports, module) {
   var View          = require('famous/core/View');
   var Surface       = require('famous/core/Surface');
-  var Transform     = require('famous/core/Transform');
   var Modifier      = require('famous/core/Modifier');
-  var CubeView      = require('views/CubeView');
   var Levels        = require('../../content/levels');
 
 
@@ -63,8 +61,8 @@ define(function(require, exports, module) {
     var tempWidth = this.options.boxSize * (this.options.row+3);
     var tempHeight = this.options.boxSize * (this.options.column+5);
 
-    console.log('temp: ', tempWidth, tempHeight);
-    console.log('actual:', window.innerWidth, window.innerHeight);
+    // console.log('temp: ', tempWidth, tempHeight);
+    // console.log('actual:', window.innerWidth, window.innerHeight);
 
     if (window.innerWidth < tempWidth || window.innerHeight < tempHeight){
       this.options.boxSize = 50;
@@ -136,9 +134,7 @@ define(function(require, exports, module) {
 
         this.levelSurfaces.push(surface);
         // if local storage for the level is set to 1, use black font
-        if (this.localStorage && this.localStorage[index-1] === '1') {
-          surface.setProperties({color: 'black'});
-        }
+        if (this.localStorage && this.localStorage[index-1] === '1') surface.setProperties({color: 'black'});
         
         // on set listners on surface and bind with index, which represent the level
         surface.on('click', function(index){

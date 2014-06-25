@@ -1,15 +1,19 @@
+/*
+ *Creates the main menu view
+ */
 define(function(require, exports, module) {
-  var View      = require('famous/core/View');
-  var Surface     = require('famous/core/Surface');
-  var Modifier     = require('famous/core/Modifier');
-  var Transform   = require('famous/core/Transform');
+  var View          = require('famous/core/View');
+  var Surface       = require('famous/core/Surface');
+  var Modifier      = require('famous/core/Modifier');
+  var Transform     = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
-  var GridLayout = require("famous/views/GridLayout");
+  var GridLayout    = require("famous/views/GridLayout");
 
   function MainMenuView() {
     View.apply(this, arguments);
 
     _createTitle.call(this);
+    _createCreatedBy.call(this);
     _createInspiredBy.call(this);
     _createPlayButton.call(this);
     _createAbout.call(this);
@@ -18,15 +22,16 @@ define(function(require, exports, module) {
   MainMenuView.prototype = Object.create(View.prototype);
   MainMenuView.prototype.constructor = MainMenuView;
 
-  MainMenuView.DEFAULT_OPTIONS = {};
+  MainMenuView.DEFAULT_OPTIONS = {
+    fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+  };
 
   function _createTitle () {
     var menu = new Surface({
       size: [undefined, 50],
-      content: 'Famonospace',
+      content: 'Famospace',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '2.5rem'
       }
@@ -40,21 +45,38 @@ define(function(require, exports, module) {
     this.add(menuMod).add(menu);
   }
 
+  function _createCreatedBy () {
+    var created = new Surface({
+      size: [undefined, 10],
+      content: 'By Amar and Joe',
+      properties: {
+        fontFamily: this.options.fontFamily,
+        textAlign: 'center',
+        fontSize: '.75rem'
+      }
+    });
+    var createdMod = new StateModifier({
+      align: [0.5, 0],
+      origin: [0.5, 0],
+      transform: Transform.translate(0, 130, 0)
+    });
+    
+    this.add(createdMod).add(created);
+  }
+
   function _createInspiredBy () {
     var inspired = new Surface({
       size: [undefined, 10],
-      content: 'Inspired by Monospace by Daniel Lutz',
+      content: 'Inspired by Monospace <br/> Daniel Lutz',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '.75rem'
       }
     });
     var inspiredMod = new StateModifier({
-      align: [0.5, 0],
-      origin: [0.5, 0],
-      transform: Transform.translate(0, 130, 0)
+      align: [0.5, 0.9],
+      origin: [0.5, 0.9]
     });
     
     this.add(inspiredMod).add(inspired);
@@ -65,12 +87,14 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'Play',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '3rem',
-        border: '2px solid black',
-        borderRadius: '10px'
+        borderRadius: '10px',
+        backgroundColor: '#34A4CC',
+        border: '2px solid #738F99',
+        cursor: 'pointer',
+        color: 'white'
       }
     });
     var playMod = new StateModifier({
@@ -79,11 +103,11 @@ define(function(require, exports, module) {
       transform: Transform.translate(0, 230, 0)
     });
 
-    play.on('touchstart', function (data) {
+    play.on('touchstart', function () {
       this._eventOutput.emit('levels');
     }.bind(this));
 
-    play.on('click', function (data) {
+    play.on('click', function () {
       this._eventOutput.emit('levels');
     }.bind(this));
     
@@ -95,25 +119,23 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'About',
       properties: {
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica',
+        fontFamily: this.options.fontFamily,
         textAlign: 'center',
         fontSize: '1rem',
-        border: '5px solid black',
-        borderRadius: '10px'
+        cursor: 'pointer'
       }
     });
     var aboutMod = new StateModifier({
       align: [0.5, 0],
       origin: [0.5, 0],
-      transform: Transform.translate(0, 400, 0)
+      transform: Transform.translate(0, 350, 0)
     });
 
-    about.on('touchstart', function (data) {
+    about.on('touchstart', function () {
       this._eventOutput.emit('about');
     }.bind(this));
 
-    about.on('click', function (data) {
+    about.on('click', function () {
       this._eventOutput.emit('about');
     }.bind(this));
     

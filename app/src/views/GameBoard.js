@@ -10,7 +10,6 @@ define(function(require, exports, module) {
   var DestroyerCube = require('views/DestroyerCube');
   var SmallCube     = require('views/SmallCube');
 
-
   function GameBoard() {
     View.apply(this, arguments);
     this.is2D = true;
@@ -31,9 +30,9 @@ define(function(require, exports, module) {
   GameBoard.DEFAULT_OPTIONS = {
     mainCubeSize: 400,
     destroyer: undefined,
-    destroyerColor: '#66CCFF',
+    destroyerColor: '#34A4CC',
     smallCube: undefined,
-    smallCubeColor: '#FF6600'
+    smallCubeColor: '#738F99'
   };
 
   // set the 2D-3D transition flag
@@ -57,10 +56,11 @@ define(function(require, exports, module) {
       }
     }
   };
-
+  
+  // Starting a new game; reset small cubes and destroyer cube position
   GameBoard.prototype.startNewGame = function(starter){
     this.destroyerCube.setPosition(_convertToPixels.call(this,starter.destroyer));
-    _restSmallCubes.call(this, starter.smallCube);
+    _resetSmallCubes.call(this, starter.smallCube);
   };
 
   // Create the destroyer cube
@@ -76,7 +76,7 @@ define(function(require, exports, module) {
   // Create the the game board/parent cube
   function _createParentCube () {
     this.cube = new CubeView({
-      size: this.options.mainCubeSize
+      size: this.options.mainCubeSize,
     });
 
     this.node.add(this.cube);
@@ -95,12 +95,13 @@ define(function(require, exports, module) {
       this.node.add(smallCube);
     }
   }
-
-  function _restSmallCubes(posMatrix){
+  
+  //reset all small cube's positon
+  function _resetSmallCubes(posMatrix){
     for (var i=0; i< this.smallCubes.length; i++){
-      if (posMatrix[i] !== undefined){
+      if (posMatrix[i] !== undefined){ //if position exist 
         this.smallCubes[i].setPosition(_convertToPixels.call(this,posMatrix[i]));
-      }else{
+      }else{ //if position isn't defined, go to starting position (off screen)
         this.smallCubes[i].setPosition(_convertToPixels.call(this,this.options.smallCube[i]));
       }
     }

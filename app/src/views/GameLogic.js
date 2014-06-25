@@ -241,7 +241,7 @@ define(function(require, exports, module) {
     // reset all variables
     function _startNewGame (starter){
       this.levelIndex = starter.levelNum;
-      this.starter = starter.level;
+      this.starter = starter;
       this.board = _forceSlice(starter.level.smallCube);
       this.destroyerCubeLocation = starter.level.destroyer;
       this.rotatingLogic.startNewGame(starter.level);

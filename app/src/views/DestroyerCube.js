@@ -4,6 +4,8 @@ define(function(require, exports, module) {
   var Transform     = require('famous/core/Transform');
   var Modifier      = require('famous/core/Modifier');
   var CubeView      = require('views/CubeView');
+  var MouseSync     = require('famous/inputs/MouseSync');
+  var TouchSync     = require('famous/inputs/TouchSync');
 
   function DestroyerCube() {
     View.apply(this, arguments);
@@ -11,8 +13,7 @@ define(function(require, exports, module) {
     // Save position for easy access
     this.position = this.options.startPosition;
     // Retain mouse data to determine the cube movement
-    this.downData = undefined;
-    this.upData = undefined;
+    this.posData = undefined;
 
     _createDestroyer.call(this);
     _setMovementListeners.call(this);
@@ -62,64 +63,76 @@ define(function(require, exports, module) {
   // include the direction that the cube should move
   function _setMovementListeners () {
     var movement;
+
+    var mouseSync = new MouseSync();
+    var touchSync = new TouchSync();
+
+    mouseSync.on('start', function (data) {
+      // initialize pos data
+      this.posData = {x:0, y:0};
+    }.bind(this));
+
+    mouseSync.on('update', function (data) {
+      //update x, y position
+      this.posData.x += data.delta[0];
+      this.posData.y += data.delta[1];
+    }.bind(this));
+
+    mouseSync.on('end', function () {
+      // calculate total movement to determin up/down/right/left and emit movement event
+      movement = _calculateMovement(this.posData);
+      this._eventOutput.emit('movingCubeToGB', movement);
+    }.bind(this));
+
+    touchSync.on('start', function (data) {
+      // initialize pos data
+      this.posData = {x:0, y:0};
+    }.bind(this));
+
+    touchSync.on('update', function (data) {
+      //update x, y position
+      this.posData.x += data.delta[0];
+      this.posData.y += data.delta[1];
+    }.bind(this));
+
+    touchSync.on('end', function () {
+      // calculate total movement to determin up/down/right/left and emit movement event
+      movement = _calculateMovement(this.posData);
+      this._eventOutput.emit('movingCubeToGB', movement);
+    }.bind(this));
+
     for (var i=0;i<this.destroyerCube.surfaces.length;i++) {
-      // Listen for mouse down event and save data
-      this.destroyerCube.surfaces[i].on('mousedown', function (data) {
-        this.downData = data;
-      }.bind(this));
-      // listen on mouse up even and save data in order to determine the diff
-      // between mouse down and up
-      // emit the event along with the direction
-      this.destroyerCube.surfaces[i].on('mouseup', function (data) {
-        this.upData = data;
-        movement = _calculateMovement(this.downData, this.upData);
-        this._eventOutput.emit('movingCubeToGB', movement);
-      }.bind(this));
-
-      this.destroyerCube.surfaces[i].on('touchstart', function (data) {
-        this.downData = {
-          x: data.changedTouches[0].clientX,
-          y: data.changedTouches[0].clientY
-        };
-      }.bind(this));
-
-      this.destroyerCube.surfaces[i].on('touchend', function (data) {
-        this.upData = {
-          x: data.changedTouches[0].clientX,
-          y: data.changedTouches[0].clientY
-        };
-        movement = _calculateMovement(this.downData, this.upData);
-        this._eventOutput.emit('movingCubeToGB', movement);
-        this.downData = undefined;
-      }.bind(this));
+      //pipe sync events to each cube surface
+      this.destroyerCube.surfaces[i].pipe(mouseSync);
+      this.destroyerCube.surfaces[i].pipe(touchSync);
     }
   }
   
   // Use the delta mouse movement to determine the direction that the destroyer cube
   // should move
-  function _calculateMovement (downData, upData) {
-    var xDelta = Math.abs(downData.x - upData.x);
-    var yDelta = Math.abs(downData.y - upData.y);
+  function _calculateMovement (posData) {
+    var xDelta = Math.abs(posData.x);
+    var yDelta = Math.abs(posData.y);
     var output = [0,0];
-    if (xDelta > 1 || yDelta > 1) {
+    if (xDelta > 5 || yDelta > 5) { // mouse must move at least 5 px
       // vertical
-      if (yDelta > xDelta) {
+      if (yDelta > xDelta) { //more y movement than x
         // move up
-        if (downData.y - upData.y > 0) {
+        if (posData.y < 0) {
           output = [0,1];
         }
         // move down
-        if (downData.y - upData.y < 0) {
+        if (posData.y > 0) {
           output = [0,-1];
         }
       // horizontal
-      } else {
+      } else { //more x movement than y
         // move left
-        if (downData.x - upData.x > 0) {
+        if (posData.x < 0) {
           output = [-1,0];
         }
         // move right
-        if (downData.x - upData.x < 0) {
+        if (posData.x > 0) {
           output = [1,0];
         }
       }

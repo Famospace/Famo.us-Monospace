@@ -116,7 +116,8 @@ define(function(require, exports, module) {
       properties: {
         fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
-        fontSize: '1rem'
+        fontSize: '1rem',
+        cursor: 'pointer'
       }
     });
     var aboutMod = new StateModifier({

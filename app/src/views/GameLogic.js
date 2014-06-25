@@ -15,11 +15,11 @@ define(function(require, exports, module) {
     var rootModifier = new Modifier();
     this.node = this.add(rootModifier);
 
+    this.terminate = false; // boolean to terminate sound if left demo view
+    this.showMenu = false; // boolean to show or hide menu
+    this.ready = true; // waiting for the menu transition is complete
+    
     // Create sound objects
-    this.terminate = false;
-    this.showMenu = false;
-    this.ready = true;
-
     this.mySound = new Buzz.sound("content/sounds/Smack.wav",{
       preload: true
     });
@@ -29,11 +29,11 @@ define(function(require, exports, module) {
     this.transitionSound = new Buzz.sound("content/sounds/swooshing-punch.wav",{
       preload: true
     });
-
-    this.twoDDataStructure = {};
-    this.is2d = false;
-    this.board = undefined;
-    this.destroyerCubeLocation = undefined;
+    
+    this.twoDDataStructure = {}; // data structure to track of cubes in 2D mode
+    this.is2d = false; // 2D 3D state
+    this.board = undefined; // reference to game board
+    this.destroyerCubeLocation = undefined; //reference to destroyer cube location
 
     _determineCubeSize.call(this);
     _createRotatingLogic.call(this);
@@ -73,6 +73,7 @@ define(function(require, exports, module) {
       ]
     };
 
+    // Create menu for game logic view to restart, move to menu view, move to level view
     function _createMenu () {
       var menuButton = new Surface({
         content: 'Menu',
@@ -81,17 +82,19 @@ define(function(require, exports, module) {
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
-          lineHeight: '45px'
+          lineHeight: '45px',
+          cursor: 'pointer'
         }
       });
 
+      // Create menu modifier to align top right corner
       var menuButtonMod = new Modifier({
         size: [50, 50],
         align: [1, 0],
         origin: [1, 0]
       });
 
-
+      // Create restart button surface
       var restartButton = new Surface({
         content:'Restart',
         properties: {
@@ -99,7 +102,8 @@ define(function(require, exports, module) {
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
-          lineHeight: '45px'
+          lineHeight: '45px',
+          cursor: 'pointer'
         }
       });
 
@@ -110,7 +114,7 @@ define(function(require, exports, module) {
         transform: Transform.translate(-50, -50, 0)
       });
 
-
+      // Create button surface to move back to level selection view
       var levelSelectButton = new Surface({
         content:'Levels',
         properties: {
@@ -118,7 +122,8 @@ define(function(require, exports, module) {
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
-          lineHeight: '45px'
+          lineHeight: '45px',
+          cursor: 'pointer'
         }
       });
 
@@ -129,7 +134,7 @@ define(function(require, exports, module) {
         transform: Transform.translate(-100, -50, 0)
       });
 
-
+      // Create button surface to move back to menu view
       var exitButton = new Surface({
         content:'Exit',
         properties: {
@@ -137,7 +142,8 @@ define(function(require, exports, module) {
           fontSize: '.8rem',
           fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
-          lineHeight: '45px'
+          lineHeight: '45px',
+          cursor: 'pointer'
         }
       });
 
@@ -149,11 +155,13 @@ define(function(require, exports, module) {
 
       });
 
+      // adding all the buttons to the root modifier
       this.node.add(menuButtonMod).add(menuButton);
       this.node.add(levelSelectButtonMod).add(levelSelectButton);
       this.node.add(restartButtonMod).add(restartButton);
       this.node.add(exitButtonMod).add(exitButton);
 
+      // create event listeners on each button
       menuButton.on('click', function () {
         if (!this.ready) return;
         if (this.showMenu) {
@@ -189,13 +197,14 @@ define(function(require, exports, module) {
         Timer.setTimeout(_hideMenu, 500);
       }.bind(this));
 
+      // hide the menu and transform each button off the page
       function _hideMenu () {
         restartButtonMod.setTransform(Transform.translate(-50, -50, 0), {duration: 500, curve: 'easeInOut'});
         levelSelectButtonMod.setTransform(Transform.translate(-100, -50, 0), {duration: 400, curve: 'easeInOut'});
         exitButtonMod.setTransform(Transform.translate(-140, -50, 0), {duration: 300, curve: 'easeInOut'});
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
-
+      // hide the menu and transform each button on to the page
       function _showMenu () {
         restartButtonMod.setTransform(Transform.translate(-50, 0, 0), {duration: 300, curve: 'easeInOut'});
         levelSelectButtonMod.setTransform(Transform.translate(-100, 0, 0), {duration: 400, curve: 'easeInOut'});
@@ -203,6 +212,11 @@ define(function(require, exports, module) {
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
     }
+<<<<<<< HEAD
+    // determine the game board (main cube) size base on window width;
+    // greater than 800: 400x400x400 cube
+    // less than 800: 200x200x200 cube
+=======
 
     function _saveToLocalStorage (levelIndex) {
       // checks to see if localstorage is enabled
@@ -219,13 +233,15 @@ define(function(require, exports, module) {
 
     }
 
+>>>>>>> 3dfda16583065eb84baeacfcc13d61fb521df8b1
     function _determineCubeSize(){
       console.log('windowwidth:', window.innerWidth);
       if (window.innerWidth < 800){
         this.options.mainCubeSize = 200;
       }
     }
- 
+    // method to start a new game base on input data of cube location (starter package); 
+    // reset all variables
     function _startNewGame (starter){
       this.levelIndex = starter.levelNum;
       this.starter = starter.level;
@@ -237,81 +253,87 @@ define(function(require, exports, module) {
       this.is2d = false;
       this.twoDDataStructure = {};
     }
-
+    
+    // restart current level by startNewGame with the current starter package
     function _restartGame(){
       console.log('restart game');
       _startNewGame.call(this,this.starter);
     }
     
+    // set startNewGame to prototype for external access
     GameLogic.prototype.startNewGame = _startNewGame;
 
+    // set soundOff variabale for demo view
     GameLogic.prototype.setSoundOff = function(bool){
       this.terminate = bool;
     };
 
+    // Create the button to change 2D/3D perspective 
     function _createPerspectiveButton () {
-        this.perspectiveButton = new Surface({
-          size: [undefined, undefined],
-          content: '<div>2D</div>',
-          properties: {
-            fontSize: '3rem',
-            fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
-            textAlign: 'center',
-            lineHeight: '65px',
-            verticalAlign: 'middle',
-            color: 'white',
-            backgroundColor: '#34A4CC',
-            borderRadius: '20px',
-            border: '3px solid #738F99',
-            cursor: 'pointer',
-            zIndex: 5
+      // Create button surface
+      this.perspectiveButton = new Surface({
+        size: [undefined, undefined],
+        content: '<div>2D</div>',
+        properties: {
+          fontSize: '3rem',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+          textAlign: 'center',
+          lineHeight: '65px',
+          verticalAlign: 'middle',
+          color: 'white',
+          backgroundColor: '#34A4CC',
+          borderRadius: '20px',
+          border: '3px solid #738F99',
+          cursor: 'pointer',
+          zIndex: 5
+        }
+      });
+
+      // create a modifier that will dynamically relocate the button base on the 
+      // size of the window with respect to cubesize
+      this.perspectiveButtonMod = new Modifier ({
+        size: function () {
+          if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+            return [75, 75];
+          } else {
+            return [75, 75];
           }
-        });
+        }.bind(this),
+        align: function () {
+          if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+            return [0.5, 0.5];
+          } else {
+            return [0.5, 0.5];
+          }
+        }.bind(this),
+        origin: function () {
+          if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
+            return [0.5, 0.98];
+          } else {
+            return [0.05, 0.5];
+          }
+        }.bind(this),
+      });
+      
+      // Create event listeners 
+      this.perspectiveButton.on('click', function () {
+        if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
+          this.transitionSound.play();
+          this._eventOutput.trigger('is2d', true);
+          this.perspectiveButton.setContent('3D');
+          this.is2d = !this.is2d;
+        } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
+          _deny3D.call(this);
+        } else {
+          this.transitionSound.play();
+          this._eventOutput.trigger('is2d', false);
+          this.perspectiveButton.setContent('2D');
+          this.is2d = !this.is2d;
+          _convertTo3d.call(this);
+        }
+      }.bind(this));
 
-
-        this.perspectiveButtonMod = new Modifier ({
-            size: function () {
-              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [75, 75];
-              } else {
-                return [75, 75];
-              }
-            }.bind(this),
-            align: function () {
-              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [0.5, 0.5];
-              } else {
-                return [0.5, 0.5];
-              }
-            }.bind(this),
-            origin: function () {
-              if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-                return [0.5, 0.98];
-              } else {
-                return [0.05, 0.5];
-              }
-            }.bind(this),
-        });
-
-        this.perspectiveButton.on('click', function () {
-          // console.log('2d click from gamelogic');
-            if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-                this.transitionSound.play();
-                this._eventOutput.trigger('is2d', true);
-                this.perspectiveButton.setContent('3D');
-                this.is2d = !this.is2d;
-            } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
-                _deny3D.call(this);
-            } else {
-                this.transitionSound.play();
-                this._eventOutput.trigger('is2d', false);
-                this.perspectiveButton.setContent('2D');
-                this.is2d = !this.is2d;
-                _convertTo3d.call(this);
-            }
-        }.bind(this));
-
-        this.node.add(this.perspectiveButtonMod).add(this.perspectiveButton);
+      this.node.add(this.perspectiveButtonMod).add(this.perspectiveButton);
     }
 
     // Create the rotating logic which controls the orientation of the game board

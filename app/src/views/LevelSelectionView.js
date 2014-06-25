@@ -127,6 +127,7 @@ define(function(require, exports, module) {
             fontSize: this.options.boxFontSize,
             backgroundColor: '#34A4CC',
             color: 'white',
+            cursor: 'pointer'
           }
         });
 
@@ -163,7 +164,9 @@ define(function(require, exports, module) {
         fontSize: '.8rem',
         fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         zIndex: 4,
-        lineHeight: '45px'
+        lineHeight: '45px',
+        cursor: 'pointer'
+
       }
     });
 

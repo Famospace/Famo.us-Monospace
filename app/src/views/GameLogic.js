@@ -20,13 +20,13 @@ define(function(require, exports, module) {
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects
-    this.mySound = new Buzz.sound("content/sounds/Smack.wav",{
+    this.mySound = new Buzz.sound("content/sounds/smack.wav",{
       preload: true
     });
     this.completeSound = new Buzz.sound("content/sounds/level-up.wav",{
       preload: true
     });
-    this.transitionSound = new Buzz.sound("content/sounds/swooshing-punch.wav",{
+    this.transitionSound = new Buzz.sound("content/sounds/swoosh.wav",{
       preload: true
     });
     
@@ -212,11 +212,6 @@ define(function(require, exports, module) {
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
     }
-<<<<<<< HEAD
-    // determine the game board (main cube) size base on window width;
-    // greater than 800: 400x400x400 cube
-    // less than 800: 200x200x200 cube
-=======
 
     function _saveToLocalStorage (levelIndex) {
       // checks to see if localstorage is enabled
@@ -233,7 +228,9 @@ define(function(require, exports, module) {
 
     }
 
->>>>>>> 3dfda16583065eb84baeacfcc13d61fb521df8b1
+    // determine the game board (main cube) size base on window width;
+    // greater than 800: 400x400x400 cube
+    // less than 800: 200x200x200 cube
     function _determineCubeSize(){
       console.log('windowwidth:', window.innerWidth);
       if (window.innerWidth < 800){
@@ -244,7 +241,7 @@ define(function(require, exports, module) {
     // reset all variables
     function _startNewGame (starter){
       this.levelIndex = starter.levelNum;
-      this.starter = starter.level;
+      this.starter = starter;
       this.board = _forceSlice(starter.level.smallCube);
       this.destroyerCubeLocation = starter.level.destroyer;
       this.rotatingLogic.startNewGame(starter.level);

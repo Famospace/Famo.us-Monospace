@@ -29,6 +29,8 @@ define(function(require, exports, module) {
 
   var perspectiveTrans = new Transitionable(500000);
 
+  perspectiveTrans.set(perspective,{ curve: Easing.outQuint, duration: 200});
+
   mainContext.add(fpsMeter);
   mainContext.add(modifier).add(menuView);
 

@@ -26,7 +26,7 @@ define(function(require, exports, module) {
       size: [undefined, 50],
       content: 'Famospace',
       properties: {
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '2.5rem'
       }
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
       size: [undefined, 10],
       content: 'By Amar and Joe',
       properties: {
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '.75rem'
       }
@@ -64,7 +64,7 @@ define(function(require, exports, module) {
       size: [undefined, 10],
       content: 'Inspired by Monospace <br/> Daniel Lutz',
       properties: {
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '.75rem'
       }
@@ -82,7 +82,7 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'Play',
       properties: {
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '3rem',
         borderRadius: '10px',
@@ -114,7 +114,7 @@ define(function(require, exports, module) {
       size: [150, 65],
       content: 'About',
       properties: {
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '1rem'
       }

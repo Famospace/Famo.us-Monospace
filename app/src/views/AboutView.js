@@ -39,7 +39,7 @@ define(function(require, exports, module) {
             color: "#404040",
             lineHeight: '50px',
             textAlign: 'center',
-            fontFamily: "HelveticaNeue-Light"
+            fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
           }
       });
 
@@ -51,7 +51,7 @@ define(function(require, exports, module) {
             color: "#404040",
             lineHeight: '50px',
             textAlign: 'center',
-            fontFamily: "HelveticaNeue-Light"
+            fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
           }
       });
     } else {
@@ -65,7 +65,7 @@ define(function(require, exports, module) {
           color: "#404040",
           lineHeight: '50px',
           textAlign: 'center',
-          fontFamily: "HelveticaNeue-Light"
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
         }
       });
 
@@ -77,7 +77,7 @@ define(function(require, exports, module) {
           color: "#404040",
           lineHeight: '50px',
           textAlign: 'center',
-          fontFamily: "HelveticaNeue-Light"
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
         }
       });
 

@@ -1,4 +1,4 @@
-/* This view is to create small cubes that gets destroyed by the destroyer cube*/
+/* This view is for displaying level selection; user will be able to choose levels in this view*/
 define(function(require, exports, module) {
   var View          = require('famous/core/View');
   var Surface       = require('famous/core/Surface');
@@ -15,10 +15,8 @@ define(function(require, exports, module) {
       size: [undefined, undefined]
     });
 
-    this.node = this.add(rootModifier);
-    this.levelSurfaces = [];
-
-    // console.log(Levels);
+    this.node = this.add(rootModifier); //root modifier
+    this.levelSurfaces = []; //save reference to each level surface
 
     _loadLocalStorage.call(this);
     _checkBoxSize.call(this);
@@ -30,8 +28,8 @@ define(function(require, exports, module) {
   }
 
   LevelSelection.DEFAULT_OPTIONS = {
-    width: 3,
-    height: 4,
+    row: 3,
+    column: 4,
     boxSize: 75,
     headerFontSize: '3rem',
     lineHeight: '65px',
@@ -42,6 +40,7 @@ define(function(require, exports, module) {
   LevelSelection.prototype = Object.create(View.prototype);
   LevelSelection.prototype.constructor = LevelSelection;
 
+  // load local storage to save completed level
   function _loadLocalStorage () {
 
     // checks to see if localstorage is enabled
@@ -55,13 +54,14 @@ define(function(require, exports, module) {
       // set up one if first time playing
       window.localStorage.setItem('famospace',[0,0,0,0,0,0,0,0,0,0,0,0]);
     }
-
+    // retrieve data from local storage
     this.localStorage = window.localStorage.getItem('famospace').split(',');
   }
-
+  
+  // determine the size of the window to determine the square size and font size
   function _checkBoxSize(){
-    var tempWidth = this.options.boxSize * (this.options.width+3);
-    var tempHeight = this.options.boxSize * (this.options.height+5);
+    var tempWidth = this.options.boxSize * (this.options.row+3);
+    var tempHeight = this.options.boxSize * (this.options.column+5);
 
     console.log('temp: ', tempWidth, tempHeight);
     console.log('actual:', window.innerWidth, window.innerHeight);
@@ -74,6 +74,7 @@ define(function(require, exports, module) {
     } 
   }
 
+  // Set listeners when levels are completed and update local storage with complete level
   function _setLevelCompletedListener () {
     this._eventInput.on('levelCompleted', function (levelIndex) {
       // update localStorage
@@ -84,9 +85,9 @@ define(function(require, exports, module) {
       this.levelSurfaces[levelIndex].setProperties({color: 'black'});
     }.bind(this));
   }
-
+  
+  // create the header for level selection
   function _createHeaderBlock(){
-
     var modifier = new Modifier({
       size: [window.innerWidth, this.options.boxSize],
       origin: [0.5, 0.1],
@@ -105,17 +106,19 @@ define(function(require, exports, module) {
 
     this.node.add(modifier).add(surface);
   }
-
+  // create a square for each box with listeners to load the proper level
   function _createLevelBlock(){
     var index = 1;
-    for (var j=0; j<this.options.height; j++){
-      for (var i=0; i < this.options.width; i++){
+    // cycle through each row and column
+    for (var j=0; j<this.options.column; j++){
+      for (var i=0; i < this.options.row; i++){
+        // placement of the square is determined by 
         var modifier = new Modifier({
           size: [this.options.boxSize, this.options.boxSize],
-          origin: [(1/(this.options.width+1))*(i+1), (1/(this.options.height+2))*(j+2)],
+          origin: [(1/(this.options.row+1))*(i+1), (1/(this.options.column+2))*(j+2)],
           align: [ 0.5, 0.5]
         });
-
+        
         var surface = new Surface({
           content: index,
           properties: {
@@ -132,16 +135,18 @@ define(function(require, exports, module) {
         });
 
         this.levelSurfaces.push(surface);
-
+        // if local storage for the level is set to 1, use black font
         if (this.localStorage && this.localStorage[index-1] === '1') {
           surface.setProperties({color: 'black'});
         }
-
+        
+        // on set listners on surface and bind with index, which represent the level
         surface.on('click', function(index){
           var levelPackage = {level: Levels.levels[index-1], levelNum: index-1};
           this.emit('startGameToL', levelPackage);
         }.bind(surface, index));
-
+        
+        // pipe surface to the view
         surface.pipe(this);
 
         this.node.add(modifier).add(surface);
@@ -150,12 +155,14 @@ define(function(require, exports, module) {
     }
   }
 
+  // listen for start game from level surface and emit event to game logic to start game
   function _setListeners(){
     this._eventInput.on('startGameToL', function(data){
       this._eventOutput.emit('startGame', data);
     }.bind(this));
   }
 
+  // create back button for level selection view
   function _createMenu () {
     var menuButton = new Surface({
       content: 'Back',

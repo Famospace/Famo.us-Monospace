@@ -312,7 +312,7 @@ define(function(require, exports, module) {
         }.bind(this),
       });
       
-      // Create event listeners 
+      // Create event listeners for 2D/3D transition
       this.perspectiveButton.on('click', function () {
         if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
           this.transitionSound.play();
@@ -365,83 +365,84 @@ define(function(require, exports, module) {
       this._eventInput.on('movingCubeToGL', function(data){
         // make a copy of the current cube location
         var requestedPos = this.destroyerCubeLocation.slice();
-
+        //an update flag, if movement update is required
         var update = false;
         for (var i =0; i<this.destroyerCubeLocation.length; i++){
           var tempUpdate = this.destroyerCubeLocation[i]
             + this.rotatingLogic.rVec[i]*data[0]
             + this.rotatingLogic.nVec[i]*data[1];
 
-          if (tempUpdate >= 0 && tempUpdate <= 3){
+          if (tempUpdate >= 0 && tempUpdate <= 3){ //determine
             requestedPos[i] = tempUpdate;
             update = true;
           }
         }
-        if(update){
+        if(update){ // if movement update is required check adjacent space
+          var newPos = _DCcanMove.call(this, requestedPos);           
 
-        }
-        var newPos = _DCcanMove.call(this, requestedPos);           
-
-        if (newPos){
-          this.destroyerCubeLocation = newPos;
-          _removeSmallCube.call(this, newPos);
-          this.rotatingLogic.setDestroyerPosition(newPos);
+          if (newPos){ 
+            //if a new positions is returned, move the destroyer cube and remove small cube
+            this.destroyerCubeLocation = newPos;
+            _removeSmallCube.call(this, newPos);
+            this.rotatingLogic.setDestroyerPosition(newPos);
+          }
         }
       }.bind(this));
     }
 
+    // function to determine if destroyer cube can move to the appointed location by determining
+    // whethere is is a small cube in that location
     function _DCcanMove (newPos) {
+      // Determine th current axial position in 2D view
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
 
+      // create key for 2D data structure object
       var newPos2D = [newPos[currentAxis.x], newPos[currentAxis.y]].join('');
 
-      // console.log('2d pos:', newPos2D);
-      // console.log('2d structure:', this.twoDDataStructure);
-      // console.log('2d array:', this.twoDDataStructure[newPos2D]);
-
-
+      // determine if key returns an array, if yes, pop the last element and return
       if (this.twoDDataStructure[newPos2D]) {
         if(this.twoDDataStructure[newPos2D].length > 0){
-          // console.log('in pop');
           var output = this.twoDDataStructure[newPos2D].pop();
-          // console.log('2d structure after:', this.twoDDataStructure);
           return output;
         }
       }
       return false;
     }
-
+    // remove small cube from given position
     function _removeSmallCube(pos){
-        // console.log('board', this);
-        for(var i =0; i < this.board.length; i++){
-            if (this.board[i][0] === pos[0]
-                && this.board[i][1] === pos[1]
-                && this.board[i][2] === pos[2]){
-                // console.log('array', this.board);
-                // console.log('remove', pos);
-                this.board.splice(i,1);
-                // console.log('array', this.board.length);
-                if (!this.terminate){
-                  this.mySound.play();
-                };
-                if(this.board.length < 1){
-                  // console.log('complete');
-                  if (!this.terminate){
-                    _saveToLocalStorage.call(this, this.levelIndex);
-                    this.completeSound.play();
-                  };
-                  Timer.setTimeout(function(){
-                    this._eventOutput.emit('levels');
-                  }.bind(this), 500);
-                }
-                return;
-            }
+      for(var i =0; i < this.board.length; i++){
+        // if position matches the position at i in the game board
+        if (this.board[i][0] === pos[0]
+          && this.board[i][1] === pos[1]
+          && this.board[i][2] === pos[2]){
+
+          // remove the piece from array
+          this.board.splice(i,1);
+          //play sound if allowed
+          if (!this.terminate){
+            this.mySound.play();
+          };
+          if(this.board.length < 1){
+            // if board is less than 1 (last piece); play sound move back to levels view
+            if (!this.terminate){
+              _saveToLocalStorage.call(this, this.levelIndex);
+              this.completeSound.play();
+            };
+            Timer.setTimeout(function(){
+              this._eventOutput.emit('levels');
+            }.bind(this), 500);
+          }
+          return;
         }
-        console.log('no cube removed', pos);
+      }
+      console.log('no cube removed', pos);
     }
+    
+    // expose removeSmallCube function for external use (demo view)
+    GameLogic.prototype.removeSmallCube = _removeSmallCube;
 
-    GameLogic.prototype._removeSmallCube = _removeSmallCube;
-
+    // determine wheter converting to 2D is a legal move (when a small cube is above,
+    // in terms of depth, of the destroyer cube in 3D mode, 2D mode is not allowed)
     function _ableToConvertTo2d () {
       _create2dDataStructure.call(this);
       // find current zAxis and zPosNeg
@@ -456,23 +457,21 @@ define(function(require, exports, module) {
       var currentSmallCubePos = this.twoDDataStructure;
       var match = currentSmallCubePos[key];
 
-      console.log('dc loc, cur axis:',dcLocation, currentAxis);
-      console.log('match, key, currentSmallCubePos:',match, key, currentSmallCubePos);
-
-
-      return ( match && match.length > 0 &&
-          (
-            ( currentAxis.zPosNeg > 0 && (dcLocation[currentAxis.z] < match[0][currentAxis.z])) ||
-            ( currentAxis.zPosNeg < 0 && (dcLocation[currentAxis.z] > match[0][currentAxis.z]))
-          )
-       ) ? false : true;
+      // if match is not null and check the depth between destroyer and small cubes
+      return ( match &&
+        (
+          ( currentAxis.zPosNeg > 0 && (dcLocation[currentAxis.z] < match[0][currentAxis.z])) ||
+          ( currentAxis.zPosNeg < 0 && (dcLocation[currentAxis.z] > match[0][currentAxis.z]))
+        )
+      ) ? false : true;
     }
-
+    
+    // determine the current state of axial position
     function _findCurrentXY (nVec, rVec, state) {
       // identifies which index is current X, Y, and Z
-
       var result = {}, i, j, k;
-
+      
+      // normal vector is y axis in 2D
       for (i=0;i<nVec.length;i++) {
         if (nVec[i] !== 0) {
           result.y = i;
@@ -480,7 +479,7 @@ define(function(require, exports, module) {
           break;
         }
       }
-
+      // right vector is the z axis in 2D
       for (j=0;j<rVec.length;j++) {
         if (rVec[j] !== 0) {
           result.x = j;
@@ -488,7 +487,7 @@ define(function(require, exports, module) {
           break;
         }
       }
-
+      // state vector doesnt show in 2D
       for (k=0;k<state.length;k++) {
         if (state[k] !== 0) {
           result.z = k;
@@ -496,17 +495,17 @@ define(function(require, exports, module) {
           break;
         }
       }
-
       return result;
     }
-
+    
+    // compress 3D coordinate system into a 2D data structure with 2D coordinate as key
     function _create2dDataStructure () {
 
       var currentAxis = _findCurrentXY(this.rotatingLogic.nVec, this.rotatingLogic.rVec, this.rotatingLogic.state);
       var key = '';
       var smallCube;
       
-     var currentSmallCubePos = _forceSlice(this.board);
+      var currentSmallCubePos = _forceSlice(this.board);
 
       // creates twoDDataStructure
       // format: { XY coordinates: [[first visible box at XY], [second visible box at XY], [etc.]] }
@@ -528,13 +527,14 @@ define(function(require, exports, module) {
           }
         }
       }
-      console.info('%c2D Data Structure: ', 'color: blue', this.twoDDataStructure);
     }
 
+    // intialize 2D data structure when converting back to 3D
     function _convertTo3d () {
       this.twoDDataStructure = {};
     }
 
+    // Slice array in array
     function _forceSlice (array) {
       var newArray = [];
       for (var i=0;i<array.length;i++) {

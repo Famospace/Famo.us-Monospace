@@ -98,7 +98,7 @@ define(function(require, exports, module) {
       properties: {
         textAlign: 'center',
         verticalAlign: 'middle',
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         fontSize: this.options.headerFontSize
       }
     });
@@ -123,7 +123,7 @@ define(function(require, exports, module) {
             borderRadius: '7px',
             textAlign: 'center',
             lineHeight: this.options.lineHeight,
-            fontFamily: 'HelveticaNeue-Light',
+            fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
             fontSize: this.options.boxFontSize,
             backgroundColor: '#34A4CC',
             color: 'white',
@@ -161,7 +161,7 @@ define(function(require, exports, module) {
       properties: {
         textAlign: 'center',
         fontSize: '.8rem',
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         zIndex: 4,
         lineHeight: '45px'
       }

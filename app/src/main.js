@@ -2,13 +2,13 @@ define(function(require, exports, module) {
 
   var Engine          = require('famous/core/Engine');
   var Modifier        = require('famous/core/Modifier');
+  var Transitionable  = require('famous/transitions/Transitionable');
   var FpsMeter        = require('views/FpsMeterView');
   var GameLogic       = require('views/GameLogic');
-  var DemoView        = require('views/DemoView');
   var MenuView        = require('views/MenuView');
+  var Easing          = require('famous/transitions/Easing');
 
   var fpsMeter        = new FpsMeter();
-
 
   var modifier = new Modifier({
     align: [0.5, 0.5],
@@ -27,18 +27,35 @@ define(function(require, exports, module) {
 
   var menuView = new MenuView();
 
+  var perspectiveTrans = new Transitionable(500000);
+
+  mainContext.add(fpsMeter);
+  mainContext.add(modifier).add(menuView);
+
   menuView._eventOutput.on('is2d', function (boolean) {
-  if (boolean) {
-      mainContext.setPerspective(1000000);
+    if (boolean) {
+      Engine.on('prerender', changePerspective);
+      perspectiveTrans.set(500000,{
+          curve: Easing.inQuint,
+          duration: 200
+      }, function() {
+          Engine.removeListener('prerender', changePerspective);
+      });
     } else {
-      mainContext.setPerspective(perspective);
+      Engine.on('prerender', changePerspective);
+      perspectiveTrans.set(perspective,{
+          curve: Easing.outQuint,
+          duration: 200
+      }, function() {
+          Engine.removeListener('prerender', changePerspective);
+      });
     }
   });
 
-  mainContext.add(fpsMeter);
 
 
-  mainContext.add(modifier).add(menuView);
 
-
+    function changePerspective() {
+        mainContext.setPerspective(perspectiveTrans.get());
+    }
 });

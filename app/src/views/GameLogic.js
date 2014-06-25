@@ -79,7 +79,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px'
         }
@@ -97,7 +97,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px'
         }
@@ -116,7 +116,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px'
         }
@@ -135,7 +135,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px'
         }
@@ -227,7 +227,6 @@ define(function(require, exports, module) {
     }
  
     function _startNewGame (starter){
-      console.log(starter);
       this.levelIndex = starter.levelNum;
       this.starter = starter.level;
       this.board = _forceSlice(starter.level.smallCube);
@@ -256,7 +255,7 @@ define(function(require, exports, module) {
           content: '<div>2D</div>',
           properties: {
             fontSize: '3rem',
-            fontFamily: 'HelveticaNeue-Light',
+            fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
             textAlign: 'center',
             lineHeight: '65px',
             verticalAlign: 'middle',

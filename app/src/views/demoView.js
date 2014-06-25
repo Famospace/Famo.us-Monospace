@@ -41,7 +41,7 @@ define(function(require, exports, module) {
           _startDemoPlay.call(this);
           _startDemoText.call(this);
         }
-      }.bind(this), 5000);
+      }.bind(this), 6000);
     }
 
     DemoView.prototype = Object.create(View.prototype);
@@ -49,7 +49,7 @@ define(function(require, exports, module) {
 
     DemoView.DEFAULT_OPTIONS = {
       crashTextProps: {
-        fontFamily: 'HelveticaNeue-Light',
+        fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
         textAlign: 'center',
         fontSize: '1.2rem'
       }
@@ -60,7 +60,7 @@ define(function(require, exports, module) {
         size: [25, 25],
         content: 'Skip',
         properties: {
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           textAlign: 'center',
           fontSize: '1.5rem'
         }
@@ -81,6 +81,10 @@ define(function(require, exports, module) {
         this.skip = true;
         this._eventOutput.emit('demoToMainMenu');
       }.bind(this));
+
+      Timer.setTimeout(function () {
+        skipMod.setOpacity(0, {curve: 'easeInOut', duration: 250});
+      }.bind(this), 25000);
 
       this.node.add(skipMod).add(skip);
 
@@ -185,7 +189,7 @@ define(function(require, exports, module) {
           0,
               {duration: 500, curve: Easing.inCubic}
         );
-      }.bind(this), 5150);
+      }.bind(this), 5500);
     }
 
     function _startDemoText () {
@@ -195,14 +199,16 @@ define(function(require, exports, module) {
       var destroyerTellTrans = new Transitionable(0);
       var objectiveTellTrans = new Transitionable(0);
 
+
+
       // create swipe instructional text
       var swipeTell = new Surface({
         opacity: 0,
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light",
-          zIndex: 10
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+          zIndex: 30
         }
       });
 
@@ -231,8 +237,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light",
-          zIndex: 10
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+          zIndex: 30
         }
       });
 
@@ -250,7 +256,7 @@ define(function(require, exports, module) {
       
       demoTextTimer += 2300;
       Timer.setTimeout(function () {
-        perspecChange.setContent('Toggle 2D and 3D');
+        perspecChange.setContent('Toggle<br/>2D and 3D');
         perspecTransitionable.set(1, { duration: 1000, curve: Easing.inBack });
         perspecTransitionable.set(0, { duration: 1000, curve: Easing.inBack });
       }, demoTextTimer);
@@ -261,8 +267,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light",
-          zIndex: 10
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+          zIndex: 30
         }
       });
 
@@ -291,8 +297,8 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '2rem',
-          fontFamily: "HelveticaNeue-Light",
-          zIndex: 10
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
+          zIndex: 30
         }
       });
 
@@ -360,7 +366,7 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
       
       // crush
-      demoTimer += 2500;
+      demoTimer += 2700;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 3, 1]);
         this.gameLogic._removeSmallCube([0, 3, 1]);
@@ -377,7 +383,7 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
 
       // rotate up
-      demoTimer += 1000;
+      demoTimer += 1200;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.rotate(Math.PI/2, 3 * Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
@@ -393,7 +399,7 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
 
       // crush
-      demoTimer += 1000;
+      demoTimer += 1200;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([0, 2, 2]);
         this.gameLogic._removeSmallCube([0, 2, 2]);
@@ -417,7 +423,7 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
 
       // // rotate up
-      demoTimer += 1000;
+      demoTimer += 1200;
       Timer.setTimeout(function () {
         demoBoardModifier.setTransform(Transform.rotate(Math.PI, -Math.PI/2, 0), {duration: 1000, curve: 'easeInOut'});
       }.bind(this), demoTimer);
@@ -433,7 +439,7 @@ define(function(require, exports, module) {
       }.bind(this), demoTimer);
 
       // crush
-      demoTimer += 1000;
+      demoTimer += 1200;
       Timer.setTimeout(function () {
         this.gameLogic.rotatingLogic.setDestroyerPosition([3, 0, 3]);
         this.gameLogic._removeSmallCube([3, 0, 3]);
@@ -455,7 +461,7 @@ define(function(require, exports, module) {
 
       // win
       // switch to 3D
-      demoTimer += 1000;
+      demoTimer += 1200;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
         if(!this.skip){this.transitionSound.play()};

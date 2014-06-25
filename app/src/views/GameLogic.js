@@ -20,13 +20,13 @@ define(function(require, exports, module) {
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects
-    this.mySound = new Buzz.sound("content/sounds/smack.wav",{
+    this.mySound = new Buzz.sound('content/sounds/smack.wav',{
       preload: true
     });
-    this.completeSound = new Buzz.sound("content/sounds/level-up.wav",{
+    this.completeSound = new Buzz.sound('content/sounds/level-up.wav',{
       preload: true
     });
-    this.transitionSound = new Buzz.sound("content/sounds/swoosh.wav",{
+    this.transitionSound = new Buzz.sound('content/sounds/swoosh.wav',{
       preload: true
     });
     
@@ -69,7 +69,7 @@ define(function(require, exports, module) {
         [-1000, -1000, -1000],
         [-1000, -1000, -1000],
         [-1000, -1000, -1000],
-        [-1000, -1000, -1000],
+        [-1000, -1000, -1000]
       ]
     };
 
@@ -177,7 +177,7 @@ define(function(require, exports, module) {
 
       restartButton.on('click', function () {
         if (!this.showMenu) return false;
-        console.log('clicked restart');
+        // console.log('clicked restart');
         _restartGame.call(this);
         this.showMenu = false;
         Timer.setTimeout(_hideMenu, 500);
@@ -215,25 +215,20 @@ define(function(require, exports, module) {
 
     function _saveToLocalStorage (levelIndex) {
       // checks to see if localstorage is enabled
-      if (!window.localStorage || window.localStorage === null) {
-        return;
-      }
+      if (!window.localStorage || window.localStorage === null) return;
 
       var localStorage = window.localStorage.getItem('famospace').split(',');
 
       //send event to LevelSelectionView to change level color and update localStorage
-      if (localStorage[levelIndex] === '0') {
-        this._eventOutput.emit('levelCompleted', levelIndex);
-      }
-
+      if (localStorage[levelIndex] === '0') this._eventOutput.emit('levelCompleted', levelIndex);
     }
 
     // determine the game board (main cube) size base on window width;
     // greater than 800: 400x400x400 cube
     // less than 800: 200x200x200 cube
     function _determineCubeSize(){
-      console.log('windowwidth:', window.innerWidth);
-      if (window.innerWidth < 600 || window.innerHeight < 600){
+      // console.log('windowwidth:', window.innerWidth);
+      if (window.innerWidth < 800){
         this.options.mainCubeSize = 200;
       }
     }
@@ -253,7 +248,7 @@ define(function(require, exports, module) {
     
     // restart current level by startNewGame with the current starter package
     function _restartGame(){
-      console.log('restart game');
+      // console.log('restart game');
       _startNewGame.call(this,this.starter);
     }
     
@@ -298,7 +293,26 @@ define(function(require, exports, module) {
           }
         }.bind(this),
         origin: function () {
-          return (window.innerWidth < 800) ? [0.5, 0.985] : [0.5, 0.9];
+
+          if (window.innerWidth >= 1150) {
+            if (window.innerHeight >= 800) {
+             return [0.5, 0.97];
+             } else {
+             return [0.83, 0.5];
+            }
+          } else if (window.innerWidth >= 800) {
+            if (window.innerHeight >= 800) {
+              return [0.5, 0.97];
+             } else {
+              return [0.97, 0.5];
+            }
+          } else {
+            if (window.innerHeight < 475) {
+              return [0.97, 0.5];
+             } else {
+              return [0.5, 0.97];
+            }
+          }
         }
       });
       
@@ -409,15 +423,13 @@ define(function(require, exports, module) {
           // remove the piece from array
           this.board.splice(i,1);
           //play sound if allowed
-          if (!this.terminate){
-            this.mySound.play();
-          };
+          if (!this.terminate) this.mySound.play();
           if(this.board.length < 1){
             // if board is less than 1 (last piece); play sound move back to levels view
             if (!this.terminate){
               _saveToLocalStorage.call(this, this.levelIndex);
               this.completeSound.play();
-            };
+            }
             Timer.setTimeout(function(){
               this._eventOutput.emit('levels');
             }.bind(this), 500);
@@ -425,7 +437,7 @@ define(function(require, exports, module) {
           return;
         }
       }
-      console.log('no cube removed', pos);
+      // console.log('no cube removed', pos);
     }
     
     // expose removeSmallCube function for external use (demo view)

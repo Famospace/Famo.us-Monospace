@@ -1,11 +1,11 @@
 /* this view is for creater contact info */
 define(function(require, exports, module) {
-  var View      = require('famous/core/View');
-  var Surface     = require('famous/core/Surface');
-  var Modifier     = require('famous/core/Modifier');
-  var Transform   = require('famous/core/Transform');
+  var View          = require('famous/core/View');
+  var Surface       = require('famous/core/Surface');
+  var Modifier      = require('famous/core/Modifier');
+  var Transform     = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
-  var GridLayout = require("famous/views/GridLayout");
+  var GridLayout    = require("famous/views/GridLayout");
 
   function AboutView() {
     View.apply(this, arguments);
@@ -17,7 +17,15 @@ define(function(require, exports, module) {
   AboutView.prototype = Object.create(View.prototype);
   AboutView.prototype.constructor = AboutView;
 
-  AboutView.DEFAULT_OPTIONS = {};
+  AboutView.DEFAULT_OPTIONS = {
+    bioProps: {
+      backgroundColor: 'white',
+      color: "#404040",
+      lineHeight: '50px',
+      textAlign: 'center',
+      fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
+    }
+  };
 
   function _createAuthors () {
 
@@ -35,56 +43,33 @@ define(function(require, exports, module) {
       amar = new Surface({
         content: '<br/><h2>Amar Patel</h2><center><img width="85%" src="content/images/amar.png"/></center><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/amarmpatel"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">amarpatel.io</a>',
         size: [undefined, undefined],
-        properties: {
-          backgroundColor: 'white',
-          borderRight: '1px solid lightgrey',
-          color: "#404040",
-          lineHeight: '50px',
-          textAlign: 'center',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
-        }
+        properties: this.options.bioProps
       });
+
+      amar.setProperties({borderRight: '1px solid lightgrey'});
 
       joe = new Surface({
         content: '<br/><h2>Joe Dou</h2><center><img width="85%" src="content/images/joe.png"/></center><span display="inline-block"><a href="http://www.github.com/joedou"><img width="20%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/joedou"><img width="20%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.whatwouldjoedou.com/">whatwouldjoedou.com</a>',
         size: [undefined, undefined],
-        properties: {
-          backgroundColor: 'white',
-          color: "#404040",
-          lineHeight: '50px',
-          textAlign: 'center',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
-        }
+        properties: this.options.bioProps
       });
     } else { // If the window width is greater than 800 px use this layout (target desktop)
       amar = new Surface({
         content: '<br/><h2>Amar Patel</h2><center><img width="25%" src="content/images/amar.png"/></center><br/><br/><br/><span display="inline-block"><a href="http://www.github.com/theamarpatel"><img width="6%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/amarmpatel"><img width="5%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.amarpatel.io/">amarpatel.io</a>',
         size: [undefined, undefined],
-        properties: {
-          backgroundColor: 'white',
-          borderRight: '1px solid lightgrey',
-          color: "#404040",
-          lineHeight: '50px',
-          textAlign: 'center',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
-        }
+        properties: this.options.bioProps
       });
+
+      amar.setProperties({borderRight: '1px solid lightgrey'});
 
       joe = new Surface({
         content: '<br/><h2>Joe Dou</h2><center><img width="25%" src="content/images/joe.png"/></center><br/><br/><br/><span display="inline-block"><a href="http://www.github.com/joedou"><img width="6%" src="https://assets-cdn.github.com/images/modules/logos_page/Octocat.png"/></a>  <a href="http://www.linkedin.com/in/joedou"><img width="5%" src="http://press.linkedin.com/display-media/206/4"/></a></span><br/><a color="#000" href="http://www.whatwouldjoedou.com/">whatwouldjoedou.com</a>',
         size: [undefined, undefined],
-        properties: {
-          backgroundColor: 'white',
-          color: "#404040",
-          lineHeight: '50px',
-          textAlign: 'center',
-          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif'
-        }
+        properties: this.options.bioProps
       });
     }
 
-    surfaces.push(amar);
-    surfaces.push(joe);
+    surfaces.push(amar, joe);
 
     this.add(grid);
   }

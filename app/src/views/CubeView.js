@@ -26,7 +26,7 @@ define(function(require, exports, module) {
   CubeView.prototype.constructor = CubeView;
 
   CubeView.DEFAULT_OPTIONS = {
-    size: 200,
+    size: 200
   };
 
   module.exports = CubeView;
@@ -80,7 +80,7 @@ define(function(require, exports, module) {
           Transform.translate(currentSurface[0],currentSurface[1],currentSurface[2]),
           Transform.rotate(currentRotation[0],currentRotation[1],currentRotation[2])
         );
-      surfaceModifier.setTransform( matrixData, {duration: 0});
+      surfaceModifier.transformFrom( matrixData );
 
       // add to view's context for presentation
       this.rootNode.add(surfaceModifier).add(surface);

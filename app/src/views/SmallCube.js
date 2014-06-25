@@ -42,12 +42,12 @@ define(function(require, exports, module) {
     var smallCube = new CubeView({ size: this.options.size });
 
     for (var i=0;i<smallCube.surfaces.length;i++) {
-        smallCube.surfaces[i].setProperties({
-            size: this.options.size,
-            backgroundColor: this.options.cubeColor,
-            opacity: this.options.opacity,
-            pointerEvents: 'none'
-        });
+      smallCube.surfaces[i].setProperties({
+        size: this.options.size,
+        backgroundColor: this.options.cubeColor,
+        opacity: this.options.opacity,
+        pointerEvents: 'none'
+      });
     }
 
     var smallCubeModifier = new Modifier({

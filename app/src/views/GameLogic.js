@@ -80,7 +80,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px',
           cursor: 'pointer'
@@ -100,7 +100,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px',
           cursor: 'pointer'
@@ -120,7 +120,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px',
           cursor: 'pointer'
@@ -140,7 +140,7 @@ define(function(require, exports, module) {
         properties: {
           textAlign: 'center',
           fontSize: '.8rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           zIndex: 4,
           lineHeight: '45px',
           cursor: 'pointer'
@@ -212,9 +212,28 @@ define(function(require, exports, module) {
         Timer.setTimeout(function () {this.ready = true;}.bind(this), 500);
       }
     }
+<<<<<<< HEAD
     // determine the game board (main cube) size base on window width;
     // greater than 800: 400x400x400 cube
     // less than 800: 200x200x200 cube
+=======
+
+    function _saveToLocalStorage (levelIndex) {
+      // checks to see if localstorage is enabled
+      if (!window.localStorage || window.localStorage === null) {
+        return;
+      }
+
+      var localStorage = window.localStorage.getItem('famospace').split(',');
+
+      //send event to LevelSelectionView to change level color and update localStorage
+      if (localStorage[levelIndex] === '0') {
+        this._eventOutput.emit('levelCompleted', levelIndex);
+      }
+
+    }
+
+>>>>>>> 3dfda16583065eb84baeacfcc13d61fb521df8b1
     function _determineCubeSize(){
       console.log('windowwidth:', window.innerWidth);
       if (window.innerWidth < 800){
@@ -224,10 +243,11 @@ define(function(require, exports, module) {
     // method to start a new game base on input data of cube location (starter package); 
     // reset all variables
     function _startNewGame (starter){
-      this.starter = starter;
-      this.board = _forceSlice(starter.smallCube);
-      this.destroyerCubeLocation = starter.destroyer;
-      this.rotatingLogic.startNewGame(starter);
+      this.levelIndex = starter.levelNum;
+      this.starter = starter.level;
+      this.board = _forceSlice(starter.level.smallCube);
+      this.destroyerCubeLocation = starter.level.destroyer;
+      this.rotatingLogic.startNewGame(starter.level);
       this._eventOutput.trigger('is2d', false);
       this.perspectiveButton.setContent('2D');
       this.is2d = false;
@@ -256,7 +276,7 @@ define(function(require, exports, module) {
         content: '<div>2D</div>',
         properties: {
           fontSize: '3rem',
-          fontFamily: 'HelveticaNeue-Light',
+          fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
           textAlign: 'center',
           lineHeight: '65px',
           verticalAlign: 'middle',
@@ -410,6 +430,7 @@ define(function(require, exports, module) {
                 if(this.board.length < 1){
                   // console.log('complete');
                   if (!this.terminate){
+                    _saveToLocalStorage.call(this, this.levelIndex);
                     this.completeSound.play();
                   };
                   Timer.setTimeout(function(){

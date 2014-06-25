@@ -233,7 +233,7 @@ define(function(require, exports, module) {
     // less than 800: 200x200x200 cube
     function _determineCubeSize(){
       console.log('windowwidth:', window.innerWidth);
-      if (window.innerWidth < 800){
+      if (window.innerWidth < 600 || window.innerHeight < 600){
         this.options.mainCubeSize = 200;
       }
     }

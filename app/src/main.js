@@ -19,7 +19,7 @@ define(function(require, exports, module) {
 
   var mainContext = Engine.createContext();
   // default perspective is 1000; 500 for smaller devices
-  var perspective = (window.innerWidth < 800) ? 500 : 1000;
+  var perspective = (window.innerWidth < 600 || window.innerHeight < 600) ? 500 : 1000;
 
   mainContext.setPerspective(perspective);
 

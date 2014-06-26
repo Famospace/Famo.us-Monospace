@@ -12,6 +12,11 @@ define(function(require, exports, module) {
 
   var fpsMeter        = new FpsMeter();
 
+  if (!buzz) {
+    console.log('not loaded!');
+    return window.location.reload(true);
+  }
+
   var modifier = new Modifier({
     align: [0.5, 0.5],
     origin: [0.5, 0.5]

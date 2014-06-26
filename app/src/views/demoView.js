@@ -25,7 +25,6 @@ define(function(require, exports, module) {
       this.skip = false;
       
       //inject sound for 2d/3d transition
-      if (!buzz) window.location.reload(true);
       this.transitionSound = new buzz.sound('content/sounds/swoosh.wav', {preload: true});
 
       // creates skip button to bybass intro animation

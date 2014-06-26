@@ -45,7 +45,7 @@ define(function(require, exports, module) {
   GameBoard.prototype.setDestroyerPosition = function(pos){
     // convert game board coordinate to pixels
     var posPix = _convertToPixels.call(this,pos);
-    this.destroyerCube.setPosition(posPix);
+    this.destroyerCube.setPosition(posPix, true);
     for (var i = 0; i < this.smallCubes.length; i++){
       var cubePos = this.smallCubes[i].getPosition();
       // Checks for small cube position that matches the new destroyer cube position

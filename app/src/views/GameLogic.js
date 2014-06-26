@@ -228,7 +228,7 @@ define(function(require, exports, module) {
     // less than 800: 200x200x200 cube
     function _determineCubeSize(){
       // console.log('windowwidth:', window.innerWidth);
-      if (window.innerWidth < 800){
+      if (window.innerWidth < 600 || window.innerHeight < 600){
         this.options.mainCubeSize = 200;
       }
     }
@@ -287,26 +287,28 @@ define(function(require, exports, module) {
         size: [75, 75],
         align: [0.5, 0.5],
         origin: function () {
-          if (window.innerWidth >= 1150) {
-            if (window.innerHeight >= 800) {
-             return [0.5, 0.97];
-            } else {
-             return [0.83, 0.5];
-            }
-          } else if (window.innerWidth >= 800) {
-            if (window.innerHeight >= 800) {
+          if (this.options.mainCubeSize < 400){
+            if (window.innerWidth < window.innerHeight) {
               return [0.5, 0.97];
-            } else {
+            }else{
               return [0.97, 0.5];
             }
-          } else {
-            if (window.innerHeight < 450) {
-              return [0.97, 0.5];
-            } else {
-              return [0.5, 0.97];
+          }else{
+            if (window.innerHeight > window.innerWidth) {
+              if (window.innerHeight < 1000){
+                return [0.5, 0.97];
+              }else{
+                return [0.5, 0.83];
+              }
+            }else{
+              if (window.innerWidth < 1100){
+                return [0.95, 0.5];
+              }else{
+                return [0.83, 0.5];
+              }
             }
           }
-        }
+        }.bind(this)
       });
       
       // Create event listeners for 2D/3D transition

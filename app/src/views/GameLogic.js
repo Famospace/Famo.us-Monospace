@@ -20,6 +20,7 @@ define(function(require, exports, module) {
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects
+    if (!buzz) window.location.reload(true);
     this.mySound = new buzz.sound('content/sounds/smack.wav',{
       preload: true
     });

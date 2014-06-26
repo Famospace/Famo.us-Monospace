@@ -285,31 +285,24 @@ define(function(require, exports, module) {
       // size of the window with respect to cubesize
       this.perspectiveButtonMod = new Modifier ({
         size: [75, 75],
-        align: function () {
-          if (((window.innerWidth - this.options.mainCubeSize) / 2) < 150) {
-            return [0.5, 0.5];
-          } else {
-            return [0.5, 0.5];
-          }
-        }.bind(this),
+        align: [0.5, 0.5],
         origin: function () {
-
           if (window.innerWidth >= 1150) {
             if (window.innerHeight >= 800) {
              return [0.5, 0.97];
-             } else {
+            } else {
              return [0.83, 0.5];
             }
           } else if (window.innerWidth >= 800) {
             if (window.innerHeight >= 800) {
               return [0.5, 0.97];
-             } else {
+            } else {
               return [0.97, 0.5];
             }
           } else {
-            if (window.innerHeight < 475) {
+            if (window.innerHeight < 450) {
               return [0.97, 0.5];
-             } else {
+            } else {
               return [0.5, 0.97];
             }
           }

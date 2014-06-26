@@ -16,21 +16,21 @@
     <!-- endbuild -->
     
     <!-- build:js(app/) src/polyfills.js -->
-    <script type="text/javascript" src="lib/famous-polyfills/functionPrototypeBind.js"></script>
-    <script type="text/javascript" src="lib/famous-polyfills/classList.js"></script>
-    <script type="text/javascript" src="lib/famous-polyfills/requestAnimationFrame.js"></script>
+    <script async type="text/javascript" src="lib/famous-polyfills/functionPrototypeBind.js"></script>
+    <script async type="text/javascript" src="lib/famous-polyfills/classList.js"></script>
+    <script async type="text/javascript" src="lib/famous-polyfills/requestAnimationFrame.js"></script>
     <!-- endbuild -->
     
     <!-- build:js(app/) src/vendor.js -->
-    <script type="text/javascript" src="lib/buzz/dist/buzz.js"></script>
+    <script async type="text/javascript" src="lib/buzz/dist/buzz.js"></script>
     <!-- endbuild -->
 
     <!-- process:remove:dev -->
-    <script type="text/javascript" src="src/main.js"></script>
+    <script defer type="text/javascript" src="src/main.js"></script>
     <!-- /process -->
     
     <!-- process:remove:dist -->
-    <script type="text/javascript" src="lib/requirejs/require.js" data-main="src/requireConfig"></script>
+    <script async type="text/javascript" src="lib/requirejs/require.js" data-main="src/requireConfig"></script>
     <!-- /process -->
 
     <!-- Google Analytics -->

@@ -11,9 +11,11 @@ module.exports = {
         '.htaccess',
         'images/{,*/}*.webp',
         'sounds/{,*/}*.webp',
+        'content/**/**.**',   // adds entire content folder
         // '{,*/}*.html',
         'styles/fonts/{,*/}*.*',
         'lib/famous/**/**.css'
+        // 'lib/**/*'
       ]
     }]
   }

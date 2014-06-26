@@ -22,13 +22,13 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'lint',
+    // 'lint',
     'processhtml:dist',
     'useminPrepare',
     'requirejs',
     'concat',
     'cssmin',
-    'uglify',
+    'uglify', 
     'copy:dist',
     'rev',
     'usemin',

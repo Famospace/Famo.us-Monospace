@@ -7,7 +7,7 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Transform     = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
-  var GridLayout    = require("famous/views/GridLayout");
+  var GridLayout    = require('famous/views/GridLayout');
 
   function MainMenuView() {
     View.apply(this, arguments);

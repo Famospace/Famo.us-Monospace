@@ -5,7 +5,6 @@ destroyer cube to remove*/
 define(function(require, exports, module) {
   var View          = require('famous/core/View');
   var Modifier      = require('famous/core/Modifier');
-  var Transform     = require('famous/core/Transform');
   var CubeView      = require('views/CubeView');
   var DestroyerCube = require('views/DestroyerCube');
   var SmallCube     = require('views/SmallCube');
@@ -46,11 +45,11 @@ define(function(require, exports, module) {
   GameBoard.prototype.setDestroyerPosition = function(pos){
     // convert game board coordinate to pixels
     var posPix = _convertToPixels.call(this,pos);
-    this.destroyerCube.setPosition(posPix);
+    this.destroyerCube.setPosition(posPix, true);
     for (var i = 0; i < this.smallCubes.length; i++){
       var cubePos = this.smallCubes[i].getPosition();
       // Checks for small cube position that matches the new destroyer cube position
-      if (cubePos[0] === posPix[0] && cubePos[1] === posPix[1] && cubePos[2] === posPix[2]){
+      if (cubePos[0] === posPix[0] && cubePos[1] === posPix[1] && cubePos[2] === posPix[2]) {
         // remove the cube by setting it far far away
         this.smallCubes[i].setPosition( _convertToPixels.call(this, [-10000,-10000,0]));
       }
@@ -76,7 +75,7 @@ define(function(require, exports, module) {
   // Create the the game board/parent cube
   function _createParentCube () {
     this.cube = new CubeView({
-      size: this.options.mainCubeSize,
+      size: this.options.mainCubeSize
     });
 
     this.node.add(this.cube);
@@ -98,10 +97,10 @@ define(function(require, exports, module) {
   
   //reset all small cube's positon
   function _resetSmallCubes(posMatrix){
-    for (var i=0; i< this.smallCubes.length; i++){
-      if (posMatrix[i] !== undefined){ //if position exist 
+    for (var i=0; i< this.smallCubes.length; i++) {
+      if (posMatrix[i] !== undefined) { //if position exist 
         this.smallCubes[i].setPosition(_convertToPixels.call(this,posMatrix[i]));
-      }else{ //if position isn't defined, go to starting position (off screen)
+      } else { //if position isn't defined, go to starting position (off screen)
         this.smallCubes[i].setPosition(_convertToPixels.call(this,this.options.smallCube[i]));
       }
     }
@@ -112,9 +111,9 @@ define(function(require, exports, module) {
     // Listen for 2D-3D transition if 2D pipe event listener to listen for
     // destroyer cube movement
     this._eventInput.on('is2d', function(data){
-      if (data){
+      if (data) {
         this.destroyerCube.pipe(this._eventInput);
-      }else{
+      } else {
         this.destroyerCube.unpipe(this._eventInput);
       }
     }.bind(this));

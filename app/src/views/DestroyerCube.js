@@ -1,11 +1,13 @@
 /* This view is to create the destroyer cube*/
 define(function(require, exports, module) {
-  var View          = require('famous/core/View');
-  var Transform     = require('famous/core/Transform');
-  var Modifier      = require('famous/core/Modifier');
-  var CubeView      = require('views/CubeView');
-  var MouseSync     = require('famous/inputs/MouseSync');
-  var TouchSync     = require('famous/inputs/TouchSync');
+  var View           = require('famous/core/View');
+  var Transform      = require('famous/core/Transform');
+  var Modifier       = require('famous/core/Modifier');
+  var Transitionable = require('famous/transitions/Transitionable');
+  var Easing         = require('famous/transitions/Easing');
+  var CubeView       = require('views/CubeView');
+  var MouseSync      = require('famous/inputs/MouseSync');
+  var TouchSync      = require('famous/inputs/TouchSync');
 
   function DestroyerCube() {
     View.apply(this, arguments);
@@ -14,6 +16,9 @@ define(function(require, exports, module) {
     this.position = this.options.startPosition;
     // Retain mouse data to determine the cube movement
     this.posData = undefined;
+    this.newPos = [0,0,0];
+
+    this.transitionable = new Transitionable(0);
 
     _createDestroyer.call(this);
     _setMovementListeners.call(this);
@@ -30,8 +35,15 @@ define(function(require, exports, module) {
   };
 
   // Position setter to relocate destroyer cube
-  DestroyerCube.prototype.setPosition = function(pos){
-    this.position = pos;
+  DestroyerCube.prototype.setPosition = function(pos, inGame){
+    if (inGame){
+      this.transitionable.set(1, {
+          duration: 500, curve: Easing.outBack
+      });
+      this.newPos = pos;
+    }else{
+      this.position = pos;
+    }
   };
 
   // Create Destroyer Cube
@@ -48,8 +60,19 @@ define(function(require, exports, module) {
 
     // create destroyer cube modifier in order to transition the location of the cube
     var destroyerModifier = new Modifier({
-      transform: function () {
-        return Transform.translate(this.position[0], this.position[1], this.position[2]);
+      transform: function(){
+        var trans = this.transitionable.get();
+        if (trans  >= 0.99999){
+          this.transitionable.halt(); // halt transitionable
+          this.position = this.newPos;
+          this.transitionable.reset(0);
+        }
+
+        var translate = Transform.translate(
+          this.position[0] + (this.newPos[0]-this.position[0])*trans,
+          this.position[1] + (this.newPos[1]-this.position[1])*trans,
+          this.position[2] + (this.newPos[2]-this.position[2])*trans);
+        return translate;
       }.bind(this)
     });
 
@@ -118,23 +141,15 @@ define(function(require, exports, module) {
       // vertical
       if (yDelta > xDelta) { //more y movement than x
         // move up
-        if (posData.y < 0) {
-          output = [0,1];
-        }
+        if (posData.y < 0) output = [0,1];
         // move down
-        if (posData.y > 0) {
-          output = [0,-1];
-        }
+        if (posData.y > 0) output = [0,-1];
       // horizontal
       } else { //more x movement than y
         // move left
-        if (posData.x < 0) {
-          output = [-1,0];
-        }
+        if (posData.x < 0) output = [-1,0];
         // move right
-        if (posData.x > 0) {
-          output = [1,0];
-        }
+        if (posData.x > 0) output = [1,0];
       }
     }
     return output;

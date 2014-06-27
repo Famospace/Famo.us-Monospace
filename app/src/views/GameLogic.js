@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
-  var Buzz          = require('buzz');
+  // var Buzz          = require('buzz');
 
   function GameLogic() {
     View.apply(this, arguments);
@@ -20,13 +20,13 @@ define(function(require, exports, module) {
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects
-    this.mySound = new Buzz.sound('content/sounds/smack.wav',{
+    this.mySound = new buzz.sound('content/sounds/smack.wav',{
       preload: true
     });
-    this.completeSound = new Buzz.sound('content/sounds/level-up.wav',{
+    this.completeSound = new buzz.sound('content/sounds/level-up.wav',{
       preload: true
     });
-    this.transitionSound = new Buzz.sound('content/sounds/swoosh.wav',{
+    this.transitionSound = new buzz.sound('content/sounds/swoosh.wav',{
       preload: true
     });
     

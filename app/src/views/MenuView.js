@@ -4,7 +4,7 @@ define(function(require, exports, module) {
   var Modifier       = require('famous/core/Modifier');
   var Timer          = require('famous/utilities/Timer');
   var RenderNode     = require('famous/core/RenderNode');
-  var Lightbox       = require('famous/views/Lightbox');
+  var Lightbox       = require('famous/views/Lightbox'); 
 
   var AboutView      = require('views/AboutView');
   var MainMenuView   = require('views/MainMenuView');

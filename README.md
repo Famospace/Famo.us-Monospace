@@ -1,11 +1,8 @@
 Famospace
 ===
-
-### Intro
-
 This is the public repo for [Famospace](https://www.Famospace.com/) built by [Amar](https://github.com/theamarpatel) and [Joe](https://github.com/joedou) at [Hack Reactor](http://www.hackreactor.com/).
 
-### Famospace
+===
 
 Famospace is a reengineered and redesigned version of Monospace, a native iOS app by Daniel Lutz, that runs in the browser on any device.
 

@@ -6,7 +6,6 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
-  // var Buzz          = require('buzz');
 
   function GameLogic() {
     View.apply(this, arguments);
@@ -235,6 +234,7 @@ define(function(require, exports, module) {
     // method to start a new game base on input data of cube location (starter package); 
     // reset all variables
     function _startNewGame (starter){
+      this.exitAnimMod.setTransform(Transform.rotate(0, 0, 0));
       this.levelIndex = starter.levelNum;
       this.starter = starter;
       this.board = _forceSlice(starter.level.smallCube);
@@ -334,12 +334,15 @@ define(function(require, exports, module) {
 
     // Create the rotating logic which controls the orientation of the game board
     function _createRotatingLogic () {
+      this.exitAnimMod = new Modifier();
+
       this.rotatingLogic = new RotatingLogic({
         mainCubeSize: this.options.mainCubeSize,
         destroyer: this.options.destroyer,
         smallCube: this.options.smallCube
       });
-      this.node.add(this.rotatingLogic);
+
+      this.node.add(this.exitAnimMod).add(this.rotatingLogic);
     }
     
     // set even listeners to main.js and rotating logic view
@@ -421,13 +424,12 @@ define(function(require, exports, module) {
           if (!this.terminate) this.mySound.play();
           if(this.board.length < 1){
             // if board is less than 1 (last piece); play sound move back to levels view
-            if (!this.terminate){
-              _saveToLocalStorage.call(this, this.levelIndex);
-              this.completeSound.play();
-            }
+            if (!this.terminate) _endLevel.call(this);
+
             Timer.setTimeout(function(){
               this._eventOutput.emit('levels');
             }.bind(this), 500);
+
           }
           return;
         }
@@ -437,6 +439,20 @@ define(function(require, exports, module) {
     
     // expose removeSmallCube function for external use (demo view)
     GameLogic.prototype.removeSmallCube = _removeSmallCube;
+
+
+    function _endLevel () {
+      this.completeSound.play();
+      _saveToLocalStorage.call(this, this.levelIndex);
+      this._eventOutput.trigger('is2d', false);
+
+      this.exitAnimMod.setTransform(
+        Transform.rotate(Math.PI * 4 * Math.random(), Math.PI * 4 * Math.random(), Math.PI * 4 * Math.random()),
+        {duration: 1200, curve: 'easeInOut'}
+      );
+    }
+
+
 
     // determine wheter converting to 2D is a legal move (when a small cube is above,
     // in terms of depth, of the destroyer cube in 3D mode, 2D mode is not allowed)

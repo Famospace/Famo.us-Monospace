@@ -6,9 +6,7 @@ This is the public repo for [Famospace](https://www.Famospace.com/) built by [Am
 
 Famospace is a reengineered and redesigned version of Monospace, a native iOS app by Daniel Lutz, that runs in the browser on any device.
 
-Famospace is a unique puzzle game where players need to think in both 2 and 3 dimensions.
-
-The goal is to collect a certain amount of grey cubes in every level. To do so, the player is given the ability to switch between 2 and 3-dimensional views of the game situation. Possibilities and solutions change depending on the players perspective.
+This is a unique puzzle game where players need to think in both 2 and 3 dimensions.  The goal is to collect a certain number of grey cubes in every level. To do so, the player is given the ability to switch between 2 and 3-dimensional views of the game situation. Possibilities and solutions change depending on the players perspective.
 
 ### Screenshots
 | Main Menu | Sample Level |

@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
     this.views = {};
     // updating boolean to indicate demo is playing
-    this.playingDemo = true;
+    this.playingDemo = true; 
     // ensures that menu transitions don't overlap
     this.ready = true;
 

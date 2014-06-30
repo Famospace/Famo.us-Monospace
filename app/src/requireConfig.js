@@ -1,15 +1,14 @@
 /*globals require*/
 require.config({
-    shim: {
+  shim: {
 
-    },
-    paths: {
-        famous: '../lib/famous',
-        requirejs: '../lib/requirejs/require',
-        almond: '../lib/almond/almond',
-        'famous-polyfills': '../lib/famous-polyfills/index',
-        howler: '../lib/howler/howler',
-        buzz: '../lib/buzz/dist/buzz'
-    }
+  },
+  paths: {
+    famous: '../lib/famous',
+    requirejs: '../lib/requirejs/require',
+    almond: '../lib/almond/almond',
+    'famous-polyfills': '../lib/famous-polyfills/index',
+    howler: '../lib/howler/howler'
+  }
 });
 require(['main']);

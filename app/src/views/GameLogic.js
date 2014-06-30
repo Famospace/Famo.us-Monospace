@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
-  var Howler        = require('howler');
+  var Howler        = require('howler');  // Invoked as Howl
 
   function GameLogic() {
     View.apply(this, arguments);
@@ -15,12 +15,12 @@ define(function(require, exports, module) {
     var rootModifier = new Modifier();
     this.node = this.add(rootModifier);
 
-    this.terminate = false; // boolean to terminate sound if left demo view
+    this.isInDemoView = false; // boolean to terminate sound if in demo view
     this.showMenu = false; // boolean to show or hide menu
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects    
-    this.mySound = new Howl({
+    this.crushSound = new Howl({
       urls: ['content/sounds/Smack.wav']
     });
 
@@ -258,7 +258,7 @@ define(function(require, exports, module) {
 
     // set soundOff variabale for demo view
     GameLogic.prototype.setSoundOff = function(bool){
-      this.terminate = bool;
+      this.isInDemoView = bool;
     };
 
     // Create the button to change 2D/3D perspective 
@@ -315,14 +315,14 @@ define(function(require, exports, module) {
       // Create event listeners for 2D/3D transition
       this.perspectiveButton.on('click', function () {
         if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-          if (!this.terminate) this.transitionSound.play();
+          if (!this.isInDemoView) this.transitionSound.play();
           this._eventOutput.trigger('is2d', true);
           this.perspectiveButton.setContent('3D');
           this.is2d = !this.is2d;
         } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
           _deny3D.call(this);
         } else {
-          if (!this.terminate) this.transitionSound.play();
+          if (!this.isInDemoView) this.transitionSound.play();
           this._eventOutput.trigger('is2d', false);
           this.perspectiveButton.setContent('2D');
           this.is2d = !this.is2d;
@@ -422,10 +422,10 @@ define(function(require, exports, module) {
           // remove the piece from array
           this.board.splice(i,1);
           //play sound if allowed
-          if (!this.terminate) this.mySound.play();
+          if (!this.isInDemoView) this.crushSound.play();
           if(this.board.length < 1){
             // if board is less than 1 (last piece); play sound move back to levels view
-            if (!this.terminate) _endLevel.call(this);
+            if (!this.isInDemoView) _endLevel.call(this);
 
             Timer.setTimeout(function(){
               this._eventOutput.emit('levels');

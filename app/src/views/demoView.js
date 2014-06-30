@@ -319,6 +319,9 @@ define(function(require, exports, module) {
       this.node.add(demoBoardModifier).add(this.gameLogic.rotatingLogic);
       this.node.add(this.gameLogic.perspectiveButtonMod).add(this.gameLogic.perspectiveButton);
 
+      // disables clicks on perspective button
+      this.gameLogic.perspectiveButton.setProperties({pointerEvents: 'none'});
+
       // perspectiveButton slides in
       this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(0, 2000, 0),{duration: 0, curve: 'easeInOut'});
       this.gameLogic.perspectiveButtonMod.setTransform(Transform.translate(0, 0, 0),{duration: 2000, curve: 'easeInOut'});

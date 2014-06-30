@@ -9,6 +9,7 @@ require.config({
         almond: '../lib/almond/almond',
         'famous-polyfills': '../lib/famous-polyfills/index',
         howler: '../lib/howler/howler'
+
     }
 });
 require(['main']);

@@ -4,7 +4,7 @@ define(function(require, exports, module) {
   var Modifier       = require('famous/core/Modifier');
   var Timer          = require('famous/utilities/Timer');
   var RenderNode     = require('famous/core/RenderNode');
-  var Lightbox       = require('famous/views/Lightbox');
+  var Lightbox       = require('famous/views/Lightbox'); 
 
   var AboutView      = require('views/AboutView');
   var MainMenuView   = require('views/MainMenuView');
@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
     this.views = {};
     // updating boolean to indicate demo is playing
-    this.playingDemo = true;
+    this.playingDemo = true; 
     // ensures that menu transitions don't overlap
     this.ready = true;
 
@@ -76,7 +76,6 @@ define(function(require, exports, module) {
     // ensures that demo's game board doesn't interfere with real game board
     this._eventInput.on('demoToMainMenu', function () {
       if (this.playingDemo) {
-        if (this.views.demoView.gameLogic) this.views.demoView.gameLogic.setSoundOff(true);
         this.lightbox.show(this.views.mainMenu);
         this.playingDemo = false;
       }

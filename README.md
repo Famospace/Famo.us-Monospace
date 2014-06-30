@@ -11,7 +11,6 @@ This is a unique puzzle game where players need to think in both 2 and 3 dimensi
 ### Screenshots
 | Main Menu | Sample Level |
 |:-----------:|:------------:|
-| | |
 | ![Main Menu SS](http://i.imgur.com/wpjKXmB.png)|![Sample Level SS](http://i.imgur.com/mESJEke.png) |
 
 ### Technical

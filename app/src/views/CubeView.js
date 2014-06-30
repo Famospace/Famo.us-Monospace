@@ -4,6 +4,7 @@ define(function(require, exports, module) {
   var Surface        = require('famous/core/Surface');
   var Transform      = require('famous/core/Transform');
   var Modifier       = require('famous/core/Modifier');
+  var Group          = require('famous/core/Group');
 
   function CubeView() {
     View.apply(this, arguments);
@@ -51,6 +52,8 @@ define(function(require, exports, module) {
       [Math.PI/2, 0, 0]// top
     ];
 
+    var group = new Group();
+
     for (var i=0;i<6;i++) {
 
       // create initial cube surfaces
@@ -83,7 +86,8 @@ define(function(require, exports, module) {
       surfaceModifier.transformFrom( matrixData );
 
       // add to view's context for presentation
-      this.rootNode.add(surfaceModifier).add(surface);
+      group.add(surfaceModifier).add(surface);
     }
+    this.rootNode.add(group);
   }
 });

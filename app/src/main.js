@@ -12,8 +12,8 @@ define(function(require, exports, module) {
 
   var fpsMeter        = new FpsMeter();
 
-  if (typeof buzz === 'undefined') {
-    console.log('Buzz not loaded.  Reloading.');
+  if (typeof Howl === 'undefined') {
+    console.log('Howler not loaded.  Reloading.');
     return window.location.reload(true);
   }
 

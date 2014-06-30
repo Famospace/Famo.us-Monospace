@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
-  var Howler        = require('howler');  // Invoked as Howl
+  // var Howler        = require('howler');  // Invoked as Howl
 
   function GameLogic() {
     View.apply(this, arguments);

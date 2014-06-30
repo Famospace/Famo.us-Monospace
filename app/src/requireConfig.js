@@ -8,7 +8,6 @@ require.config({
         requirejs: '../lib/requirejs/require',
         almond: '../lib/almond/almond',
         'famous-polyfills': '../lib/famous-polyfills/index',
-        buzz: '../lib/buzz/dist/buzz',
         howler: '../lib/howler/howler'
     }
 });

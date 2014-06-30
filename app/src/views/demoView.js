@@ -11,7 +11,6 @@ define(function(require, exports, module) {
     var Timer           = require('famous/utilities/Timer');
     var Modifier        = require('famous/core/Modifier');
     var Easing          = require('famous/transitions/Easing');
-    // var Buzz            = require('buzz');
 
     var GameLogic       = require('views/GameLogic');
     var Levels          = require('../../content/levels');
@@ -337,7 +336,6 @@ define(function(require, exports, module) {
       // switch to 2D
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
-        // if(!this.skip) this.transitionSound.play();
         this.gameLogic.perspectiveButton.setContent('3D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -354,7 +352,6 @@ define(function(require, exports, module) {
       demoTimer += 2000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
-        // if(!this.skip) this.transitionSound.play();
         this.gameLogic.perspectiveButton.setContent('2D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -370,7 +367,6 @@ define(function(require, exports, module) {
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
-        // if(!this.skip) this.transitionSound.play();
         this.gameLogic.perspectiveButton.setContent('3D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -394,7 +390,6 @@ define(function(require, exports, module) {
       demoTimer += 1000;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
-        // if(!this.skip) this.transitionSound.play();
         this.gameLogic.perspectiveButton.setContent('2D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -410,7 +405,6 @@ define(function(require, exports, module) {
       demoTimer += 1500;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', true);
-        // if(!this.skip) this.transitionSound.play();
         this.gameLogic.perspectiveButton.setContent('3D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});
@@ -442,7 +436,6 @@ define(function(require, exports, module) {
       demoTimer += 1200;
       Timer.setTimeout(function () {
         this._eventOutput.emit('is2dDemo', false);
-        // if(!this.skip) this.transitionSound.play();
         this.gameLogic.perspectiveButton.setContent('2D');
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(0.95,0.95,1), {duration: 200, curve: 'easeInOut'});
         this.gameLogic.perspectiveButtonMod.setTransform(Transform.scale(1,1,1), {duration: 200, curve: 'easeInOut'});

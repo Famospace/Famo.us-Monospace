@@ -6,7 +6,6 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
-  var Buzz          = require('buzz');
   var Howler        = require('howler');
 
   function GameLogic() {
@@ -230,7 +229,6 @@ define(function(require, exports, module) {
     // greater than 800: 400x400x400 cube
     // less than 800: 200x200x200 cube
     function _determineCubeSize(){
-      // console.log('windowwidth:', window.innerWidth);
       if (window.innerWidth > 825 || window.innerHeight > 825){
         this.options.mainCubeSize = 400;
       }
@@ -251,7 +249,6 @@ define(function(require, exports, module) {
     
     // restart current level by startNewGame with the current starter package
     function _restartGame(){
-      // console.log('restart game');
       _startNewGame.call(this,this.starter);
     }
     
@@ -317,14 +314,14 @@ define(function(require, exports, module) {
       // Create event listeners for 2D/3D transition
       this.perspectiveButton.on('click', function () {
         if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-          this.transitionSound.play();
+          if (!this.terminate) this.transitionSound.play();
           this._eventOutput.trigger('is2d', true);
           this.perspectiveButton.setContent('3D');
           this.is2d = !this.is2d;
         } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
           _deny3D.call(this);
         } else {
-          this.transitionSound.play();
+          if (!this.terminate) this.transitionSound.play();
           this._eventOutput.trigger('is2d', false);
           this.perspectiveButton.setContent('2D');
           this.is2d = !this.is2d;

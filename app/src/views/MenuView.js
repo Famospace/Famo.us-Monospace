@@ -76,7 +76,6 @@ define(function(require, exports, module) {
     // ensures that demo's game board doesn't interfere with real game board
     this._eventInput.on('demoToMainMenu', function () {
       if (this.playingDemo) {
-        if (this.views.demoView.gameLogic) this.views.demoView.gameLogic.setSoundOff(true);
         this.lightbox.show(this.views.mainMenu);
         this.playingDemo = false;
       }

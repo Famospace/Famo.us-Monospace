@@ -13,6 +13,7 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
 
     _createTitle.call(this);
+    _createGithubLink.call(this);
     _createCreatedBy.call(this);
     _createInspiredBy.call(this);
     _createPlayButton.call(this);
@@ -25,6 +26,32 @@ define(function(require, exports, module) {
   MainMenuView.DEFAULT_OPTIONS = {
     fontFamily: 'HelveticaNeue-Light, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif',
   };
+
+  function _createGithubLink () {
+    var banner = new Surface({
+      size: [window.innerWidth * 0.05, window.innerHeight * 0.05],
+      content: '<a href="https://github.com/Famospace/Famo.us-Monospace">' +
+                     '<img src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67"' +
+                       'alt="Fork me on GitHub"' +
+                       'imgdata-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png">' +
+                     '</a>',
+      properties: {
+        zIndex: 5
+      }
+    });
+
+    var bannerMod = new Modifier({
+      align: [0, 0],
+      origin: [0, 0],
+      transform: function () {
+        if (window.innerWidth < 800) {
+          return Transform.scale(0.7, 0.7, 0.7);
+        }
+      }.bind(this)
+    });
+
+    this.add(bannerMod).add(banner);
+  }
 
   function _createTitle () {
     var menu = new Surface({

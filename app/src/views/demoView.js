@@ -11,11 +11,6 @@ define(function(require, exports, module) {
     var Timer           = require('famous/utilities/Timer');
     var Modifier        = require('famous/core/Modifier');
     var Easing          = require('famous/transitions/Easing');
-<<<<<<< HEAD
-=======
-    // var Buzz            = require('buzz');
->>>>>>> 20fb9ca521db14a1cdb4f1ed4496138c1914e217
-
     var GameLogic       = require('views/GameLogic');
     var Levels          = require('../../content/levels');
 
@@ -26,13 +21,6 @@ define(function(require, exports, module) {
 
       // allows sounds to be muted if demo is skipped
       this.skip = false;
-      
-      //inject sound for 2d/3d transition
-<<<<<<< HEAD
-      // this.transitionSound = new Buzz.sound('content/sounds/swoosh.wav', {preload: true});
-=======
-      this.transitionSound = new buzz.sound('content/sounds/swoosh.wav', {preload: true});
->>>>>>> 20fb9ca521db14a1cdb4f1ed4496138c1914e217
 
       // creates skip button to bybass intro animation
         // takes 5.1 seconds

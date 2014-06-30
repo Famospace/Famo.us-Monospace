@@ -7,6 +7,7 @@ define(function(require, exports, module) {
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
   var Buzz          = require('buzz');
+  var Howler        = require('howler');
 
   function GameLogic() {
     View.apply(this, arguments);
@@ -19,15 +20,17 @@ define(function(require, exports, module) {
     this.showMenu = false; // boolean to show or hide menu
     this.ready = true; // waiting for the menu transition is complete
     
-    // Create sound objects
-    this.mySound = new Buzz.sound('content/sounds/smack.wav',{
-      preload: true
+    // Create sound objects    
+    this.mySound = new Howl({
+      urls: ['content/sounds/Smack.wav']
     });
-    this.completeSound = new Buzz.sound('content/sounds/level-up.wav',{
-      preload: true
+
+    this.completeSound = new Howl({
+      urls: ['content/sounds/level-up.wav']
     });
-    this.transitionSound = new Buzz.sound('content/sounds/swoosh.wav',{
-      preload: true
+
+    this.transitionSound = new Howl({
+      urls: ['content/sounds/swoosh.wav']
     });
     
     this.twoDDataStructure = {}; // data structure to track of cubes in 2D mode
@@ -48,7 +51,7 @@ define(function(require, exports, module) {
     
     // Set Game logic default options with default game board
     GameLogic.DEFAULT_OPTIONS = {
-      mainCubeSize: 400,
+      mainCubeSize: 200,
       destroyer: [-1000,  -1000,  -1000],
       smallCube: [
         [-1000, -1000, -1000],
@@ -228,8 +231,8 @@ define(function(require, exports, module) {
     // less than 800: 200x200x200 cube
     function _determineCubeSize(){
       // console.log('windowwidth:', window.innerWidth);
-      if (window.innerWidth < 600 || window.innerHeight < 600){
-        this.options.mainCubeSize = 200;
+      if (window.innerWidth > 825 || window.innerHeight > 825){
+        this.options.mainCubeSize = 400;
       }
     }
     // method to start a new game base on input data of cube location (starter package); 
@@ -289,9 +292,9 @@ define(function(require, exports, module) {
         origin: function () {
           if (this.options.mainCubeSize < 400){
             if (window.innerWidth < window.innerHeight) {
-              return [0.5, 0.97];
+              return [0.5, 0.98];
             }else{
-              return [0.97, 0.5];
+              return [0.98, 0.5];
             }
           }else{
             if (window.innerHeight > window.innerWidth) {

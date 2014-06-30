@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   var Modifier      = require('famous/core/Modifier');
   var Timer         = require('famous/utilities/Timer');
   var RotatingLogic = require('views/RotatingLogic');
-  var Howler        = require('howler');
+  var Howler        = require('howler');  // Invoked as Howl
 
   function GameLogic() {
     View.apply(this, arguments);
@@ -15,12 +15,12 @@ define(function(require, exports, module) {
     var rootModifier = new Modifier();
     this.node = this.add(rootModifier);
 
-    this.terminate = false; // boolean to terminate sound if left demo view
+    this.isInDemoView = false; // boolean to terminate sound if in demo view
     this.showMenu = false; // boolean to show or hide menu
     this.ready = true; // waiting for the menu transition is complete
     
     // Create sound objects    
-    this.mySound = new Howl({
+    this.crushSound = new Howl({
       urls: ['content/sounds/Smack.wav']
     });
 
@@ -236,6 +236,7 @@ define(function(require, exports, module) {
     // method to start a new game base on input data of cube location (starter package); 
     // reset all variables
     function _startNewGame (starter){
+      this.exitAnimMod.setTransform(Transform.rotate(0, 0, 0));
       this.levelIndex = starter.levelNum;
       this.starter = starter;
       this.board = _forceSlice(starter.level.smallCube);
@@ -257,7 +258,7 @@ define(function(require, exports, module) {
 
     // set soundOff variabale for demo view
     GameLogic.prototype.setSoundOff = function(bool){
-      this.terminate = bool;
+      this.isInDemoView = bool;
     };
 
     // Create the button to change 2D/3D perspective 
@@ -314,14 +315,14 @@ define(function(require, exports, module) {
       // Create event listeners for 2D/3D transition
       this.perspectiveButton.on('click', function () {
         if (this.is2d === false && _ableToConvertTo2d.call(this) === true) {
-          if (!this.terminate) this.transitionSound.play();
+          if (!this.isInDemoView) this.transitionSound.play();
           this._eventOutput.trigger('is2d', true);
           this.perspectiveButton.setContent('3D');
           this.is2d = !this.is2d;
         } else if (this.is2d === false && _ableToConvertTo2d.call(this) === false) {
           _deny3D.call(this);
         } else {
-          if (!this.terminate) this.transitionSound.play();
+          if (!this.isInDemoView) this.transitionSound.play();
           this._eventOutput.trigger('is2d', false);
           this.perspectiveButton.setContent('2D');
           this.is2d = !this.is2d;
@@ -334,12 +335,15 @@ define(function(require, exports, module) {
 
     // Create the rotating logic which controls the orientation of the game board
     function _createRotatingLogic () {
+      this.exitAnimMod = new Modifier();
+
       this.rotatingLogic = new RotatingLogic({
         mainCubeSize: this.options.mainCubeSize,
         destroyer: this.options.destroyer,
         smallCube: this.options.smallCube
       });
-      this.node.add(this.rotatingLogic);
+
+      this.node.add(this.exitAnimMod).add(this.rotatingLogic);
     }
     
     // set even listeners to main.js and rotating logic view
@@ -353,8 +357,10 @@ define(function(require, exports, module) {
 
     // A visual effect created for an illegal 3D to 2D transition
     function _deny3D () {
+      this.transitionSound.play();
       this._eventOutput.trigger('is2d', true);
       Timer.setTimeout(function () {
+        this.transitionSound.play();
         this._eventOutput.trigger('is2d', false);
       }.bind(this), 600);
     }
@@ -418,16 +424,15 @@ define(function(require, exports, module) {
           // remove the piece from array
           this.board.splice(i,1);
           //play sound if allowed
-          if (!this.terminate) this.mySound.play();
+          if (!this.isInDemoView) this.crushSound.play();
           if(this.board.length < 1){
             // if board is less than 1 (last piece); play sound move back to levels view
-            if (!this.terminate){
-              _saveToLocalStorage.call(this, this.levelIndex);
-              this.completeSound.play();
-            }
+            if (!this.isInDemoView) _endLevel.call(this);
+
             Timer.setTimeout(function(){
               this._eventOutput.emit('levels');
             }.bind(this), 500);
+
           }
           return;
         }
@@ -437,6 +442,20 @@ define(function(require, exports, module) {
     
     // expose removeSmallCube function for external use (demo view)
     GameLogic.prototype.removeSmallCube = _removeSmallCube;
+
+
+    function _endLevel () {
+      this.completeSound.play();
+      _saveToLocalStorage.call(this, this.levelIndex);
+      this._eventOutput.trigger('is2d', false);
+
+      this.exitAnimMod.setTransform(
+        Transform.rotate(Math.PI * 4 * Math.random(), Math.PI * 4 * Math.random(), Math.PI * 4 * Math.random()),
+        {duration: 1200, curve: 'easeInOut'}
+      );
+    }
+
+
 
     // determine wheter converting to 2D is a legal move (when a small cube is above,
     // in terms of depth, of the destroyer cube in 3D mode, 2D mode is not allowed)

@@ -48,7 +48,10 @@ define(function(require, exports, module) {
   function _createCreatedBy () {
     var created = new Surface({
       size: [undefined, 10],
-      content: 'By Amar and Joe',
+      content: 'By ' + 
+                '<a href="http://www.github.com/theamarpatel">Amar</a> ' +
+                'and ' +
+                '<a href="http://www.github.com/joedou">Joe</a>',
       properties: {
         fontFamily: this.options.fontFamily,
         textAlign: 'center',

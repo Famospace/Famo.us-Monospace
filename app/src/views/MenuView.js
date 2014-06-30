@@ -4,7 +4,7 @@ define(function(require, exports, module) {
   var Modifier       = require('famous/core/Modifier');
   var Timer          = require('famous/utilities/Timer');
   var RenderNode     = require('famous/core/RenderNode');
-  var Lightbox       = require('famous/views/Lightbox');
+  var Lightbox       = require('famous/views/Lightbox'); 
 
   var AboutView      = require('views/AboutView');
   var MainMenuView   = require('views/MainMenuView');
@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
     this.views = {};
     // updating boolean to indicate demo is playing
-    this.playingDemo = true;
+    this.playingDemo = true; 
     // ensures that menu transitions don't overlap
     this.ready = true;
 

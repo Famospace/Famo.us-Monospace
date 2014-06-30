@@ -357,8 +357,10 @@ define(function(require, exports, module) {
 
     // A visual effect created for an illegal 3D to 2D transition
     function _deny3D () {
+      this.transitionSound.play();
       this._eventOutput.trigger('is2d', true);
       Timer.setTimeout(function () {
+        this.transitionSound.play();
         this._eventOutput.trigger('is2d', false);
       }.bind(this), 600);
     }

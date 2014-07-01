@@ -24,6 +24,7 @@ define(function(require, exports, module) {
 
       _createGithubLink.call(this); 
 
+
       // creates skip button to bybass intro animation
         // takes 5.1 seconds
       _createSkipButton.call(this);
@@ -52,13 +53,13 @@ define(function(require, exports, module) {
                          'alt="Fork me on GitHub"' +
                          'imgdata-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png">' +
                        '</a>',
-        opacity: 0,
         properties: {
           zIndex: 5,
         }
       });
 
       var bannerMod = new StateModifier({
+        opacity: 0,
         align: [0, 0],
         origin: [0, 0],
         transform: function () {
@@ -71,8 +72,8 @@ define(function(require, exports, module) {
       this.add(bannerMod).add(banner);
 
       Timer.setTimeout(function () {
-        bannerMod.setOpacity(1, {duration: 300, curve: 'easeInOut'});
-      }.bind(this, 6000));
+        bannerMod.setOpacity(1, {duration: 1000, curve: 'easeInOut'});
+      }, 6000);
     }
 
     DemoView.DEFAULT_OPTIONS = {

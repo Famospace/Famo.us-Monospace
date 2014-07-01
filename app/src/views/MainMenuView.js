@@ -174,6 +174,7 @@ define(function(require, exports, module) {
   }
 
   function _createStarButton () {
+
     var about = new Surface({
       size: [150, 65],
       content: '<iframe src="http://ghbtns.com/github-btn.html?user=Famospace&repo=Famo.us-Monospace&type=watch" allowtransparency="true" frameborder="0" scrolling="0" width="62" height="20"></iframe>',
@@ -184,19 +185,12 @@ define(function(require, exports, module) {
         cursor: 'pointer'
       }
     });
+
     var aboutMod = new StateModifier({
       align: [0.5, 0],
       origin: [0.5, 0],
-      transform: Transform.translate(4, 400, 0)
+      transform: Transform.translate(4, 375, 0)
     });
-
-    about.on('touchstart', function () {
-      this._eventOutput.emit('about');
-    }.bind(this));
-
-    about.on('click', function () {
-      this._eventOutput.emit('about');
-    }.bind(this));
     
     this.add(aboutMod).add(about);
   }

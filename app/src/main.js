@@ -6,11 +6,8 @@ define(function(require, exports, module) {
 
   var Engine          = require('famous/core/Engine');
   var Modifier        = require('famous/core/Modifier');
-  var FpsMeter        = require('views/FpsMeterView');
   var MenuView        = require('views/MenuView');
   var Easing          = require('famous/transitions/Easing');
-
-  var fpsMeter        = new FpsMeter();
 
   if (typeof Howl === 'undefined') {
     console.log('Howler not loaded.  Reloading.');
@@ -31,7 +28,6 @@ define(function(require, exports, module) {
   // instantiates game
   var menuView = new MenuView();
 
-  mainContext.add(fpsMeter);
   mainContext.add(modifier).add(menuView);
 
   // upon receiving event, perspective is changed over 200ms

@@ -61,6 +61,10 @@ define(function(require, exports, module) {
         size: [this.options.size, this.options.size],
         properties: {
           webkitBackfaceVisibility: 'visible',
+          backfaceVisibility: 'visible',
+          mozBackfaceVisibility: 'visible', 
+          msBackfaceVisibility: 'visible',
+          oBackfaceVisibility: 'visible',
           border: '1px solid black',
           pointerEvents: 'none'
         }

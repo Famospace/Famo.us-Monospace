@@ -22,7 +22,8 @@ define(function(require, exports, module) {
       // allows sounds to be muted if demo is skipped
       this.skip = false;
 
-      _createGithubLink.call(this);
+      _createGithubLink.call(this); 
+
 
       // creates skip button to bybass intro animation
         // takes 5.1 seconds
@@ -47,17 +48,18 @@ define(function(require, exports, module) {
     function _createGithubLink () {
       var banner = new Surface({
         size: [window.innerWidth * 0.05, window.innerHeight * 0.05],
-          content: '<a href="https://github.com/Famospace/Famo.us-Monospace">' +
-                         '<img src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67"' +
-                           'alt="Fork me on GitHub"' +
-                           'imgdata-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png">' +
-                         '</a>',
+        content: '<a href="https://github.com/Famospace/Famo.us-Monospace">' +
+                       '<img src="https://camo.githubusercontent.com/c6286ade715e9bea433b4705870de482a654f78a/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f77686974655f6666666666662e706e67"' +
+                         'alt="Fork me on GitHub"' +
+                         'imgdata-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png">' +
+                       '</a>',
         properties: {
-          zIndex: 5
+          zIndex: 5,
         }
       });
 
-      var bannerMod = new Modifier({
+      var bannerMod = new StateModifier({
+        opacity: 0,
         align: [0, 0],
         origin: [0, 0],
         transform: function () {
@@ -68,6 +70,10 @@ define(function(require, exports, module) {
       });
 
       this.add(bannerMod).add(banner);
+
+      Timer.setTimeout(function () {
+        bannerMod.setOpacity(1, {duration: 1000, curve: 'easeInOut'});
+      }, 6000);
     }
 
     DemoView.DEFAULT_OPTIONS = {

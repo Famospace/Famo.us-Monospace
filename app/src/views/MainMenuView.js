@@ -18,7 +18,7 @@ define(function(require, exports, module) {
     _createInspiredBy.call(this);
     _createPlayButton.call(this);
     _createAbout.call(this);
-    _createStarButton.call(this);
+    // _createStarButton.call(this);
   }
 
   MainMenuView.prototype = Object.create(View.prototype);

@@ -14,9 +14,11 @@ This is a unique puzzle game where players need to think in both 2 and 3 dimensi
 | ![Main Menu SS](http://i.imgur.com/wpjKXmB.png)|![Sample Level SS](http://i.imgur.com/mESJEke.png) |
 
 ### Technical
-
 Famospace uses the following technologies:
   - [Famo.us](http://www.famo.us)
   - Node
   - Express
   - HTML5/CSS3
+
+### License
+Famospace is licensed under the [MIT license.](https://github.com/Famospace/Famo.us-Monospace/blob/master/LICENSE.txt)

@@ -69,15 +69,15 @@ define(function(require, exports, module) {
       origin: [0.5, 0],
       transform: Transform.translate(0, 75, 0)
     });
-    
+
     this.add(menuMod).add(menu);
   }
 
   function _createCreatedBy () {
     var created = new Surface({
       size: [undefined, 10],
-      content: 'By ' + 
-                '<a href="http://www.github.com/theamarpatel">Amar</a> ' +
+      content: 'By ' +
+                '<a href="http://www.github.com/amarpatel">Amar</a> ' +
                 'and ' +
                 '<a href="http://www.github.com/joedou">Joe</a>',
       properties: {
@@ -91,7 +91,7 @@ define(function(require, exports, module) {
       origin: [0.5, 0],
       transform: Transform.translate(0, 130, 0)
     });
-    
+
     this.add(createdMod).add(created);
   }
 
@@ -109,7 +109,7 @@ define(function(require, exports, module) {
       align: [0.5, 0.9],
       origin: [0.5, 0.9]
     });
-    
+
     this.add(inspiredMod).add(inspired);
   }
 
@@ -141,7 +141,7 @@ define(function(require, exports, module) {
     play.on('click', function () {
       this._eventOutput.emit('levels');
     }.bind(this));
-    
+
     this.add(playMod).add(play);
   }
 
@@ -169,7 +169,7 @@ define(function(require, exports, module) {
     about.on('click', function () {
       this._eventOutput.emit('about');
     }.bind(this));
-    
+
     this.add(aboutMod).add(about);
   }
 
@@ -191,7 +191,7 @@ define(function(require, exports, module) {
       origin: [0.5, 0],
       transform: Transform.translate(4, 375, 0)
     });
-    
+
     this.add(aboutMod).add(about);
   }
 
